@@ -1,0 +1,54 @@
+{% extends "includes/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <form method="POST">
+                    <br>
+                    {% csrf_token %}
+                    {% crispy partform %}
+                </form>
+                <br>
+                <table class="table table-hover">
+                    <tbody>
+                    {% for comment in partcomments %}
+                        <tr>
+                            <td>{{ comment }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <form method="POST">
+                    <br>
+                    {% csrf_token %}
+                    {% crispy commentForm %}
+                </form>
+            </div>
+            <div class="col-sm">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Supplier</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for supplier in partsuppliers %}
+                        <tr data-href="{% url 'supplier_information' partsupplier.partsupplier.id %}">
+                            <td>{{ supplier }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="row justify-content-between">
+
+    </div>
+{% endblock %}

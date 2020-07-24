@@ -20,5 +20,7 @@ import PartsApp
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('inventory/',include('PartsApp.urls')),\
+    path('main/',include('MainApp.urls')),
+    path('inventory/',include('PartsApp.urls')),
+
 ]

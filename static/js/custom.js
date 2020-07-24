@@ -6,7 +6,6 @@ $(document).ready(function()
         return false;
     });
 
-
     $('[data-id]').click(function()
     {
         $("#id_partsrequired").val($(this).data('id'));
