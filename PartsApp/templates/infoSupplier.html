@@ -22,9 +22,9 @@
                     </thead>
                     <tbody>
                     {% for supplierpart in supplierparts %}
-                        <tr data-href="{% url 'detail' supplierpart.partnumber.id %}">
-                            <td>{{ supplierpart.partnumber.partnumber }}</td>
-                            <td>{{ supplierpart.partnumber.stockonhand }}</td>
+                        <tr data-href="{% url 'info_part' supplierpart.part.id %}">
+                            <td>{{ supplierpart.part.partNumber }}</td>
+                            <td>{{ supplierpart.part.stockOnHand }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

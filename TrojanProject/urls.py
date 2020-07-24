@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 import PartsApp
+from PartsApp.views import list_parts
 
 urlpatterns = [
+    path('', list_parts),
     path('admin/', admin.site.urls),
     path('main/',include('MainApp.urls')),
     path('inventory/',include('PartsApp.urls')),

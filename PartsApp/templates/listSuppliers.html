@@ -50,8 +50,8 @@
 
         {% for supplier in suppliers %}
 
-            <tr data-href="{% url 'supplier_information' supplier.id %}">
-                <td>{{ supplier.supplier }}</td>
+            <tr data-href="{% url 'info_supplier' supplier.id %}">
+                <td>{{ supplier.supplierName }}</td>
             </tr>
 
         {% endfor %}

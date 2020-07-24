@@ -53,12 +53,12 @@
 
         {% for part in parts %}
 
-            <tr data-href="{% url 'detail' part.id %}">
-                <td>{{ part.partnumber }}</td>
+            <tr data-href="{% url 'info_part' part.id %}">
+                <td>{{ part.partNumber }}</td>
                 <td>{{ part.description }}</td>
                 <td>{{ part.location }}</td>
                 <td>{{ part.supplier }}</td>
-                <td>{{ part.stockonhand }}</td>
+                <td>{{ part.stockOnHand }}</td>
             </tr>
 
         {% endfor %}

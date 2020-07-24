@@ -37,7 +37,7 @@
                     </thead>
                     <tbody>
                     {% for supplier in partsuppliers %}
-                        <tr data-href="{% url 'supplier_information' partsupplier.partsupplier.id %}">
+                        <tr data-href="{% url 'info_supplier' supplier.supplier.id %}">
                             <td>{{ supplier }}</td>
                         </tr>
                     {% endfor %}

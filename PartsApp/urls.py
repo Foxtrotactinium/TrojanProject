@@ -2,10 +2,10 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', inventory_list, name='inventory'),  # URL path for inventory_list view
+    path('', list_parts, name='inventory'),  # URL path for inventory_list view
     path('addpart/', add_part, name='addpart'),
-    path('parts/<str:id>/', part_information, name='detail'),
+    path('parts/<str:part_id>/', info_part, name='info_part'),
     path('addsupplier', add_supplier, name='addsupplier'),
-    path("suppliers/", supplier_list, name="suppliers"),
-    path('suppliers/<str:id>/', supplier_information, name='supplier_information'),
+    path("suppliers/", list_supplier, name="suppliers"),
+    path('suppliers/<str:id>/', info_supplier, name='info_supplier'),
 ]
