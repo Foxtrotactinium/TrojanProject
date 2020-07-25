@@ -1,0 +1,79 @@
+{% extends "includes/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block body%}
+<script>
+    function activitySearch() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchBar");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("activityselection");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+<br>
+
+<div class="row justify-content-between">
+    <div class="row">
+        <div class="col-sm">
+            <br>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="activitySearch()" placeholder="Search" aria-label="Search">
+            </form>
+            <br>
+            <table class="table table-hover" id="activityselection">
+                <thead>
+                <tr>
+                    <th>Activity Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for activity in allactivities %}
+                <tr data-aid="{{ activity.id }}">
+                    <td>{{ activity.activityName }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm">
+        <table class="table table-hover">
+            <tbody>
+            {% for activity in activityrequiredparts %}
+            <tr data-href="{% url 'detail' activity.id %}">
+                <td>{{ activity.activityid }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="container">
+            <form method="POST">
+                {% csrf_token %}
+                {% crispy requiredactivityform %}
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+

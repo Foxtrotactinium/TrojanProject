@@ -37,15 +37,15 @@ from .models import PartModel, SupplierModel, PartSupplierModel, PartCommentMode
 # class jobsresource(resources.ModelResource):
 #
 #     class Meta:
-#         model = Activities
+#         model = ActivityModel
 
 # admin.site.register(PartModel, importparts)
 admin.site.register(PartModel)
-# admin.site.register(Activities)
+# admin.site.register(ActivityModel)
 admin.site.register(SupplierModel)
 admin.site.register(PartSupplierModel)
-# admin.site.register(ActivityRequiredParts)
+# admin.site.register(ActivityPartModel)
 admin.site.register(PartCommentModel)
-# admin.site.register(Tasks)
-# admin.site.register(TaskRequiredActivities)
-# admin.site.register(WorkCentre)
+# admin.site.register(TaskModel)
+# admin.site.register(TaskActivityModel)
+# admin.site.register(WorkCentreModel)

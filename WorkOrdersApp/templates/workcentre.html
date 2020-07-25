@@ -1,0 +1,64 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block body %}
+<script>
+    function workcentresearch() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchBar");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("workcentretable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+<br>
+<form class="form-inline my-2 my-lg-0">
+  <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="workcentresearch()" placeholder="Search" aria-label="Search">
+</form>
+
+<br>
+
+<div class="container-fluid">
+      <a href="{% url 'addwork' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Work</a>
+</div>
+
+<br>
+
+<table class="table table-hover" id="workcentretable">
+    <thead>
+    <tr>
+        <th>Outstanding Workcentre Items</th>
+
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for vehicle in workcentre %}
+
+    <tr data-href="{% url 'workcentretasks' vehicle %}">
+        <td>{{ vehicle }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

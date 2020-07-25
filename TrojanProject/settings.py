@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'import_export',
     'crispy_forms',
     'PartsApp',
-
+    'ActivitiesApp',
+    'WorkOrdersApp',
 ]
 
 MIDDLEWARE = [

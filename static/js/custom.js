@@ -8,12 +8,12 @@ $(document).ready(function()
 
     $('[data-id]').click(function()
     {
-        $("#id_partsrequired").val($(this).data('id'));
+        $("#id_part").val($(this).data('id'));
     });
 
     $('[data-aid]').click(function()
     {
-        $("#id_activityid").val($(this).data('aid'));
+        $("#id_activity").val($(this).data('aid'));
     });
 });
 

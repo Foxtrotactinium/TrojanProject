@@ -1,0 +1,58 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block body %}
+<script>
+    function workcentretaskactivitysearch() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchBar");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("workcentretaskactivitytable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+<br>
+<form class="form-inline my-2 my-lg-0">
+  <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="workcentretaskactivitysearch()" placeholder="Search" aria-label="Search">
+</form>
+
+<br>
+
+<table class="table table-hover" id="workcentretaskactivitytable">
+    <thead>
+    <tr>
+        <th>Parts</th>
+
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for part in parts %}
+
+    <tr>
+        <td>{{ part }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "includes/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block body%}
+<script>
+    function inventorySearch() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("searchBar");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("partselection");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
+
+<br>
+
+<div class="row justify-content-between">
+    <div class="row">
+        <div class="col-sm">
+            <br>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="inventorySearch()" placeholder="Search" aria-label="Search">
+            </form>
+            <br>
+            <table class="table table-hover" id="partselection">
+                <thead>
+                <tr>
+                    <th>Part Number</th>
+                    <th>Description</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for part in parts %}
+                <tr data-id="{{ part.id }}">
+                    <td>{{ part.partNumber }}</td>
+                    <td>{{ part.description }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm">
+        <table class="table table-hover">
+            <tbody>
+            {% for required in activityrequiredparts %}
+            <tr data-href="{% url 'info_part' required.part.id %}">
+                <td>{{ required.part.partNumber }}</td>
+                <td>{{ required.part.description }}</td>
+                <td>{{ required.quantity }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="container">
+            <form method="POST">
+                {% csrf_token %}
+                {% crispy requiredpartform %}
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
