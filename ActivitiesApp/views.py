@@ -36,7 +36,7 @@ def activity_information(request, id):
 
     else:
         form = activity_form(instance=activity)
-        print(ActivityPartModel.objects.all().filter(activity=id))
+        # print(ActivityPartModel.objects.all().filter(activity=id))
         context = {'activityform': form,
                    'activitypartsrequired': ActivityPartModel.objects.all().filter(activity=id),
                    'id': id}
@@ -50,7 +50,7 @@ def add_required_part_to_activity(request, id):
     if request.method == "POST":
         form = required_part_form(request.POST)
 
-        print(form.is_valid(), form.errors)
+        # print(form.is_valid(), form.errors)
 
         if form.is_valid():
             form.save()
