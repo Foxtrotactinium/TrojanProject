@@ -5,9 +5,9 @@ from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field,Hi
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 
-class work_form(forms.ModelForm):
+class WorkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(work_form, self).__init__(*args, **kwargs)
+        super(WorkForm, self).__init__(*args, **kwargs)
 
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields

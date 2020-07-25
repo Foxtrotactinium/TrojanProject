@@ -4,12 +4,12 @@
 
 {% block body%}
 
-    <div class="container">
-        <form method="POST">
-            <br>
-            {% csrf_token %}
-            {% crispy PartForm %}
-        </form>
-    </div>
+<div class="container">
+    <form method="POST">
+        <br>
+        {% csrf_token %}
+        {% crispy PartForm %}
+    </form>
+</div>
 
 {% endblock %}

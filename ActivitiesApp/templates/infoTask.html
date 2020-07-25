@@ -16,14 +16,14 @@
         <div class="col-sm">
             <br>
             <table class="table table-hover">
-            <tbody>
-            {% for activity in taskactivities %}
-            <tr data-href="{% url 'activityinformation' activity.activity.pk %}">
-                <td>{{ activity.activity }}</td>
-                <td>{{ activity.description }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
+                <tbody>
+                {% for activity in taskactivities %}
+                <tr data-href="{% url 'activityinformation' activity.activity.pk %}">
+                    <td>{{ activity.activity }}</td>
+                    <td>{{ activity.description }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
             </table>
             <a href="{% url 'addrequiredactivity' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Item</a>
         </div>

@@ -1,34 +1,11 @@
 {% extends "includes/base.html" %}
 {% load static %}
 {% block body %}
-    <script>
-        function supplierSearch() {
-            // Declare variables
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("searchBar");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("supplierTable");
-            tr = table.getElementsByTagName("tr");
-
-            // Loop through all table rows, and hide those who don't match the search query
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    </script>
 
     <br>
 
     <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="supplierSearch()" placeholder="Search" aria-label="Search">
+        <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
     </form>
 
     <br>
@@ -39,7 +16,7 @@
 
     <br>
 
-    <table class="table table-hover" id="supplierTable">
+    <table class="table table-hover" id="selection">
         <thead>
         <tr>
             <th>Supplier</th>

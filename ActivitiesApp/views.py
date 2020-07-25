@@ -7,7 +7,7 @@ from django.utils import timezone
 
 # Create your views here.
 def activity_list(request):
-    return render(request, 'activities.html', {'header': 'ActivityModel',
+    return render(request, 'listActivities.html', {'header': 'ActivityModel',
                                                'activities': ActivityModel.objects.all()})
 
 
@@ -22,7 +22,7 @@ def add_activity(request):
     else:
         form = activity_form()
 
-        return render(request, 'addactivity.html', {'activityform': form})
+        return render(request, 'addActivity.html', {'activityform': form})
 
 
 def activity_information(request, id):
@@ -36,21 +36,17 @@ def activity_information(request, id):
 
     else:
         form = activity_form(instance=activity)
-        # print(ActivityPartModel.objects.all().filter(activity=id))
         context = {'activityform': form,
                    'activitypartsrequired': ActivityPartModel.objects.all().filter(activity=id),
                    'id': id}
-        return render(request, 'activityinformation.html', context)
+        return render(request, 'infoActivity.html', context)
 
 
 def add_required_part_to_activity(request, id):
     activity_parts = ActivityPartModel.objects.all().filter(activity=id)
-
     parts = PartModel.objects.all()
     if request.method == "POST":
         form = required_part_form(request.POST)
-
-        # print(form.is_valid(), form.errors)
 
         if form.is_valid():
             form.save()
@@ -58,16 +54,15 @@ def add_required_part_to_activity(request, id):
 
     else:
         form = required_part_form(initial={'activity': id})
-        # form.fields['activityName'].disabled = True
         context = {'requiredpartform': form,
                    'activityrequiredparts': activity_parts,
                    'parts': parts,
                    }
-    return render(request, 'addrequired.html', context)
+    return render(request, 'addActivityPart.html', context)
 
 
 def tasks(request):
-    return render(request, 'tasks.html', {'header': 'TaskModel',
+    return render(request, 'listTasks.html', {'header': 'TaskModel',
                                           'tasks': TaskModel.objects.distinct()})
 
 
@@ -78,24 +73,10 @@ def add_task(request):
         if form.is_valid():
             form.save()
             return redirect('tasks')
-        # if form.is_valid():
-        #     taskName = form.cleaned_data['taskName']
-        #     activity = form.cleaned_data['activityName']
-        #
-        #     if TaskModel.objects.filter(taskName=taskName).count() > 0:
-        #         messages.error(request, "Task name exists")
-        #         return redirect('addtask')
-        #
-        #     required_list = ActivityPartModel.objects.filter(activityName=activity)
-        #     for required in required_list:
-        #         temp = TaskActivityModel(taskName=taskName,
-        #                                       activityName=activity,
-        #                                       )
-        #         temp.save()
-        #     return redirect('tasks')
+
     else:
         form = task_form()
-        return render(request, 'addtask.html', {'taskform': form})
+        return render(request, 'addTask.html', {'taskform': form})
 
 
 def task_information(request, id):
@@ -111,33 +92,29 @@ def task_information(request, id):
         context = {'taskform': form,
                    'taskactivities': TaskActivityModel.objects.filter(task=id),
                    'id': id}
-        return render(request, 'taskinformation.html', context)
+        return render(request, 'infoTask.html', context)
 
 
 def add_required_activity_to_task(request, id):
-    all_activities = ActivityModel.objects.all()
+    activities = ActivityModel.objects.all()
     task_activities = TaskActivityModel.objects.filter(task=id)
     if request.method == "POST":
         form = required_activity_form(request.POST)
-        print(form.is_valid())
         if form.is_valid():
-            print(form)
             form.save()
         return redirect('tasks')
 
     else:
-        form = required_activity_form(initial={'taskName': id})
-        # form.fields['taskName'].readonly = True
-        # form.fields['taskName'].value = id
+        form = required_activity_form(initial={'task': id})
         context = {'requiredactivityform': form,
                    'taskrequiredactivity': task_activities,
-                   'allactivities': all_activities,
+                   'allactivities': activities,
                    }
-    return render(request, 'addrequiredactivity.html', context)
+    return render(request, 'addTaskActivity.html', context)
 
 
 def tasks(request):
-    return render(request, 'tasks.html', {'header': 'TaskModel',
+    return render(request, 'listTasks.html', {'header': 'TaskModel',
                                           'tasks': TaskModel.objects.all()})
 
 # # use for getting all files in instruction model relating to job from ActivityModel model

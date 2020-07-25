@@ -70,8 +70,8 @@ class required_activity_form(forms.ModelForm):
         # It builds a default layout with all its fields
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field('taskName', type="hidden"),
-            Field('activityName', css_class='form-control'),
+            Field('task', type="hidden"),
+            Field('activity', css_class='form-control'),
             HTML('<br>'),
             Submit('save', 'Save')
         )

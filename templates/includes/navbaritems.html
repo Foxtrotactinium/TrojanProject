@@ -11,22 +11,22 @@
     <li class="nav-item">
         <a class="nav-link" href="{% url 'tasks' %}">Tasks</a>
     </li>
-    {#    <li class="nav-item">#}
-    {#        <a class="nav-link" href="{% url 'workcentre' %}">Workcentre</a>#}
-    {#    </li>#}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'infojobs' %}">Workcentre</a>
+    </li>
     {% if user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">{{user.username|title}}</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-        </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">{{user.username|title}}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+    </li>
     {% else %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Login</a>
-        </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'register' %}">Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">Login</a>
+    </li>
     {% endif %}
 </ul>

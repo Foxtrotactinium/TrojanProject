@@ -1,0 +1,35 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block body %}
+
+<br>
+<form class="form-inline my-2 my-lg-0">
+  <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+</form>
+
+<br>
+
+<table class="table table-hover" id="selection">
+    <thead>
+    <tr>
+        <th>Configuration</th>
+
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for task in jobtasks %}
+
+    <tr data-href="{% url 'infojobactivities' job task %}">
+        <td>{{ task }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

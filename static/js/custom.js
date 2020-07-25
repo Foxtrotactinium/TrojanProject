@@ -15,6 +15,7 @@ $(document).ready(function()
     {
         $("#id_activity").val($(this).data('aid'));
     });
+
 });
 
 
