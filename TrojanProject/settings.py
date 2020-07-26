@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'PartsApp',
     'ActivitiesApp',
     'WorkOrdersApp',
-    'QRScannerApp'
+    'QRScannerApp',
+    'sslserver',
 ]
 
 MIDDLEWARE = [

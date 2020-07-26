@@ -5,27 +5,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
     <title>Title</title>
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
 </head>
 <body>
-<div style="width: 500px" id="reader"></div>
+<div id="container">
+    <h1>QR Code Scanner</h1>
+
+    <a id="btn-scan-qr">
+        <img src="https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2017/07/1499401426qr_icon.svg">
+    </a>
+
+    <canvas hidden="" id="qr-canvas"></canvas>
+
+    <div id="qr-result" hidden="">
+        <b>Data:</b> <span id="outputData"></span>
+    </div>
+</div>
+
+<script src="{% static '/js/qrCodeReader.js' %}"></script>
 </body>
 </html>
 
-
-<script src="{% static '/js/html5-qrcode.min.js' %}"></script>
-<script>
-function onScanSuccess(qrMessage) {
-    // handle the scanned code as you like
-    console.log(`QR matched = ${qrMessage}`);
-}
-
-function onScanFailure(error) {
-    // handle scan failure, usually better to ignore and keep scanning
-    console.warn(`QR error = ${error}`);
-}
-
-let html5QrcodeScanner = new Html5QrcodeScanner(
-    "reader", { fps: 10, qrbox: 250 }, /* verbose= */ true);
-html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+<script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js">
 </script>
