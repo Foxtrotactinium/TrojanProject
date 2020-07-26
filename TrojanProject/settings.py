@@ -30,7 +30,7 @@ SECRET_KEY = 'z!^y&6)&(4qmx4poh#=wt^wddf#e!wha_8@45k^e6bz8-gl!s9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["10.0.0.95"]
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'PartsApp',
     'ActivitiesApp',
     'WorkOrdersApp',
+    'QRScannerApp'
 ]
 
 MIDDLEWARE = [

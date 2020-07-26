@@ -26,4 +26,5 @@ urlpatterns = [
     path('inventory/',include('PartsApp.urls')),
     path('activities/', include('ActivitiesApp.urls')),
     path('workOrders/', include('WorkOrdersApp.urls')),
+    path('QRScanner/', include('QRScannerApp.urls')),
 ]
