@@ -3,14 +3,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import activity_form, required_part_form, task_form, required_activity_form
 from django.contrib import messages
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def activity_list(request):
     return render(request, 'listActivities.html', {'header': 'ActivityModel',
                                                'activities': ActivityModel.objects.all()})
 
-
+@login_required
 def add_activity(request):
     if request.method == "POST":
         form = activity_form(request.POST)
@@ -24,7 +26,7 @@ def add_activity(request):
 
         return render(request, 'addActivity.html', {'activityform': form})
 
-
+@login_required
 def activity_information(request, id):
     activity = get_object_or_404(ActivityModel, id=id)
 
@@ -41,7 +43,7 @@ def activity_information(request, id):
                    'id': id}
         return render(request, 'infoActivity.html', context)
 
-
+@login_required
 def add_required_part_to_activity(request, id):
     activity_parts = ActivityPartModel.objects.all().filter(activity=id)
     parts = PartModel.objects.all()
@@ -60,12 +62,12 @@ def add_required_part_to_activity(request, id):
                    }
     return render(request, 'addActivityPart.html', context)
 
-
+@login_required
 def tasks(request):
     return render(request, 'listTasks.html', {'header': 'TaskModel',
                                           'tasks': TaskModel.objects.distinct()})
 
-
+@login_required
 def add_task(request):
     if request.method == "POST":
         form = task_form(request.POST)
@@ -78,7 +80,7 @@ def add_task(request):
         form = task_form()
         return render(request, 'addTask.html', {'taskform': form})
 
-
+@login_required
 def task_information(request, id):
     task = get_object_or_404(TaskModel, id=id)
     if request.method == "POST":
@@ -94,7 +96,7 @@ def task_information(request, id):
                    'id': id}
         return render(request, 'infoTask.html', context)
 
-
+@login_required
 def add_required_activity_to_task(request, id):
     activities = ActivityModel.objects.all()
     task_activities = TaskActivityModel.objects.filter(task=id)
@@ -112,7 +114,7 @@ def add_required_activity_to_task(request, id):
                    }
     return render(request, 'addTaskActivity.html', context)
 
-
+@login_required
 def tasks(request):
     return render(request, 'listTasks.html', {'header': 'TaskModel',
                                           'tasks': TaskModel.objects.all()})

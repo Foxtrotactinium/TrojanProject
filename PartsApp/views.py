@@ -2,9 +2,11 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .forms import *
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def list_parts(request):
     parts = PartModel.objects.all()
     for part in parts:
@@ -21,7 +23,7 @@ def list_parts(request):
 
     return render(request, 'listParts.html', context)
 
-
+@login_required
 def list_supplier(request):
     context = {
         'header': 'Supplier List',
@@ -29,7 +31,7 @@ def list_supplier(request):
     }
     return render(request, 'listSuppliers.html', context)
 
-
+@login_required
 def info_part(request, part_id):
     part = PartModel.objects.all().filter(pk=part_id).first()
 
@@ -53,7 +55,7 @@ def info_part(request, part_id):
                                                  'partcomments': PartCommentModel.objects.all().filter(part=part.id),
                                                  })
 
-
+@login_required
 def info_supplier(request, id):
     if request.method == "POST":
         form = SupplierForm(request.POST, instance=SupplierModel.objects.all().filter(pk=id).first())
@@ -67,7 +69,7 @@ def info_supplier(request, id):
                                                      'supplierparts': PartSupplierModel.objects.all().filter(
                                                          supplier=id)})
 
-
+@login_required
 def add_supplier(request):
     if request.method == "POST":
         form = SupplierForm(request.POST)
@@ -80,7 +82,7 @@ def add_supplier(request):
         form = SupplierForm()
         return render(request, 'addSupplier.html', {'supplierForm': form})
 
-
+@login_required
 def add_part(request):
     if request.method == "POST":
         form = PartForm(request.POST)

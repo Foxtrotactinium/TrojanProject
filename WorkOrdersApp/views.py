@@ -4,8 +4,10 @@ from django.utils import timezone
 from ActivitiesApp.models import TaskActivityModel, ActivityPartModel, ActivityModel
 from .forms import WorkForm
 from .models import WorkCentreModel
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def add_job(request):
     if request.method == "POST":
         form = WorkForm(request.POST)
@@ -37,13 +39,13 @@ def add_job(request):
         form = WorkForm()
         return render(request, 'addJob.html', {'workform': form})
 
-
+@login_required
 def info_job(request):
     return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
                                             'jobs': WorkCentreModel.objects.values_list('vehicle',
                                                                                         flat=True).distinct()})
 
-
+@login_required
 def info_job_tasks(request, job):
     tasks = WorkCentreModel.objects \
         .filter(vehicle=job) \
@@ -53,7 +55,7 @@ def info_job_tasks(request, job):
                                                  'job': job,
                                                  'jobtasks': tasks})
 
-
+@login_required
 def info_job_activities(request, job, task):
     activities = WorkCentreModel.objects \
         .filter(vehicle=job) \
@@ -64,7 +66,7 @@ def info_job_activities(request, job, task):
                                                       'job': job,
                                                       'task': task})
 
-
+@login_required
 def info_job_parts(request, job, task, activity):
     activity = get_object_or_404(ActivityModel, activityName=activity)
     parts = WorkCentreModel.objects \
