@@ -5,7 +5,14 @@
     <br>
     <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+        <button id="btn-scan-qr">QR</button>
     </form>
+
+    <div>
+    <canvas hidden="" id="qr-canvas"></canvas>
+
+    </div>
+
 
     <br>
 
@@ -43,5 +50,5 @@
         </tbody>
 
     </table>
-
+<script src="{% static '/js/qrCodeReaderMy.js' %}"></script>
 {% endblock %}
