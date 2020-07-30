@@ -18,5 +18,5 @@ class VehiclePartsModel(models.Model):
     vehicle = models.ForeignKey(VehicleModel, on_delete=models.PROTECT)
     part = models.ForeignKey(PartModel, on_delete=models.PROTECT)
     quantityCompleted = models.IntegerField(default=0)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     history = HistoricalRecords()

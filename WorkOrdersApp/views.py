@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from ActivitiesApp.models import TaskActivityModel, ActivityPartModel, ActivityModel
 from .forms import WorkForm
-from .models import VehicleModel
+from .models import VehicleModel, VehiclePartsModel
 from django.contrib.auth.decorators import login_required
 
 
@@ -12,22 +12,23 @@ def add_job(request):
     if request.method == "POST":
         form = WorkForm(request.POST)
         if form.is_valid():
-            job = form.cleaned_data['chassisNumber']
-            if VehicleModel.objects.filter(chassisNumber=job).count() > 0:
+
+            if VehicleModel.objects.filter(chassisNumber=form.cleaned_data['chassisNumber']).count() > 0:
                 messages.error(request, "Vehicle already exists")
                 return redirect('addjob')
 
+            vehicleMy = form.save()
             taskname = form.cleaned_data['task']
+
             taskactivitylist = TaskActivityModel.objects.filter(task=taskname)
+
             for activity in taskactivitylist:
                 required_list = ActivityPartModel.objects.filter(activity=activity.activity)
                 for required in required_list:
-                    temp = VehicleModel(chassisNumber=job,
-                                        task=taskname,
-                                        part=required.part,
-                                        quantityCompleted=0,
-                                        user=request.user,
-                                        )
+                    temp = VehiclePartsModel(vehicle=vehicleMy,
+                                             part=required.part,
+                                             quantityCompleted=0,
+                                             )
                     temp.save()
 
             return redirect('infojobs')
@@ -35,41 +36,52 @@ def add_job(request):
         form = WorkForm()
         return render(request, 'addJob.html', {'workform': form})
 
+
 @login_required
 def info_job(request):
     return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
-                                            'jobs': VehicleModel.objects.values_list('chassisNumber',
-                                                                                     flat=True).distinct()})
+                                            'jobs': VehicleModel.objects.all()})
+
 
 @login_required
-def info_job_tasks(request, job):
-    tasks = VehicleModel.objects \
-        .filter(vehicle=job) \
-        .values_list('task__taskName', flat=True) \
-        .distinct()
-    return render(request, 'infoJobTasks.html', {'header': 'Outstanding Tasks',
-                                                 'job': job,
-                                                 'jobtasks': tasks})
+def info_job_activities(request, job):
 
-@login_required
-def info_job_activities(request, job, task):
-    activities = VehicleModel.objects \
-        .filter(vehicle=job) \
-        .values_list('activity__activityName', flat=True) \
-        .distinct()
-    return render(request, 'infoJobActivities.html', {'header': 'Kits',
-                                                      'jobactivities': activities,
+    vehicle = get_object_or_404(VehicleModel, id=job)
+    task = vehicle.task
+
+    activities = TaskActivityModel.objects.filter(task=task)
+
+
+
+    # tasks = VehiclePartsModel.objects.filter(vehicle=job)
+    return render(request, 'infoJobActivities.html', {'header': 'Outstanding Tasks',
                                                       'job': job,
-                                                      'task': task})
+                                                      'jobactivities': activities})
+
+
+# @login_required
+# def info_job_activities(request, job, task):
+#     activities = VehicleModel.objects \
+#         .filter(vehicle=job) \
+#         .values_list('activity__activityName', flat=True) \
+#         .distinct()
+#     return render(request, 'infoJobActivities.html', {'header': 'Kits',
+#                                                       'jobactivities': activities,
+#                                                       'job': job,
+#                                                       'task': task})
+
 
 @login_required
-def info_job_parts(request, job, task, activity):
-    activity = get_object_or_404(ActivityModel, activityName=activity)
-    parts = VehicleModel.objects \
+def info_job_parts(request, job, activity_id):
+    # activity = get_object_or_404(ActivityPartModel, activity=activity_id)
+
+    reqParts = ActivityPartModel.objects.filter(activity=activity_id)
+
+    parts = VehiclePartsModel.objects \
         .filter(vehicle=job) \
-        .filter(activity=activity)
+        .filter(part_id__in=reqParts.values_list("id"))
     return render(request, 'infoJobParts.html', {'header': 'Kits',
-                                                 'vehicle': job,
-                                                 'task': task,
-                                                 'activity': activity,
+                                                 # 'vehicle': job,
+                                                 # 'task': task,
+                                                 # 'activity': activity,
                                                  'parts': parts})

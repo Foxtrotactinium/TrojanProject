@@ -24,6 +24,14 @@ class WorkForm(forms.ModelForm):
         model = VehicleModel
         fields = ['chassisNumber', 'fleetNumber', 'task']
 
+class WorkUserForm(WorkForm):
+
+
+
+    class Meta:
+        model = VehiclePartsModel
+        fields = ['user']
+
 
 class WorkPartsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

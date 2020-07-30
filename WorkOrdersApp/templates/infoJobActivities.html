@@ -21,7 +21,7 @@
 
     {% for activity in jobactivities %}
 
-    <tr data-href="{% url 'infojobparts' job task activity %}">
+    <tr data-href="{% url 'infojobparts' job activity.id %}">
         <td>{{ activity }}</td>
 
     </tr>

@@ -28,7 +28,7 @@
 
     {% for vehicle in jobs %}
 
-    <tr data-href="{% url 'infojobtasks' vehicle %}">
+    <tr data-href="{% url 'infojobactivities' vehicle.id %}">
         <td>{{ vehicle }}</td>
 
     </tr>
