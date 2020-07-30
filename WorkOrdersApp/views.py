@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from ActivitiesApp.models import TaskActivityModel, ActivityPartModel, ActivityModel
 from .forms import WorkForm
-from .models import WorkCentreModel
+from .models import VehicleModel
 from django.contrib.auth.decorators import login_required
 
 
@@ -12,8 +12,8 @@ def add_job(request):
     if request.method == "POST":
         form = WorkForm(request.POST)
         if form.is_valid():
-            job = form.cleaned_data['vehicle']
-            if WorkCentreModel.objects.filter(vehicle=job).count() > 0:
+            job = form.cleaned_data['chassisNumber']
+            if VehicleModel.objects.filter(chassisNumber=job).count() > 0:
                 messages.error(request, "Vehicle already exists")
                 return redirect('addjob')
 
@@ -22,16 +22,12 @@ def add_job(request):
             for activity in taskactivitylist:
                 required_list = ActivityPartModel.objects.filter(activity=activity.activity)
                 for required in required_list:
-                    temp = WorkCentreModel(vehicle=job,
-                                           task=taskname,
-                                           activity=activity.activity,
-                                           part=required.part,
-                                           increment=required.increment,
-                                           quantityRequired=required.quantity,
-                                           quantityCompleted=0,
-                                           timestamp=timezone.now(),
-                                           user=request.user,
-                                           )
+                    temp = VehicleModel(chassisNumber=job,
+                                        task=taskname,
+                                        part=required.part,
+                                        quantityCompleted=0,
+                                        user=request.user,
+                                        )
                     temp.save()
 
             return redirect('infojobs')
@@ -42,12 +38,12 @@ def add_job(request):
 @login_required
 def info_job(request):
     return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
-                                            'jobs': WorkCentreModel.objects.values_list('vehicle',
-                                                                                        flat=True).distinct()})
+                                            'jobs': VehicleModel.objects.values_list('chassisNumber',
+                                                                                     flat=True).distinct()})
 
 @login_required
 def info_job_tasks(request, job):
-    tasks = WorkCentreModel.objects \
+    tasks = VehicleModel.objects \
         .filter(vehicle=job) \
         .values_list('task__taskName', flat=True) \
         .distinct()
@@ -57,7 +53,7 @@ def info_job_tasks(request, job):
 
 @login_required
 def info_job_activities(request, job, task):
-    activities = WorkCentreModel.objects \
+    activities = VehicleModel.objects \
         .filter(vehicle=job) \
         .values_list('activity__activityName', flat=True) \
         .distinct()
@@ -69,7 +65,7 @@ def info_job_activities(request, job, task):
 @login_required
 def info_job_parts(request, job, task, activity):
     activity = get_object_or_404(ActivityModel, activityName=activity)
-    parts = WorkCentreModel.objects \
+    parts = VehicleModel.objects \
         .filter(vehicle=job) \
         .filter(activity=activity)
     return render(request, 'infoJobParts.html', {'header': 'Kits',

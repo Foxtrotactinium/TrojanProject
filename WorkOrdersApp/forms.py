@@ -13,12 +13,28 @@ class WorkForm(forms.ModelForm):
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            Field('vehicle', css_class='form-control'),
+            Field('chassisNumber', css_class='form-control'),
+            Field('fleetNumber', css_class='form-control'),
             Field('task', css_class='form-control'),
-            Field('activity', css_class='form-control'),
+            HTML('<br>'),
+            Submit('save', 'Save')
+        )
+
+    class Meta:
+        model = VehicleModel
+        fields = ['chassisNumber', 'fleetNumber', 'task']
+
+
+class WorkPartsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(WorkForm, self).__init__(*args, **kwargs)
+
+        # If you pass FormHelper constructor a form instance
+        # It builds a default layout with all its fields
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            Field('vehicle', css_class='form-control'),
             Field('part', css_class='form-control'),
-            Field('increment', css_class='form-control'),
-            Field('quantityRequired', css_class='form-control'),
             Field('quantityCompleted', css_class='form-control'),
             Field('user', css_class='form-control'),
             HTML('<br>'),
@@ -26,5 +42,5 @@ class WorkForm(forms.ModelForm):
         )
 
     class Meta:
-        model = WorkCentreModel
-        fields = ['vehicle', 'task']
+        model = VehiclePartsModel
+        fields = ['vehicle', 'part']

@@ -2,12 +2,14 @@ from django.db import models
 # from django.contrib.postgres.fields import ArrayField
 from PartsApp.models import PartModel
 from django.contrib.auth.models import User
+from simple_history.models import HistoricalRecords
 
 
 # Create your models here.
 class ActivityModel(models.Model):
     activityName = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
+    history = HistoricalRecords()
 
     def __str__(self):
         return str(self.activityName)
@@ -15,10 +17,10 @@ class ActivityModel(models.Model):
 
 class ActivityPartModel(models.Model):
     activity = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
-    # part = models.ForeignKey(PartModel, related_name='required_for_jobs', on_delete=models.CASCADE)
     part = models.ForeignKey(PartModel, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     increment = models.BooleanField(default=False)  # TRUE/FALSE used to represent parts ActivityPartModel/produced
+    history = HistoricalRecords()
 
     def __str__(self):
         return str(self.activity) + " - " + str(self.part)

@@ -31,6 +31,7 @@ SECRET_KEY = 'z!^y&6)&(4qmx4poh#=wt^wddf#e!wha_8@45k^e6bz8-gl!s9'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     '192.168.0.100',
     '10.0.0.95',
 ] #"10.0.0.95"]
@@ -51,8 +52,8 @@ INSTALLED_APPS = [
     'PartsApp',
     'ActivitiesApp',
     'WorkOrdersApp',
-    'QRScannerApp',
     'sslserver',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'TrojanProject.urls'
