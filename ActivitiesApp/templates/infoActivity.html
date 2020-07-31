@@ -16,6 +16,11 @@
         <div class="col-sm">
             <br>
             <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Parts Required</th>
+                </tr>
+                </thead>
                 <tbody>
                 {% for required in activitypartsrequired %}
                 <tr data-href="{% url 'info_part' required.part.id %}">
@@ -26,7 +31,24 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="{% url 'addrequired' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Item</a>
+            <a href="{% url 'addrequired' id=id increment=False %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required Part</a>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Parts Produced</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for produced in activitypartsproduced %}
+                <tr data-href="{% url 'info_part' required.part.id %}">
+                    <td>{{ produced.part.partnumber }}</td>
+                    <td>{{ produced.part.description }}</td>
+                    <td>{{ produced.quantity }}</td>
+                </tr>
+                <a href="{% url 'addrequired' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required Part</a>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

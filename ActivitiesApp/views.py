@@ -41,14 +41,15 @@ def activity_information(request, id):
     else:
         form = activity_form(instance=activity)
         context = {'activityform': form,
-                   'activitypartsrequired': ActivityPartModel.objects.all().filter(activity=id),
+                   'activitypartsrequired': ActivityPartModel.objects.filter(activity=id).filter(increment=False),
+                   # 'activitypartsproduced': ActivityPartModel.objects.filter(activity=id).filter(increment=True),
                    'id': id}
         return render(request, 'infoActivity.html', context)
 
 
 @login_required
-def add_required_part_to_activity(request, id):
-    activity_parts = ActivityPartModel.objects.all().filter(activity=id)
+def add_required_part_to_activity(request, id, increment):
+    activity_parts = ActivityPartModel.objects.filter(activity=id).filter(increment=increment)
     parts = PartModel.objects.all()
     if request.method == "POST":
         form = required_part_form(request.POST)
