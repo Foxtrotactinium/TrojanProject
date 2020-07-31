@@ -8,6 +8,12 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
+def info_job(request):
+    return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
+                                            'jobs': VehicleModel.objects.all()})
+
+
+@login_required
 def add_job(request):
     if request.method == "POST":
         form = WorkForm(request.POST)
@@ -38,50 +44,20 @@ def add_job(request):
 
 
 @login_required
-def info_job(request):
-    return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
-                                            'jobs': VehicleModel.objects.all()})
-
-
-@login_required
 def info_job_activities(request, job):
-
     vehicle = get_object_or_404(VehicleModel, id=job)
     task = vehicle.task
-
     activities = TaskActivityModel.objects.filter(task=task)
-
-
-
-    # tasks = VehiclePartsModel.objects.filter(vehicle=job)
     return render(request, 'infoJobActivities.html', {'header': 'Outstanding Tasks',
                                                       'job': job,
                                                       'jobactivities': activities})
 
 
-# @login_required
-# def info_job_activities(request, job, task):
-#     activities = VehicleModel.objects \
-#         .filter(vehicle=job) \
-#         .values_list('activity__activityName', flat=True) \
-#         .distinct()
-#     return render(request, 'infoJobActivities.html', {'header': 'Kits',
-#                                                       'jobactivities': activities,
-#                                                       'job': job,
-#                                                       'task': task})
-
-
 @login_required
 def info_job_parts(request, job, activity_id):
-    # activity = get_object_or_404(ActivityPartModel, activity=activity_id)
-
     reqParts = ActivityPartModel.objects.filter(activity=activity_id)
-
     parts = VehiclePartsModel.objects \
         .filter(vehicle=job) \
         .filter(part_id__in=reqParts.values_list("id"))
     return render(request, 'infoJobParts.html', {'header': 'Kits',
-                                                 # 'vehicle': job,
-                                                 # 'task': task,
-                                                 # 'activity': activity,
                                                  'parts': parts})

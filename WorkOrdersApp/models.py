@@ -13,6 +13,9 @@ class VehicleModel(models.Model):
     fleetNumber = models.CharField(max_length=50)
     task = models.ForeignKey(TaskModel, on_delete=models.PROTECT)
 
+    def __str__(self):
+        return str(self.chassisNumber)+" - "+str(self.fleetNumber)+" - "+str(self.task)
+
 
 class VehiclePartsModel(models.Model):
     vehicle = models.ForeignKey(VehicleModel, on_delete=models.PROTECT)
@@ -20,3 +23,6 @@ class VehiclePartsModel(models.Model):
     quantityCompleted = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     history = HistoricalRecords()
+
+    def __str__(self):
+        return str(self.part)

@@ -16,6 +16,11 @@ $(document).ready(function()
         $("#id_activity").val($(this).data('aid'));
     });
 
+    $('[data-sid]').click(function()
+    {
+        $("#id_supplier").val($(this).data('sid'));
+    });
+
 });
 
 

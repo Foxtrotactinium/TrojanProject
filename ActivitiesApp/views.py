@@ -10,7 +10,8 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def activity_list(request):
     return render(request, 'listActivities.html', {'header': 'ActivityModel',
-                                               'activities': ActivityModel.objects.all()})
+                                                   'activities': ActivityModel.objects.all()})
+
 
 @login_required
 def add_activity(request):
@@ -25,6 +26,7 @@ def add_activity(request):
         form = activity_form()
 
         return render(request, 'addActivity.html', {'activityform': form})
+
 
 @login_required
 def activity_information(request, id):
@@ -42,6 +44,7 @@ def activity_information(request, id):
                    'activitypartsrequired': ActivityPartModel.objects.all().filter(activity=id),
                    'id': id}
         return render(request, 'infoActivity.html', context)
+
 
 @login_required
 def add_required_part_to_activity(request, id):
@@ -62,10 +65,12 @@ def add_required_part_to_activity(request, id):
                    }
     return render(request, 'addActivityPart.html', context)
 
+
 @login_required
 def tasks(request):
     return render(request, 'listTasks.html', {'header': 'TaskModel',
-                                          'tasks': TaskModel.objects.distinct()})
+                                              'tasks': TaskModel.objects.distinct()})
+
 
 @login_required
 def add_task(request):
@@ -79,6 +84,7 @@ def add_task(request):
     else:
         form = task_form()
         return render(request, 'addTask.html', {'taskform': form})
+
 
 @login_required
 def task_information(request, id):
@@ -95,6 +101,7 @@ def task_information(request, id):
                    'taskactivities': TaskActivityModel.objects.filter(task=id),
                    'id': id}
         return render(request, 'infoTask.html', context)
+
 
 @login_required
 def add_required_activity_to_task(request, id):
@@ -114,10 +121,11 @@ def add_required_activity_to_task(request, id):
                    }
     return render(request, 'addTaskActivity.html', context)
 
+
 @login_required
 def tasks(request):
     return render(request, 'listTasks.html', {'header': 'TaskModel',
-                                          'tasks': TaskModel.objects.all()})
+                                              'tasks': TaskModel.objects.all()})
 
 # # use for getting all files in instruction model relating to job from ActivityModel model
 # some_manual = Manual.objects.get(id=1)

@@ -1,7 +1,9 @@
 from django import forms
-from .models import PartModel, SupplierModel, PartCommentModel
+from .models import *
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Layout, Div, Submit, HTML, Hidden, Row, Column, Field
+
+
 # from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 
@@ -90,3 +92,23 @@ class PartCommentForm(forms.ModelForm):
     class Meta:
         model = PartCommentModel
         fields = ['comment', 'author', 'part']
+
+
+class PartSupplierForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(PartSupplierForm, self).__init__(*args, **kwargs)
+
+        # If you pass FormHelper constructor a form instance
+        # It builds a default layout with all its fields
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            Field('supplierPartNumber', css_class='form-control'),
+            Field('part', type='hidden'),
+            Field('supplier', css_class='form-control'),
+            'preferred',
+            Submit('submit', 'Add Supplier')
+        )
+
+    class Meta:
+        model = PartSupplierModel
+        fields = '__all__'

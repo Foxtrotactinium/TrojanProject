@@ -23,6 +23,7 @@ def list_parts(request):
 
     return render(request, 'listParts.html', context)
 
+
 @login_required
 def list_supplier(request):
     context = {
@@ -30,6 +31,7 @@ def list_supplier(request):
         'suppliers': SupplierModel.objects.all(),
     }
     return render(request, 'listSuppliers.html', context)
+
 
 @login_required
 def info_part(request, part_id):
@@ -52,8 +54,10 @@ def info_part(request, part_id):
                                                  'partsuppliers': PartSupplierModel.objects.all().filter(
                                                      part=part.id),
                                                  'commentForm': form2,
+                                                 'part_id': part.id,
                                                  'partcomments': PartCommentModel.objects.all().filter(part=part.id),
                                                  })
+
 
 @login_required
 def info_supplier(request, id):
@@ -69,6 +73,7 @@ def info_supplier(request, id):
                                                      'supplierparts': PartSupplierModel.objects.all().filter(
                                                          supplier=id)})
 
+
 @login_required
 def add_supplier(request):
     if request.method == "POST":
@@ -82,6 +87,7 @@ def add_supplier(request):
         form = SupplierForm()
         return render(request, 'addSupplier.html', {'supplierForm': form})
 
+
 @login_required
 def add_part(request):
     if request.method == "POST":
@@ -94,3 +100,26 @@ def add_part(request):
     else:
         form = PartForm()
         return render(request, 'addPart.html', {'PartForm': form})
+
+
+@login_required
+def add_supplier_to_part(request, part_id):
+    suppliers = SupplierModel.objects.all()
+    part = PartModel.objects.filter(pk=part_id)
+    partsuppliers = PartSupplierModel.objects.filter(part=part_id)
+    if request.method == "POST":
+        form = PartSupplierForm(request.POST)
+        print(part)
+        print(form.errors)
+        if form.is_valid():
+
+            form.save()
+        return redirect('info_part', part_id)
+
+    else:
+        form = PartSupplierForm(initial={'part': part})
+        context = {'partsupplierform': form,
+                   'partsuppliers': partsuppliers,
+                   'suppliers': suppliers,
+                   }
+    return render(request, 'addPartSupplier.html', context)
