@@ -38,6 +38,18 @@ class PartSupplierModel(models.Model):
     part = models.ForeignKey(PartModel, on_delete=models.CASCADE)
     preferred = models.BooleanField(default=False)
 
+    def setPreferred(self):
+
+        supp_list = PartSupplierModel.objects.all().filter(part=self.part)
+
+        for supp in supp_list:
+            supp.preferred = False
+            supp.save()
+
+        self.preferred = True
+        self.save()
+
+
     def __str__(self):
         return str(self.supplier) + " - " + str(self.supplierPartNumber)
 
