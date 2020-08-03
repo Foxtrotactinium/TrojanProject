@@ -42,7 +42,7 @@ def activity_information(request, id):
         form = activity_form(instance=activity)
         context = {'activityform': form,
                    'activitypartsrequired': ActivityPartModel.objects.filter(activity=id).filter(increment=False),
-                   # 'activitypartsproduced': ActivityPartModel.objects.filter(activity=id).filter(increment=True),
+                   'activitypartsproduced': ActivityPartModel.objects.filter(activity=id).filter(increment=True),
                    'id': id}
         return render(request, 'infoActivity.html', context)
 
@@ -59,7 +59,7 @@ def add_required_part_to_activity(request, id, increment):
         return redirect('activities')
 
     else:
-        form = required_part_form(initial={'activity': id})
+        form = required_part_form(initial={'activity': id, 'increment': increment})
         context = {'requiredpartform': form,
                    'activityrequiredparts': activity_parts,
                    'parts': parts,

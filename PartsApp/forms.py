@@ -103,7 +103,8 @@ class PartSupplierForm(forms.ModelForm):
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
             Field('supplierPartNumber', css_class='form-control'),
-            Field('part', type='hidden'),
+            # Field('part', type='hidden'),
+            'part',
             Field('supplier', css_class='form-control'),
             'preferred',
             Submit('submit', 'Add Supplier')

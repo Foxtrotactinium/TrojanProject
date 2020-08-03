@@ -35,14 +35,14 @@ class required_part_form(forms.ModelForm):
             Field('activity', type='hidden'),
             Field('part', css_class='form-control'),
             Field('quantity', css_class='form-control'),
-            Field('increment', css_class='form-control'),
+            Field('increment', type='hidden'),
             HTML('<br>'),
             Submit('save', 'Save')
         )
 
     class Meta:
         model = ActivityPartModel
-        fields = '__all__'
+        fields = ['activity', 'part', 'quantity', 'increment']
 
 
 class task_form(forms.ModelForm):

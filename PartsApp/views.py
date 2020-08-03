@@ -120,6 +120,7 @@ def add_supplier_to_part(request, part_id):
         form = PartSupplierForm(initial={'part': part})
         context = {'partsupplierform': form,
                    'partsuppliers': partsuppliers,
+                   'part': part,
                    'suppliers': suppliers,
                    }
     return render(request, 'addPartSupplier.html', context)
