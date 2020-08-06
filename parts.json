@@ -1,0 +1,37 @@
+[
+{
+    "model": "PartsApp.historicalpartmodel",
+    "pk": 1,
+    "fields": {
+        "id": 1,
+        "partNumber": "PartNumber1",
+        "description": "description1",
+        "location": "location1",
+        "stockOnHand": 1,
+        "minimumStock": 1,
+        "reorderQtys": 1,
+        "boxSize": 1,
+        "leadtime": "leadtime1",
+        "weight": 1,
+        "history_date": "2020-08-03T09:19:56.702Z",
+        "history_change_reason": null,
+        "history_type": "+",
+        "history_user": 1
+    }
+},
+{
+    "model": "PartsApp.partmodel",
+    "pk": 1,
+    "fields": {
+        "partNumber": "PartNumber1",
+        "description": "description1",
+        "location": "location1",
+        "stockOnHand": 1,
+        "minimumStock": 1,
+        "reorderQtys": 1,
+        "boxSize": 1,
+        "leadtime": "leadtime1",
+        "weight": 1
+    }
+}
+]

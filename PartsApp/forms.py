@@ -20,15 +20,15 @@ class PartForm(forms.ModelForm):
             Field('location', css_class='form-control'),
             Row(
                 Column(
-                    Field('stockOnHand', css_class='form-control mb-0'),
+                    Field('stockOnHand', css_class='form-control', required=True),
                     css_class='col-md-4'
                 ),
                 Column(
-                    Field('minimumStock', css_class='form-control mb-0'),
+                    Field('minimumStock', css_class='form-control', required=True),
                     css_class='col-md-4'
                 ),
                 Column(
-                    Field('reorderQtys', css_class='form-control mb-0'),
+                    Field('reorderQtys', css_class='form-control', required=True),
                     css_class='col-md-4'
                 ),
                 css_class='form-row'
@@ -36,11 +36,11 @@ class PartForm(forms.ModelForm):
             Field('leadtime', css_class='form-control'),
             Row(
                 Column(
-                    Field('boxSize', css_class='form-control mb-0'),
+                    Field('boxSize', css_class='form-control', required=True),
                     css_class='col-md-6'
                 ),
                 Column(
-                    Field('weight', css_class='form-control mb-0'),
+                    Field('weight', css_class='form-control', required=True),
                     css_class='col-md-6'
                 ),
                 css_class='form-row form_group'

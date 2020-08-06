@@ -5,11 +5,9 @@
 {% block body%}
 
 <div class="container">
-    <form method="POST">
-        <br>
-        {% csrf_token %}
-        {% crispy PartForm %}
-    </form>
+    <br>
+    {% csrf_token %}
+    {% crispy PartForm %}
 </div>
 
 {% endblock %}

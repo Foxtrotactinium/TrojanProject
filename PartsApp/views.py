@@ -94,7 +94,7 @@ def add_part(request):
         form = PartForm(request.POST)
 
         if form.is_valid():
-            form.save()
+            form.sav0e()
             return redirect('inventory')
 
     else:

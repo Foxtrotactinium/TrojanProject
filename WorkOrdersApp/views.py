@@ -33,6 +33,7 @@ def add_job(request):
                 for required in required_list:
                     temp = VehiclePartsModel(vehicle=vehicleMy,
                                              part=required.part,
+                                             quantityRequired=required.quantity,
                                              quantityCompleted=0,
                                              )
                     temp.save()
@@ -55,6 +56,13 @@ def info_job_activities(request, job):
 
 @login_required
 def info_job_parts(request, job, activity_id):
+    if request.method == "POST":
+        for x in request.POST:
+            try:
+                temp = get_object_or_404(VehiclePartsModel,id=int(x))
+                temp.updateQuantity(int(request.POST[x]))
+            except ValueError:
+                pass
     reqParts = ActivityPartModel.objects.filter(activity=activity_id)
     parts = VehiclePartsModel.objects \
         .filter(vehicle=job) \

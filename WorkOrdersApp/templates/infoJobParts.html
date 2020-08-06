@@ -4,32 +4,38 @@
 
 <br>
 <form class="form-inline my-2 my-lg-0">
-  <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+    <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
 </form>
 
 <br>
+<form method="POST">
 
-<table class="table table-hover" id="selectione">
-    <thead>
-    <tr>
-        <th>Parts</th>
+    <table class="table table-hover" id="selectione">
+        <thead>
+        <tr>
+            <th>Parts</th>
 
-    </tr>
-    </thead>
+        </tr>
+        </thead>
 
-    <tbody>
+        <tbody>
 
-    {% for part in parts %}
+        {% for part in parts %}
 
-    <tr>
-        <td>{{ part }}</td>
+        <tr>
+            <td>{{ part }}</td>
+            <td>{{ part.quantityRequired }}</td>
+            <td>
+                <input type="number" value="{{ part.quantityCompleted }}" name="{{ part.pk }}">
+            </td>
+        </tr>
 
-    </tr>
+        {% endfor %}
 
-    {% endfor %}
+        </tbody>
 
-    </tbody>
-
-</table>
-
+    </table>
+    <input type="submit">
+    {% csrf_token %}
+</form>
 {% endblock %}

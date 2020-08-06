@@ -33,7 +33,7 @@ class SupplierModel(models.Model):
 
 # lookup for many to many relationship between parts and Suppliers
 class PartSupplierModel(models.Model):
-    supplierPartNumber = models.CharField(max_length=50)
+    supplierPartNumber = models.CharField(max_length=50, null=True)
     supplier = models.ForeignKey(SupplierModel, on_delete=models.CASCADE)
     part = models.ForeignKey(PartModel, on_delete=models.CASCADE)
     preferred = models.BooleanField(default=False)
