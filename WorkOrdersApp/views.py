@@ -57,10 +57,10 @@ def info_job_activities(request, job):
 @login_required
 def info_job_parts(request, job, activity_id):
     if request.method == "POST":
-        for x in request.POST:
+        for completed in request.POST:
             try:
-                temp = get_object_or_404(VehiclePartsModel,id=int(x))
-                temp.updateQuantity(int(request.POST[x]))
+                updatedvalue = get_object_or_404(VehiclePartsModel,id=int(completed))
+                updatedvalue.updateQuantity(int(request.POST[completed]))
             except ValueError:
                 pass
     reqParts = ActivityPartModel.objects.filter(activity=activity_id)

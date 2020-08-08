@@ -10,11 +10,11 @@ from django.contrib.auth.decorators import login_required
 def list_parts(request):
     parts = PartModel.objects.all()
     for part in parts:
-        all_suppliers = PartSupplierModel.objects.all().filter(part=part.id)
+        all_suppliers = PartSupplierModel.objects.filter(part=part.id)
         if all_suppliers.count() > 1:
-            part.supplierName = all_suppliers.get_object_or_404(preferred=True)
+            part.supplier = all_suppliers.filter(preferred=True)
         else:
-            part.supplierName = all_suppliers.first()
+            part.supplier = all_suppliers.first()
 
     context = {
         'parts': parts,
@@ -120,7 +120,7 @@ def add_supplier_to_part(request, part_id):
         return redirect('info_part', part_id)
 
     else:
-        form = PartSupplierForm(initial={'part': part})
+        form = PartSupplierForm(initial={'part': part_id})
         context = {'partsupplierform': form,
                    'partsuppliers': partsuppliers,
                    'part': part,

@@ -21,26 +21,24 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark static-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <a class="navbar-brand" href="#">Trojan Systems</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
         {% include 'includes/navbaritems.html' %}
     </div>
 </nav>
 
 <main role="main" class="container">
     {% include 'includes/messaging.html' %}
-    <div class="container">
-        {% block body %} <!-- base.html inserted-->
+    {% block body %} <!-- base.html inserted-->
 
-        {% endblock %}
-    </div>
-
+    {% endblock %}
 </main>
+
 <script src="{% static '/js/jquery-3.5.1.min.js' %}"></script>
 <script src="{% static '/js/bootstrap.min.js' %}"></script>
 <script src="{% static '/js/custom.js' %}"></script>
