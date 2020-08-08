@@ -46,11 +46,18 @@ def info_part(request, part_id):
     else:
         form1 = PartForm(instance=part)
         form2 = PartCommentForm(initial={'author': request.user, 'part': part})
+        movements = part.history.all()[:10]
+        previouslevel = 0
+        for movement in movements:
+            movements.change = movement.stockOnHand - previouslevel
+            print(movements.change)
+            previouslevel = movement.stockOnHand
         return render(request, 'infoPart.html', {'partform': form1,
                                                  'partsuppliers': PartSupplierModel.objects.all().filter(
                                                      part=part.id),
                                                  'commentForm': form2,
                                                  'part_id': part.id,
+                                                 'movements': movements,
                                                  'partcomments': PartCommentModel.objects.all().filter(part=part.id),
                                                  })
 

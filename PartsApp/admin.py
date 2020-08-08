@@ -1,5 +1,6 @@
 # Register your models here.
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 # from work_orders.models import *
 from .models import PartModel, SupplierModel, PartSupplierModel, PartCommentModel
 # from import_export import resources
@@ -40,7 +41,7 @@ from .models import PartModel, SupplierModel, PartSupplierModel, PartCommentMode
 #         model = ActivityModel
 
 # admin.site.register(PartModel, importparts)
-admin.site.register(PartModel)
+admin.site.register(PartModel, SimpleHistoryAdmin)
 # admin.site.register(ActivityModel)
 admin.site.register(SupplierModel)
 admin.site.register(PartSupplierModel)
