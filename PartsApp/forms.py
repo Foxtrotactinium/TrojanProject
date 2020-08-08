@@ -15,6 +15,7 @@ class PartForm(forms.ModelForm):
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
+            'obsolete',
             Field('partNumber', css_class='form-control'),
             Field('description', css_class='form-control'),
             Field('location', css_class='form-control'),

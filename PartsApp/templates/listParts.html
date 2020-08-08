@@ -46,7 +46,8 @@
 
         {% for part in parts %}
 
-            <tr data-href="{% url 'info_part' part.id %}">
+            <tr data-href="{% url 'info_part' part.id %}"
+            {% if part.obsolete %} class="table-dark" {% endif %}>
                 <td>{{ part.partNumber }}</td>
                 <td>{{ part.description }}</td>
                 <td>{{ part.location }}</td>

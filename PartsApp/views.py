@@ -10,11 +10,7 @@ from django.contrib.auth.decorators import login_required
 def list_parts(request):
     parts = PartModel.objects.all()
     for part in parts:
-        all_suppliers = PartSupplierModel.objects.filter(part=part.id)
-        if all_suppliers.count() > 1:
-            part.supplier = all_suppliers.filter(preferred=True)
-        else:
-            part.supplier = all_suppliers.first()
+        part.supplier = part.getPreferredSupplier()
 
     context = {
         'parts': parts,
@@ -94,7 +90,7 @@ def add_part(request):
         form = PartForm(request.POST)
 
         if form.is_valid():
-            form.sav0e()
+            form.save()
             return redirect('inventory')
 
     else:

@@ -15,7 +15,17 @@ class PartModel(models.Model):
     boxSize = models.IntegerField(blank=True)
     leadtime = models.CharField(max_length=50)
     weight = models.IntegerField(blank=True)
+    obsolete = models.BooleanField(default=False)
     history = HistoricalRecords()
+
+    def getPreferredSupplier(self):
+        supplierlist = PartSupplierModel.objects.filter(part=self.id)
+        if supplierlist.count() > 1:
+            return supplierlist.get(preferred=True).supplier
+        elif supplierlist.count() == 1:
+            return supplierlist.first().supplier
+        return None
+
 
     def __str__(self):
         return self.partNumber

@@ -1,5 +1,9 @@
 $(document).ready(function()
 {
+    $('.setbutton').click(function() {
+    $('input[name='+$(this).data("partid")+']').val( $(this).data("value"));
+    });
+
     $('[data-href]').click(function()
     {
         window.location = $(this).data('href');
@@ -20,6 +24,7 @@ $(document).ready(function()
     {
         $("#id_supplier").val($(this).data('sid'));
     });
+
 
 });
 

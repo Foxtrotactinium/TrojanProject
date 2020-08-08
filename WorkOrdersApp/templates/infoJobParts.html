@@ -28,6 +28,7 @@
             <td>
                 <input type="number" value="{{ part.quantityCompleted }}" name="{{ part.pk }}">
             </td>
+            <td><button type="button" data-partid="{{ part.pk }}" data-value="{{ part.quantityRequired }}" class="setbutton">complete</button></td>
         </tr>
 
         {% endfor %}

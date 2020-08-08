@@ -20,6 +20,10 @@
         }
     </style>
 </head>
+<script src="{% static '/js/jquery-3.5.1.min.js' %}"></script>
+<script src="{% static '/js/bootstrap.min.js' %}"></script>
+<script src="{% static '/js/custom.js' %}"></script>
+<script src="{% static '/js/search.js' %}"></script>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <a class="navbar-brand" href="#">Trojan Systems</a>
@@ -32,16 +36,11 @@
     </div>
 </nav>
 
-<main role="main" class="container">
+<main class="container">
     {% include 'includes/messaging.html' %}
     {% block body %} <!-- base.html inserted-->
 
     {% endblock %}
 </main>
-
-<script src="{% static '/js/jquery-3.5.1.min.js' %}"></script>
-<script src="{% static '/js/bootstrap.min.js' %}"></script>
-<script src="{% static '/js/custom.js' %}"></script>
-<script src="{% static '/js/search.js' %}"></script>
 </body>
 </html>
