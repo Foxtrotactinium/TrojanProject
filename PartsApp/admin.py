@@ -2,16 +2,16 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
 # from work_orders.models import *
-from .models import PartModel, SupplierModel, PartSupplierModel, PartCommentModel
-# from import_export import resources
-# from import_export.admin import ImportExportModelAdmin
+from .models import *
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
-# # Register your models here.
-# class partsresource(resources.ModelResource):
+# Register your models here.
+class partsresource(resources.ModelResource):
+
+    class Meta:
+        model = PartModel
 #
-#     class Meta:
-#         model = PartModel
-# #
 # class supplierresource(resources.ModelResource):
 #
 #     class Meta:
@@ -32,16 +32,16 @@ from .models import PartModel, SupplierModel, PartSupplierModel, PartCommentMode
 #     list_display = ('timestamp', 'author', 'part', 'comments')
 #     readonly_fields = ('timestamp',)
 #
-# class importparts(ImportExportModelAdmin):
-#     resource_class = partsresource
+class importparts(ImportExportModelAdmin):
+    resource_class = partsresource
 
 # class jobsresource(resources.ModelResource):
 #
 #     class Meta:
 #         model = ActivityModel
 
-# admin.site.register(PartModel, importparts)
-admin.site.register(PartModel, SimpleHistoryAdmin)
+admin.site.register(PartModel, importparts)
+# admin.site.register(SimpleHistoryAdmin)
 # admin.site.register(ActivityModel)
 admin.site.register(SupplierModel)
 admin.site.register(PartSupplierModel)
