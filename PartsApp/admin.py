@@ -11,16 +11,16 @@ class partsresource(resources.ModelResource):
 
     class Meta:
         model = PartModel
-#
-# class supplierresource(resources.ModelResource):
-#
-#     class Meta:
-#         model = SupplierModel
-#
-# class partsupplierresource(resources.ModelResource):
-#
-#     class Meta:
-#         model = PartSupplierModel
+
+class suppliersresource(resources.ModelResource):
+
+    class Meta:
+        model = SupplierModel
+
+class partsuppliersresource(resources.ModelResource):
+
+    class Meta:
+        model = PartSupplierModel
 #
 # class partcommentsresource(resources.ModelResource):
 #
@@ -35,6 +35,11 @@ class partsresource(resources.ModelResource):
 class importparts(ImportExportModelAdmin):
     resource_class = partsresource
 
+class importsuppliers(ImportExportModelAdmin):
+    resource_class = suppliersresource
+
+class importpartsuppliers(ImportExportModelAdmin):
+    resource_class = partsuppliersresource
 # class jobsresource(resources.ModelResource):
 #
 #     class Meta:
@@ -43,8 +48,8 @@ class importparts(ImportExportModelAdmin):
 admin.site.register(PartModel, importparts)
 # admin.site.register(SimpleHistoryAdmin)
 # admin.site.register(ActivityModel)
-admin.site.register(SupplierModel)
-admin.site.register(PartSupplierModel)
+admin.site.register(SupplierModel, importsuppliers)
+admin.site.register(PartSupplierModel, importpartsuppliers)
 # admin.site.register(ActivityPartModel)
 admin.site.register(PartCommentModel)
 # admin.site.register(TaskModel)

@@ -22,7 +22,9 @@
                 </thead>
                 <tbody>
                 {% for supplierpart in supplierparts %}
-                <tr data-href="{% url 'info_part' supplierpart.part.id %}">
+                <tr data-href="{% url 'info_part' supplierpart.part.id %}"
+                    {% if supplierpart.part.obsolete %} class="table-dark" {% endif %}
+                    {% if supplierpart.low %} class="table-danger" {% endif %}>
                     <td>{{ supplierpart.part.partNumber }}</td>
                     <td>{{ supplierpart.part.stockOnHand }}</td>
                 </tr>

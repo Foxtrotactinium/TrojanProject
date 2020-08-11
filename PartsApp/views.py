@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 def list_parts(request):
     parts = PartModel.objects.all()
     for part in parts:
+        part.low = part.stockOnHand < part.minimumStock
+    for part in parts:
         part.supplier = part.getPreferredSupplier()
 
     context = {
@@ -71,10 +73,12 @@ def info_supplier(request, id):
             return redirect('suppliers')
 
     else:
+        supplierparts = PartSupplierModel.objects.all().filter(supplier=id)
+        for part in supplierparts:
+            part.low = part.part.stockOnHand < part.part.minimumStock
         form = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first())
         return render(request, 'infoSupplier.html', {'supplierForm': form,
-                                                     'supplierparts': PartSupplierModel.objects.all().filter(
-                                                         supplier=id)})
+                                                     'supplierparts': supplierparts})
 
 
 @login_required
