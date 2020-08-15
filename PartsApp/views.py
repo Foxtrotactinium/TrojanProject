@@ -117,12 +117,7 @@ def add_supplier_to_part(request, part_id):
     if request.method == "POST":
         form = PartSupplierForm(request.POST)
         if form.is_valid():
-            part_supplier = form.save()
-
-            is_preferred = form.cleaned_data['preferred']
-
-            if is_preferred:
-                part_supplier.setPreferred()
+            form.save()
 
         return redirect('info_part', part_id)
 

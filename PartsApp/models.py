@@ -1,5 +1,5 @@
 # Create your models here.
-from django.db import models
+from django.db import models, transaction
 from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
 
@@ -19,12 +19,10 @@ class PartModel(models.Model):
     history = HistoricalRecords()
 
     def getPreferredSupplier(self):
-        supplierlist = PartSupplierModel.objects.filter(part=self.id)
-        if supplierlist.count() > 1:
-            return supplierlist.get(preferred=True).supplier
-        elif supplierlist.count() == 1:
-            return supplierlist.first().supplier
-        return None
+        supplierList = PartSupplierModel.objects.filter(part=self.id, preferred=True)
+        if supplierList.count() == 0:
+            return None
+        return supplierList.first().supplier
 
 
     def __str__(self):
@@ -48,16 +46,15 @@ class PartSupplierModel(models.Model):
     part = models.ForeignKey(PartModel, on_delete=models.CASCADE)
     preferred = models.BooleanField(default=False)
 
-    def setPreferred(self):
-
-        supp_list = PartSupplierModel.objects.all().filter(part=self.part)
-
-        for supp in supp_list:
-            supp.preferred = False
-            supp.save()
-
-        self.preferred = True
-        self.save()
+    def save(self, *args, **kwargs):
+        if not self.preferred:
+            if PartSupplierModel.objects.filter(part=self.part).count() == 0:
+                self.preferred = True
+            return super(PartSupplierModel, self).save(*args, **kwargs)
+        with transaction.atomic():
+            PartSupplierModel.objects.filter(part=self.part, preferred=True) \
+                .update(preferred=False)
+            return super(PartSupplierModel, self).save(*args, **kwargs)
 
 
     def __str__(self):
