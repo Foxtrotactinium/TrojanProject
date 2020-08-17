@@ -7,8 +7,9 @@ urlpatterns = [
     path('activity/<str:id>/', activity_information, name='activityinformation'),
     path('activity/<str:id>/addrequired', add_required_part_to_activity, {'increment': False}, name='addrequired'),
     path('activity/<str:id>/addproduced', add_required_part_to_activity, {'increment': True}, name='addproduced'),
-    path('tasks/', tasks, name='tasks'),
-    path('tasks/addtask/', add_task, name='addtask'),
-    path('tasks/<int:id>/', task_information, name='taskinformation'),
-    path('tasks/<int:id>/addrequired', add_required_activity_to_task, name='addrequiredactivity'),
+    # path('workcenters/', work_centers, name='workcenters'),
+    path('groups/', groups, name='groups'),
+    path('groups/addgroup/', add_group, name='addgroup'),
+    path('groups/<int:id>/', group_information, name='groupinformation'),
+    path('groups/<int:id>/addrequired', add_required_activity_to_group, name='addrequiredactivity'),
 ]

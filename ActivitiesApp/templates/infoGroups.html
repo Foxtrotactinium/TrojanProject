@@ -10,14 +10,14 @@
             <form method="POST">
                 <br>
                 {% csrf_token %}
-                {% crispy taskform %}
+                {% crispy groupform %}
             </form>
         </div>
         <div class="col-sm">
             <br>
             <table class="table table-hover">
                 <tbody>
-                {% for activity in taskactivities %}
+                {% for activity in groupactivities %}
                 <tr data-href="{% url 'activityinformation' activity.activity.pk %}">
                     <td>{{ activity.activity }}</td>
                     <td>{{ activity.description }}</td>

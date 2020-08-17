@@ -15,14 +15,14 @@ class WorkForm(forms.ModelForm):
         self.helper.layout = Layout(
             Field('chassisNumber', css_class='form-control'),
             Field('fleetNumber', css_class='form-control'),
-            Field('task', css_class='form-control'),
+            Field('group', css_class='form-control'),
             HTML('<br>'),
             Submit('save', 'Save')
         )
 
     class Meta:
         model = VehicleModel
-        fields = ['chassisNumber', 'fleetNumber', 'task']
+        fields = ['chassisNumber', 'fleetNumber', 'group']
 
 class WorkUserForm(WorkForm):
 

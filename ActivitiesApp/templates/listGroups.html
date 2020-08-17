@@ -1,0 +1,34 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block body %}
+
+<br>
+<form class="form-inline my-2 my-lg-0">
+  <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+</form>
+
+<br>
+
+<div class="container-fluid">
+      <a href="{% url 'addgroup' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Group</a>
+</div>
+
+<br>
+
+<table class="table table-hover" id="selection">
+    <thead>
+    <tr>
+        <th>Tasks</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for group in groups %}
+    <tr data-href="{% url 'groupinformation' group.id %}">
+        <td>{{ group.groupName }}</td>
+        <td>{{ group.workCenter }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

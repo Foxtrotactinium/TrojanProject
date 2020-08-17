@@ -6,17 +6,17 @@ from PartsApp.models import *
 
 
 # Create your models here.
-from ActivitiesApp.models import TaskModel, ActivityModel
+from ActivitiesApp.models import GroupModel, ActivityModel
 from PartsApp.models import PartModel
 
 
 class VehicleModel(models.Model):
     chassisNumber = models.CharField(max_length=50)
     fleetNumber = models.CharField(max_length=50)
-    task = models.ForeignKey(TaskModel, on_delete=models.PROTECT)
+    group = models.ForeignKey(GroupModel, on_delete=models.PROTECT)
 
     def __str__(self):
-        return str(self.chassisNumber)+" - "+str(self.fleetNumber)+" - "+str(self.task)
+        return str(self.chassisNumber)+" - "+str(self.fleetNumber)+" - "+str(self.group)
 
 
 class VehiclePartsModel(models.Model):

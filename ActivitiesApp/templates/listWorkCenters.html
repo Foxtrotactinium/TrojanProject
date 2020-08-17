@@ -9,22 +9,22 @@
 
 <br>
 
-<div class="container-fluid">
-      <a href="{% url 'addtask' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Task</a>
-</div>
+<!--<div class="container-fluid">-->
+<!--      <a href="{% url 'addtask' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Task</a>-->
+<!--</div>-->
 
 <br>
 
 <table class="table table-hover" id="selection">
     <thead>
     <tr>
-        <th>Tasks</th>
+        <th>Work Centers</th>
     </tr>
     </thead>
     <tbody>
-    {% for task in tasks %}
-    <tr data-href="{% url 'taskinformation' task.id %}">
-        <td>{{ task.taskName }}</td>
+    {% for workcenter in workcenters %}
+    <tr data-href="{% url 'groupinformation' workcenter.id %}">
+        <td>{{ workcenter.workCenter }}</td>
     </tr>
     {% endfor %}
     </tbody>

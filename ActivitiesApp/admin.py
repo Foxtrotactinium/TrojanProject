@@ -6,5 +6,5 @@ from .models import *
 
 admin.site.register(ActivityModel, SimpleHistoryAdmin)
 admin.site.register(ActivityPartModel, SimpleHistoryAdmin)
-admin.site.register(TaskModel)
-admin.site.register(TaskActivityModel)
+admin.site.register(GroupModel)
+admin.site.register(GroupActivityModel)

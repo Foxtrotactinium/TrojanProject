@@ -1,6 +1,6 @@
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import activity_form, required_part_form, task_form, required_activity_form
+from .forms import activity_form, required_part_form, group_form, required_activity_form
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -68,65 +68,64 @@ def add_required_part_to_activity(request, id, increment):
 
 
 @login_required
-def tasks(request):
-    return render(request, 'listTasks.html', {'header': 'TaskModel',
-                                              'tasks': TaskModel.objects.distinct()})
+def groups(request):
+    return render(request, 'listGroups.html', {'header': 'GroupModel',
+                                              'groups': GroupModel.objects.distinct()})
 
 
 @login_required
-def add_task(request):
+def add_group(request):
     if request.method == "POST":
-        form = task_form(request.POST)
+        form = group_form(request.POST)
 
         if form.is_valid():
             form.save()
-            return redirect('tasks')
+            return redirect('groups')
 
     else:
-        form = task_form()
-        return render(request, 'addTask.html', {'taskform': form})
+        form = group_form()
+        return render(request, 'addGroup.html', {'groupform': form})
 
 
 @login_required
-def task_information(request, id):
-    task = get_object_or_404(TaskModel, id=id)
+def group_information(request, id):
+    group= get_object_or_404(GroupModel, id=id)
     if request.method == "POST":
-        form = task_form(request.POST, instance=task)
+        form = group_form(request.POST, instance=group)
         if form.is_valid():
             form.save()
-            return redirect('tasks')
+            return redirect('groups')
 
     else:
-        form = task_form(instance=task)
-        context = {'taskform': form,
-                   'taskactivities': TaskActivityModel.objects.filter(task=id),
+        form = group_form(instance=group)
+        context = {'groupform': form,
+                   'groupactivities': GroupActivityModel.objects.filter(group=id),
                    'id': id}
-        return render(request, 'infoTask.html', context)
+        return render(request, 'infoGroups.html', context)
 
 
 @login_required
-def add_required_activity_to_task(request, id):
+def add_required_activity_to_group(request, id):
     activities = ActivityModel.objects.all()
-    task_activities = TaskActivityModel.objects.filter(task=id)
+    group_activities = GroupActivityModel.objects.filter(group=id)
     if request.method == "POST":
         form = required_activity_form(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('tasks')
+        return redirect('groups')
 
     else:
-        form = required_activity_form(initial={'task': id})
+        form = required_activity_form(initial={'group': id})
         context = {'requiredactivityform': form,
-                   'taskrequiredactivity': task_activities,
+                   'grouprequiredactivity': group_activities,
                    'allactivities': activities,
                    }
-    return render(request, 'addTaskActivity.html', context)
+    return render(request, 'addGroupActivity.html', context)
 
-
-@login_required
-def tasks(request):
-    return render(request, 'listTasks.html', {'header': 'TaskModel',
-                                              'tasks': TaskModel.objects.all()})
+# @login_required
+# def workcentre(request):
+#     return render(request, 'listWorkCenters.html', {'header': 'GroupModel',
+#                                               'workcenters': GroupModel.objects.distinct()})
 
 # # use for getting all files in instruction model relating to job from ActivityModel model
 # some_manual = Manual.objects.get(id=1)

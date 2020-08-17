@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from ActivitiesApp.models import TaskActivityModel, ActivityPartModel, ActivityModel
+from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel
 from .forms import WorkForm
 from .models import VehicleModel, VehiclePartsModel
 from django.contrib.auth.decorators import login_required
@@ -24,11 +24,11 @@ def add_job(request):
                 return redirect('addjob')
 
             vehicleMy = form.save()
-            taskname = form.cleaned_data['task']
+            groupname = form.cleaned_data['group']
 
-            taskactivitylist = TaskActivityModel.objects.filter(task=taskname)
+            groupactivitylist = GroupActivityModel.objects.filter(group=groupname)
 
-            for activity in taskactivitylist:
+            for activity in groupactivitylist:
                 required_list = ActivityPartModel.objects.filter(activity=activity.activity)
                 for required in required_list:
                     temp = VehiclePartsModel(vehicle=vehicleMy,
@@ -47,9 +47,9 @@ def add_job(request):
 @login_required
 def info_job_activities(request, job):
     vehicle = get_object_or_404(VehicleModel, id=job)
-    task = vehicle.task
-    activities = TaskActivityModel.objects.filter(task=task)
-    return render(request, 'infoJobActivities.html', {'header': 'Outstanding Tasks',
+    group = vehicle.group
+    activities = GroupActivityModel.objects.filter(group=group)
+    return render(request, 'infoJobActivities.html', {'header': 'Grouped Activities',
                                                       'job': job,
                                                       'jobactivities': activities})
 

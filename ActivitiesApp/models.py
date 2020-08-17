@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 # from django.contrib.postgres.fields import ArrayField
 from PartsApp.models import PartModel
 from django.contrib.auth.models import User
@@ -26,20 +27,32 @@ class ActivityPartModel(models.Model):
         return str(self.activity) + " - " + str(self.part)
 
 
-class TaskModel(models.Model):
-    taskName = models.CharField(max_length=50)
+class GroupModel(models.Model):
+    groupName = models.CharField(max_length=50)
+
+    class WorkCenterTypes(models.TextChoices):
+        PICKING = 'PK', _('Picking')
+        LAZERCUTTING = 'LC', _('Lazer Cutting')
+        POWDERCOATING = 'PC', _('Powder Coating')
+        ZINCCOATING = 'ZN', _('Zinc Coating')
+        HEATTREAT = 'HT', _('Heat Treatment & Shot Peening')
+        ROTARYSAW = 'RS', _('Brobo Rotary Saw')
+        SHAKEOUT = 'SK', _('Shakeout')
+        FOLDING = 'FD', _('Sheet Metal Folding')
+
+    workCenter = models.CharField(max_length=2,
+                                  choices=WorkCenterTypes.choices)
 
     def __str__(self):
-        return self.taskName
+        return self.groupName
 
 
-class TaskActivityModel(models.Model):
-    task = models.ForeignKey(TaskModel, on_delete=models.PROTECT)
+class GroupActivityModel(models.Model):
+    group = models.ForeignKey(GroupModel, on_delete=models.PROTECT)
     activity = models.ForeignKey(ActivityModel, on_delete=models.PROTECT)
 
     def __str__(self):
-        return str(self.task) + ' - ' + str(self.activity)
-
+        return str(self.group) + ' - ' + str(self.activity)
 
 # class instruction(models.Model):
 #     job = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import ActivityModel, ActivityPartModel, TaskModel, TaskActivityModel
+from .models import ActivityModel, ActivityPartModel, GroupModel, GroupActivityModel
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field,Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
@@ -45,21 +45,21 @@ class required_part_form(forms.ModelForm):
         fields = ['activity', 'part', 'quantity', 'increment']
 
 
-class task_form(forms.ModelForm):
+class group_form(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(task_form, self).__init__(*args, **kwargs)
+        super(group_form, self).__init__(*args, **kwargs)
 
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            Field('taskName', css_class='form-control'),
+            Field('groupName', css_class='form-control'),
             Submit('save', 'Save')
         )
 
     class Meta:
-        model = TaskModel
-        fields = ['taskName']
+        model = GroupModel
+        fields = ['groupName']
 
 
 class required_activity_form(forms.ModelForm):
@@ -70,12 +70,12 @@ class required_activity_form(forms.ModelForm):
         # It builds a default layout with all its fields
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field('task', type="hidden"),
+            Field('group', type="hidden"),
             Field('activity', css_class='form-control'),
             HTML('<br>'),
             Submit('save', 'Save')
         )
 
     class Meta:
-        model = TaskActivityModel
+        model = GroupActivityModel
         fields = '__all__'
