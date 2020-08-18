@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel
+from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel
 from .forms import WorkForm
 from .models import VehicleModel, VehiclePartsModel
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def info_job(request):
+    print(VehicleModel.objects.filter(group__workCenter__contains='LC'))
+    print(VehicleModel.objects.filter(vehiclepartsmodel__user__exact=request.user))
     return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
                                             'jobs': VehicleModel.objects.all()})
 

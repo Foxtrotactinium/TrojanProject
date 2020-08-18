@@ -70,7 +70,7 @@ def add_required_part_to_activity(request, id, increment):
 @login_required
 def groups(request):
     return render(request, 'listGroups.html', {'header': 'GroupModel',
-                                              'groups': GroupModel.objects.distinct()})
+                                               'groups': GroupModel.objects.distinct()})
 
 
 @login_required
@@ -89,7 +89,7 @@ def add_group(request):
 
 @login_required
 def group_information(request, id):
-    group= get_object_or_404(GroupModel, id=id)
+    group = get_object_or_404(GroupModel, id=id)
     if request.method == "POST":
         form = group_form(request.POST, instance=group)
         if form.is_valid():
@@ -122,10 +122,13 @@ def add_required_activity_to_group(request, id):
                    }
     return render(request, 'addGroupActivity.html', context)
 
-# @login_required
-# def workcentre(request):
-#     return render(request, 'listWorkCenters.html', {'header': 'GroupModel',
-#                                               'workcenters': GroupModel.objects.distinct()})
+@login_required
+def work_center(request):
+    print(GroupModel.objects.values('workCenter').distinct())
+    print(GroupModel.objects.first().get_workCenter_display())
+    print(GroupModel.WorkCenterTypes)
+    return render(request, 'listWorkCenters.html', {'header': 'GroupModel',
+                                                    'workcenters': GroupModel.objects.all()})
 
 # # use for getting all files in instruction model relating to job from ActivityModel model
 # some_manual = Manual.objects.get(id=1)
