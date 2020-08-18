@@ -54,12 +54,13 @@ class group_form(forms.ModelForm):
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
             Field('groupName', css_class='form-control'),
+            'workCenter',
             Submit('save', 'Save')
         )
 
     class Meta:
         model = GroupModel
-        fields = ['groupName']
+        fields = ['groupName', 'workCenter']
 
 
 class required_activity_form(forms.ModelForm):
@@ -79,3 +80,14 @@ class required_activity_form(forms.ModelForm):
     class Meta:
         model = GroupActivityModel
         fields = '__all__'
+#
+#
+# class TypesForm(forms.ModelForm):
+#     def __init__(self, *args, **kwargs):
+#         super(TypesForm, self).__init__(*args, **kwargs)
+#         self.helper = FormHelper(self)
+#         self.helper.layout = Layout('workCenter')
+#
+#     class Meta:
+#         model = GroupModel
+#         fields = ['workCenter']

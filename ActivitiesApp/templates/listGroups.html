@@ -1,16 +1,25 @@
 {% extends "includes/base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block body %}
 
 <br>
-<form class="form-inline my-2 my-lg-0">
-  <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
-</form>
+{% for type in types %}
+<a href="{% url 'groups' type.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">{{ type.description }}</a>
+{% endfor %}
 
+<form class="form-inline my-2 my-lg-0">
+    <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search"
+           aria-label="Search">
+</form>
+<form method="POST">
+    <br>
+
+</form>
 <br>
 
 <div class="container-fluid">
-      <a href="{% url 'addgroup' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Group</a>
+    <a href="{% url 'addgroup' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Group</a>
 </div>
 
 <br>

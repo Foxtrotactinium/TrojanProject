@@ -8,3 +8,5 @@ admin.site.register(ActivityModel, SimpleHistoryAdmin)
 admin.site.register(ActivityPartModel, SimpleHistoryAdmin)
 admin.site.register(GroupModel)
 admin.site.register(GroupActivityModel)
+admin.site.register(WorkCenterTypes)
+

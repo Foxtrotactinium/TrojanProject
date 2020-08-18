@@ -27,21 +27,26 @@ class ActivityPartModel(models.Model):
         return str(self.activity) + " - " + str(self.part)
 
 
+class WorkCenterTypes(models.Model):
+    wcType = models.CharField(max_length=2)
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f'{self.wcType} - {self.description}'
+
+        # PICKING = 'PK', _('Picking')
+        # LAZERCUTTING = 'LC', _('Lazer Cutting')
+        # POWDERCOATING = 'PC', _('Powder Coating')
+        # ZINCCOATING = 'ZN', _('Zinc Coating')
+        # HEATTREAT = 'HT', _('Heat Treatment & Shot Peening')
+        # ROTARYSAW = 'RS', _('Brobo Rotary Saw')
+        # SHAKEOUT = 'SK', _('Shakeout')
+        # FOLDING = 'FD', _('Sheet Metal Folding')
+
+
 class GroupModel(models.Model):
     groupName = models.CharField(max_length=50)
-
-    class WorkCenterTypes(models.TextChoices):
-        PICKING = 'PK', _('Picking')
-        LAZERCUTTING = 'LC', _('Lazer Cutting')
-        POWDERCOATING = 'PC', _('Powder Coating')
-        ZINCCOATING = 'ZN', _('Zinc Coating')
-        HEATTREAT = 'HT', _('Heat Treatment & Shot Peening')
-        ROTARYSAW = 'RS', _('Brobo Rotary Saw')
-        SHAKEOUT = 'SK', _('Shakeout')
-        FOLDING = 'FD', _('Sheet Metal Folding')
-
-    workCenter = models.CharField(max_length=2,
-                                  choices=WorkCenterTypes.choices)
+    workCenter = models.ForeignKey(WorkCenterTypes, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.groupName

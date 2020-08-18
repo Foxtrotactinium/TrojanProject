@@ -6,7 +6,9 @@
 <form class="form-inline my-2 my-lg-0">
   <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
 </form>
-
+{% for type in types %}
+<a href="{% url 'groups' type.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">{{ type.description }}</a>
+{% endfor %}
 <br>
 
 <br>

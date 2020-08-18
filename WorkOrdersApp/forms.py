@@ -52,3 +52,4 @@ class WorkPartsForm(forms.ModelForm):
     class Meta:
         model = VehiclePartsModel
         fields = ['vehicle', 'part']
+

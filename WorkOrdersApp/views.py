@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def info_job(request):
-    print(VehicleModel.objects.filter(group__workCenter__contains='LC'))
+    # print(VehicleModel.objects.filter(group__workCenter__contains='LC'))
     print(VehicleModel.objects.filter(vehiclepartsmodel__user__exact=request.user))
     return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
                                             'jobs': VehicleModel.objects.all()})
@@ -61,7 +61,7 @@ def info_job_parts(request, job, activity_id):
     if request.method == "POST":
         for completed in request.POST:
             try:
-                updatedvalue = get_object_or_404(VehiclePartsModel,id=int(completed))
+                updatedvalue = get_object_or_404(VehiclePartsModel, id=int(completed))
                 updatedvalue.updateQuantity(int(request.POST[completed]))
             except ValueError:
                 pass
@@ -69,5 +69,6 @@ def info_job_parts(request, job, activity_id):
     parts = VehiclePartsModel.objects \
         .filter(vehicle=job) \
         .filter(part_id__in=reqParts.values_list("id"))
-    return render(request, 'infoJobParts.html', {'header': 'Kits',
-                                                 'parts': parts})
+    if get_object_or_404(VehicleModel,id=job).group.workCenter.wcType == 'PK':
+        return render(request, 'infoJobParts.html', {'header': 'Kits',
+                                                     'parts': parts})

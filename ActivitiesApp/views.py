@@ -1,6 +1,6 @@
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import activity_form, required_part_form, group_form, required_activity_form
+from .forms import *
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -68,9 +68,12 @@ def add_required_part_to_activity(request, id, increment):
 
 
 @login_required
-def groups(request):
+def groups(request, type):
+    # print(WorkCenterTypes.objects.filter(wcType=type))
+
     return render(request, 'listGroups.html', {'header': 'GroupModel',
-                                               'groups': GroupModel.objects.distinct()})
+                                               'groups': GroupModel.objects.filter(workCenter=type),
+                                               'types': WorkCenterTypes.objects.all()})
 
 
 @login_required
@@ -112,7 +115,7 @@ def add_required_activity_to_group(request, id):
         form = required_activity_form(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('groups')
+        return redirect('activities')
 
     else:
         form = required_activity_form(initial={'group': id})
@@ -124,11 +127,17 @@ def add_required_activity_to_group(request, id):
 
 @login_required
 def work_center(request):
-    print(GroupModel.objects.values('workCenter').distinct())
-    print(GroupModel.objects.first().get_workCenter_display())
-    print(GroupModel.WorkCenterTypes)
+    # print(GroupModel.objects.values('workCenter').distinct())
+    # print(GroupModel.objects.first().get_workCenter_display())
+    # print(GroupModel.WorkCenterTypes)
+
+
+    # form = TypesForm()
+
     return render(request, 'listWorkCenters.html', {'header': 'GroupModel',
-                                                    'workcenters': GroupModel.objects.all()})
+                                                    'workcenters': GroupModel.objects.all(),
+                                                    'types': WorkCenterTypes.objects.all()})
+                                                    # 'workcentertypesform': form})
 
 # # use for getting all files in instruction model relating to job from ActivityModel model
 # some_manual = Manual.objects.get(id=1)
