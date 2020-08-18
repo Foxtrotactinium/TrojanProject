@@ -1,0 +1,66 @@
+[
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 1,
+    "fields": {
+        "wcType": "PK",
+        "description": "Picking"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 2,
+    "fields": {
+        "wcType": "LC",
+        "description": "Lazer Cutting"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 3,
+    "fields": {
+        "wcType": "PC",
+        "description": "Powder Coating"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 4,
+    "fields": {
+        "wcType": "ZN",
+        "description": "Zinc Coating"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 5,
+    "fields": {
+        "wcType": "HT",
+        "description": "Heat Treatment & Sho"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 6,
+    "fields": {
+        "wcType": "RS",
+        "description": "Brobo Rotary Saw"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 7,
+    "fields": {
+        "wcType": "SK",
+        "description": "Shakeout"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 8,
+    "fields": {
+        "wcType": "FD",
+        "description": "Sheet Metal Folding"
+    }
+}
+]
