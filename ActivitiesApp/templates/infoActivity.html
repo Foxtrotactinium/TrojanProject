@@ -13,6 +13,8 @@
                 {% crispy activityform %}
             </form>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm">
             <br>
             <table class="h-50 table table-hover">
@@ -31,7 +33,12 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="{% url 'addrequired' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required Part</a>
+            <a href="{% url 'addrequired' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required
+                Part</a>
+
+        </div>
+        <div class="col-sm">
+            <br>
             <table class="h-50 table table-hover">
                 <thead>
                 <tr>
@@ -48,7 +55,8 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="{% url 'addproduced' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Produced Part</a>
+            <a href="{% url 'addproduced' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Produced
+                Part</a>
         </div>
     </div>
 </div>

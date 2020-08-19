@@ -3,9 +3,9 @@ from .views import *
 
 
 urlpatterns = [
-    path('workcentre/', info_job, name='infojobs'),
-    path('workcentre/addjob/', add_job, name='addjob'),
-    path('workcentre/<int:job>/', info_job_activities, name='infojobactivities'),
-    path('workcentre/<int:job>/<int:activity_id>', info_job_parts, name='infojobparts'),
-    # path('workcentre/<str:job>/<str:group>/<str:activity>', info_job_parts, name='infojobparts'),
+    path('tasks/', task_list, name='tasks'),
+    path('task/addtask/', add_task, name='addtask'),
+    path('task/<int:taskid>/', info_task_activities, name='infotaskactivities'),
+    path('task/<int:taskid>/<int:activityid>', info_task_parts, name='infotaskparts'),
+    # path('workcentre/<str:job>/<str:group>/<str:activity>', info_task_parts, name='infojobparts'),
 ]

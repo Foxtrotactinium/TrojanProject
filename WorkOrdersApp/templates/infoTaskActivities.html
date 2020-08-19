@@ -19,9 +19,9 @@
 
     <tbody>
 
-    {% for activity in jobactivities %}
+    {% for activity in taskactivities %}
 
-    <tr data-href="{% url 'infojobparts' job activity.id %}">
+    <tr data-href="{% url 'infotaskparts' taskid=taskid activityid=activity.activity.id %}">
         <td>{{ activity }}</td>
 
     </tr>

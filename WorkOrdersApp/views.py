@@ -2,30 +2,30 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel
-from .forms import WorkForm
-from .models import VehicleModel, VehiclePartsModel
+from .forms import TaskForm
+from .models import TaskModel, TaskPartsModel
 from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def info_job(request):
-    # print(VehicleModel.objects.filter(group__workCenter__contains='LC'))
-    print(VehicleModel.objects.filter(vehiclepartsmodel__user__exact=request.user))
-    return render(request, 'infoJob.html', {'header': 'Outstanding Jobs',
-                                            'jobs': VehicleModel.objects.all()})
+def task_list(request):
+    # print(TaskModel.objects.filter(group__workCenter__contains='LC'))
+    # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
+    return render(request, 'listTasks.html', {'header': 'Outstanding Tasks',
+                                              'tasks': TaskModel.objects.all()})
 
 
 @login_required
-def add_job(request):
+def add_task(request):
     if request.method == "POST":
-        form = WorkForm(request.POST)
+        form = TaskForm(request.POST)
         if form.is_valid():
 
-            if VehicleModel.objects.filter(chassisNumber=form.cleaned_data['chassisNumber']).count() > 0:
-                messages.error(request, "Vehicle already exists")
-                return redirect('addjob')
+            if TaskModel.objects.filter(taskName=form.cleaned_data['taskName']).count() > 0:
+                messages.error(request, "Task already exists")
+                return redirect('addtask')
 
-            vehicleMy = form.save()
+            taskMy = form.save()
             groupname = form.cleaned_data['group']
 
             groupactivitylist = GroupActivityModel.objects.filter(group=groupname)
@@ -33,42 +33,43 @@ def add_job(request):
             for activity in groupactivitylist:
                 required_list = ActivityPartModel.objects.filter(activity=activity.activity)
                 for required in required_list:
-                    temp = VehiclePartsModel(vehicle=vehicleMy,
-                                             part=required.part,
-                                             quantityRequired=required.quantity,
-                                             quantityCompleted=0,
-                                             )
+                    temp = TaskPartsModel(task=taskMy,
+                                          part=required.part,
+                                          quantityRequired=required.quantity,
+                                          quantityCompleted=0,
+                                          )
                     temp.save()
 
-            return redirect('infojobs')
+            return redirect('tasks')
     else:
-        form = WorkForm()
-        return render(request, 'addJob.html', {'workform': form})
+        form = TaskForm()
+        return render(request, 'addTask.html', {'taskform': form})
 
 
 @login_required
-def info_job_activities(request, job):
-    vehicle = get_object_or_404(VehicleModel, id=job)
-    group = vehicle.group
-    activities = GroupActivityModel.objects.filter(group=group)
-    return render(request, 'infoJobActivities.html', {'header': 'Grouped Activities',
-                                                      'job': job,
-                                                      'jobactivities': activities})
+def info_task_activities(request, taskid):
+    task = get_object_or_404(TaskModel, id=taskid)
+    activities = GroupActivityModel.objects.filter(group=task.group)
+    return render(request, 'infoTaskActivities.html', {'header': 'Grouped Activities',
+                                                       'taskid': taskid,
+                                                       'taskactivities': activities})
 
 
 @login_required
-def info_job_parts(request, job, activity_id):
+def info_task_parts(request, taskid, activityid):
     if request.method == "POST":
         for completed in request.POST:
             try:
-                updatedvalue = get_object_or_404(VehiclePartsModel, id=int(completed))
+                updatedvalue = get_object_or_404(TaskPartsModel, id=int(completed))
                 updatedvalue.updateQuantity(int(request.POST[completed]))
             except ValueError:
                 pass
-    reqParts = ActivityPartModel.objects.filter(activity=activity_id)
-    parts = VehiclePartsModel.objects \
-        .filter(vehicle=job) \
+    reqParts = ActivityPartModel.objects.filter(activity=activityid)
+    parts = TaskPartsModel.objects \
+        .filter(task=taskid) \
         .filter(part_id__in=reqParts.values_list("id"))
-    if get_object_or_404(VehicleModel,id=job).group.workCenter.wcType == 'PK':
-        return render(request, 'infoJobParts.html', {'header': 'Kits',
-                                                     'parts': parts})
+    print(TaskPartsModel.objects.filter(task=taskid))
+    print(parts)
+    if get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'PK':
+        return render(request, 'infoTaskParts.html', {'header': 'Kits',
+                                                      'parts': parts})

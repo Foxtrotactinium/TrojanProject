@@ -11,7 +11,7 @@
 <br>
 
 <div class="container-fluid">
-    <a href="{% url 'addjob' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Job</a>
+    <a href="{% url 'addtask' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Task</a>
 </div>
 
 <br>
@@ -19,17 +19,17 @@
 <table class="table table-hover" id="selection">
     <thead>
     <tr>
-        <th>Outstanding Workcentre Items</th>
+        <th>Outstanding Tasks</th>
 
     </tr>
     </thead>
 
     <tbody>
 
-    {% for vehicle in jobs %}
+    {% for task in tasks %}
 
-    <tr data-href="{% url 'infojobactivities' vehicle.id %}">
-        <td>{{ vehicle }}</td>
+    <tr data-href="{% url 'infotaskactivities' taskid=task.id %}">
+        <td>{{ task }}</td>
 
     </tr>
 

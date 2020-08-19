@@ -5,15 +5,15 @@ from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field,Hi
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 
-class WorkForm(forms.ModelForm):
+class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(WorkForm, self).__init__(*args, **kwargs)
+        super(TaskForm, self).__init__(*args, **kwargs)
 
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            Field('chassisNumber', css_class='form-control'),
+            Field('taskName', css_class='form-control'),
             Field('fleetNumber', css_class='form-control'),
             Field('group', css_class='form-control'),
             HTML('<br>'),
@@ -21,27 +21,27 @@ class WorkForm(forms.ModelForm):
         )
 
     class Meta:
-        model = VehicleModel
-        fields = ['chassisNumber', 'fleetNumber', 'group']
+        model = TaskModel
+        fields = ['taskName', 'fleetNumber', 'group']
 
-class WorkUserForm(WorkForm):
+class TaskUserForm(TaskForm):
 
 
 
     class Meta:
-        model = VehiclePartsModel
+        model = TaskPartsModel
         fields = ['user']
 
 
 class WorkPartsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(WorkForm, self).__init__(*args, **kwargs)
+        super(TaskForm, self).__init__(*args, **kwargs)
 
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            Field('vehicle', css_class='form-control'),
+            Field('task', css_class='form-control'),
             Field('part', css_class='form-control'),
             Field('quantityCompleted', css_class='form-control'),
             Field('user', css_class='form-control'),
@@ -50,6 +50,6 @@ class WorkPartsForm(forms.ModelForm):
         )
 
     class Meta:
-        model = VehiclePartsModel
-        fields = ['vehicle', 'part']
+        model = TaskPartsModel
+        fields = ['task', 'part']
 

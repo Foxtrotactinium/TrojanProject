@@ -83,7 +83,8 @@ def add_group(request):
 
         if form.is_valid():
             form.save()
-            return redirect('groups')
+            type = form.cleaned_data['workCenter'].id
+            return redirect('groups', type)
 
     else:
         form = group_form()
@@ -97,7 +98,7 @@ def group_information(request, id):
         form = group_form(request.POST, instance=group)
         if form.is_valid():
             form.save()
-            return redirect('groups')
+            return redirect('groups', group.workCenter)
 
     else:
         form = group_form(instance=group)
@@ -111,11 +112,12 @@ def group_information(request, id):
 def add_required_activity_to_group(request, id):
     activities = ActivityModel.objects.all()
     group_activities = GroupActivityModel.objects.filter(group=id)
+    group = get_object_or_404(GroupModel, id=id)
     if request.method == "POST":
         form = required_activity_form(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('activities')
+        return redirect('groups', group.workCenter.id)
 
     else:
         form = required_activity_form(initial={'group': id})
