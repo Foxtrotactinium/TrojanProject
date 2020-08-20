@@ -64,12 +64,46 @@ def info_task_parts(request, taskid, activityid):
                 updatedvalue.updateQuantity(int(request.POST[completed]))
             except ValueError:
                 pass
-    reqParts = ActivityPartModel.objects.filter(activity=activityid)
-    parts = TaskPartsModel.objects \
+    partsRequired = ActivityPartModel.objects.filter(activity=activityid) \
+        .filter(increment=False)
+    taskPartsRequired = TaskPartsModel.objects \
         .filter(task=taskid) \
-        .filter(part_id__in=reqParts.values_list("id"))
-    print(TaskPartsModel.objects.filter(task=taskid))
-    print(parts)
+        .filter(part_id__in=partsRequired.values_list("part"))
+    partsProduced = ActivityPartModel.objects.filter(activity=activityid) \
+        .filter(increment=True)
+    taskPartsProduced = TaskPartsModel.objects \
+        .filter(task=taskid) \
+        .filter(part_id__in=partsProduced.values_list("part"))
+
     if get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'PK':
         return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'parts': parts})
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'LC':
+        return render(request, 'infoTaskLaserCuttingParts.html', {'header': 'Kits',
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'PC':
+        return render(request, 'infoTaskParts.html', {'header': 'Kits',
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'ZN':
+        return render(request, 'infoTaskParts.html', {'header': 'Kits',
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'HT':
+        return render(request, 'infoTaskParts.html', {'header': 'Kits',
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'RS':
+        return render(request, 'infoTaskParts.html', {'header': 'Kits',
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'SK':
+        return render(request, 'infoTaskParts.html', {'header': 'Kits',
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'FD':
+        return render(request, 'infoTaskParts.html', {'header': 'Kits',
+                                                      'producedparts': taskPartsProduced,
+                                                      'requiredparts': taskPartsRequired})

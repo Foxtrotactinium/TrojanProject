@@ -20,10 +20,10 @@
 
         <tbody>
 
-        {% for part in parts %}
+        {% for part in producedparts %}
 
         <tr>
-            <td>{{ part.partNumber }}</td>
+            <td>{{ part.part.partNumber }}</td>
             <td>{{ part.quantityRequired }}</td>
             <td>
                 <input type="number" value="{{ part.quantityCompleted }}" name="{{ part.pk }}">
