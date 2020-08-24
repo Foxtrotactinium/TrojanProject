@@ -16,10 +16,6 @@ class ActivityModel(models.Model):
         return str(self.activityName)
 
 
-class ActivityTriggerModel(models.Model):
-    completedActivity = models.ForeignKey(ActivityModel, related_name='completed_activity', on_delete=models.CASCADE)
-    triggerActivity = models.ForeignKey(ActivityModel, related_name='trigger_activity', on_delete=models.CASCADE)
-
 
 class ActivityPartModel(models.Model):
     activity = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
@@ -63,6 +59,10 @@ class GroupActivityModel(models.Model):
 
     def __str__(self):
         return str(self.group) + ' - ' + str(self.activity)
+
+class GroupTriggerModel(models.Model):
+    completedGroup = models.ForeignKey(GroupModel, related_name='completed_group', on_delete=models.CASCADE)
+    triggerGroup = models.ForeignKey(GroupModel, related_name='trigger_group', on_delete=models.CASCADE)
 
 # class instruction(models.Model):
 #     job = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
