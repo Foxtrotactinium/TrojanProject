@@ -25,7 +25,7 @@ $(document).ready(function()
         $("#id_supplier").val($(this).data('sid'));
     });
 
-    $('#low-stock').click(function()
+    $('.low-stock-button').click(function()
     {
         $("tr:not(.table-danger)").hide();
     });

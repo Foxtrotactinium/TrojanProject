@@ -16,6 +16,11 @@ class ActivityModel(models.Model):
         return str(self.activityName)
 
 
+class ActivityTriggerModel(models.Model):
+    completedActivity = models.ForeignKey(ActivityModel, related_name='completed_activity', on_delete=models.CASCADE)
+    triggerActivity = models.ForeignKey(ActivityModel, related_name='trigger_activity', on_delete=models.CASCADE)
+
+
 class ActivityPartModel(models.Model):
     activity = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
     part = models.ForeignKey(PartModel, on_delete=models.CASCADE)
