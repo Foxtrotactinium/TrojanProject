@@ -64,6 +64,10 @@ def info_task_parts(request, taskid, activityid):
                 updatedvalue.updateQuantity(int(request.POST[completed]))
             except ValueError:
                 pass
+
+        if TaskPartsModel.objects.filter(task=taskid, isComplete=False).count() == 0:
+            TaskModel.objects.get(id=taskid).triggerNextGroup()
+
     partsRequired = ActivityPartModel.objects.filter(activity=activityid) \
         .filter(increment=False)
     taskPartsRequired = TaskPartsModel.objects \
