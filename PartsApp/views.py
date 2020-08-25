@@ -1,5 +1,7 @@
 # Create your views here.
 from django.shortcuts import render, redirect
+
+from WorkOrdersApp.forms import TaskForm, TaskPartsModel
 from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
@@ -66,19 +68,46 @@ def info_part(request, part_id):
 
 @login_required
 def info_supplier(request, id):
+    supplierparts = PartSupplierModel.objects.filter(supplier=id)
     if request.method == "POST":
-        form = SupplierForm(request.POST, instance=SupplierModel.objects.all().filter(pk=id).first())
-        if form.is_valid():
-            form.save()
-            return redirect('suppliers')
+        if 'supplier' in request.POST:
+            supplierform = SupplierForm(request.POST, instance=SupplierModel.objects.filter(pk=id),
+                                        prefix='supplierform')
+            if supplierform.is_valid():
+                supplierform.save()
+                return redirect('suppliers')
+        elif 'taskName' in request.POST:
+            # for part in supplierparts:
+            #     print(request.POST.get(str(part.pk)))
+            # print(TaskForm(request.POST).cleaned_data['taskName'])
+
+            taskform = TaskForm(request.POST, prefix='taskform')
+            print(taskform.errors)
+            print(taskform.is_bound)
+            if taskform.is_valid():
+                taskform.save()
+                ordertask = taskform.cleaned_data['taskName']
+                # taskpartsordered = supplierparts.objects.filter(ordered__gte=0)
+                for part in supplierparts:
+                    if int(request.POST.get(str(part.pk))) > 0:
+                        temp = TaskPartsModel(task=ordertask,
+                                              part=part.pk,
+                                              quantityRequired=request.POST.get(str(part.pk)),
+                                              quantityCompleted=0,
+                                              )
+                        temp.save()
+
+            return redirect('inventory')
 
     else:
-        supplierparts = PartSupplierModel.objects.all().filter(supplier=id)
         for part in supplierparts:
             part.low = part.part.stockOnHand < part.part.minimumStock
-        form = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first())
-        return render(request, 'infoSupplier.html', {'supplierForm': form,
-                                                     'supplierparts': supplierparts})
+            part.ordered = 0
+        supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first())
+        taskform = TaskForm()
+        return render(request, 'infoSupplier.html', {'supplierform': supplierform,
+                                                     'supplierparts': supplierparts,
+                                                     'taskform': taskform})
 
 
 @login_required

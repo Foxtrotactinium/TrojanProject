@@ -10,29 +10,48 @@
             <form method="POST">
                 <br>
                 {% csrf_token %}
-                {% crispy supplierForm %}
+                {% crispy supplierform %}
             </form>
         </div>
-        <div class="col-sm" style="height:800px; overflow: scroll;">
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>Parts Supplied</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for supplierpart in supplierparts %}
-                <tr data-href="{% url 'info_part' supplierpart.part.id %}"
-                    {% if supplierpart.part.obsolete %} class="table-dark" {% endif %}
-                    {% if supplierpart.low %} class="table-danger" {% endif %}>
-                    <td>{{ supplierpart.part.partNumber }}</td>
-                    <td>{{ supplierpart.part.stockOnHand }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
     </div>
+    <form method="POST">
+        <div class="row">
+            <div class="col-sm" style="height:400px; overflow: scroll;">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Parts Supplied</th>
+                        <th>Description</th>
+                        <th>Stock on Hand</th>
+                        <th>Minimum Stock</th>
+                        <th>Reorder Quantities</th>
+                        <th>Ordering</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for supplierpart in supplierparts %}
+                    <tr data-href="{% url 'info_part' supplierpart.part.id %}"
+                        {% if supplierpart.part.obsolete %} class="table-dark" {% endif %}
+                        {% if supplierpart.low %} class="table-danger" {% endif %}>
+                        <td>{{ supplierpart.part.partNumber }}</td>
+                        <td>{{ supplierpart.part.description }}</td>
+                        <td>{{ supplierpart.part.stockOnHand }}</td>
+                        <td>{{ supplierpart.part.minimumStock }}</td>
+                        <td>{{ supplierpart.part.reorderQtys }}</td>
+                        <td>
+                            <input type="number" value="{{ supplierpart.ordered }}" name="{{ supplierpart.pk }}">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            {% csrf_token %}
+            {% crispy taskform %}
+        </div>
+    </form>
 </div>
 
 {% endblock %}
