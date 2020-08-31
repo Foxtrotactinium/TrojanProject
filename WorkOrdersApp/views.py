@@ -50,6 +50,9 @@ def add_task(request):
 def info_task_activities(request, taskid):
     task = get_object_or_404(TaskModel, id=taskid)
     activities = GroupActivityModel.objects.filter(group=task.group)
+    if activities.count() == 1:
+        activity = activities.first()
+        return info_task_parts(request, taskid, activity.id)
     return render(request, 'infoTaskActivities.html', {'header': 'Grouped Activities',
                                                        'taskid': taskid,
                                                        'taskactivities': activities})
@@ -65,7 +68,12 @@ def info_task_parts(request, taskid, activityid):
             except ValueError:
                 pass
 
-        if TaskPartsModel.objects.filter(task=taskid, isComplete=False).count() == 0:
+        completedList = TaskPartsModel.objects.filter(task=taskid)
+        completedList = [part for part in completedList if not part.isComplete()]
+
+        len(completedList)
+
+        if len(completedList) == 0:
             TaskModel.objects.get(id=taskid).triggerNextGroup()
 
     partsRequired = ActivityPartModel.objects.filter(activity=activityid) \
@@ -85,8 +93,8 @@ def info_task_parts(request, taskid, activityid):
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'LC':
         return render(request, 'infoTaskLaserCuttingParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                                  'producedparts': taskPartsProduced,
+                                                                  'requiredparts': taskPartsRequired})
     elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'PC':
         return render(request, 'infoTaskParts.html', {'header': 'Kits',
                                                       'producedparts': taskPartsProduced,
@@ -111,3 +119,7 @@ def info_task_parts(request, taskid, activityid):
         return render(request, 'infoTaskParts.html', {'header': 'Kits',
                                                       'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
+    elif get_object_or_404(TaskModel, id=taskid).group.workCenter.wcType == 'OR':
+        taskPartsOrdered = TaskPartsModel.objects.filter(task=taskid)
+        return render(request, 'infoTaskOrderingParts.html', {'header': 'Ordered',
+                                                              'orderedparts': taskPartsOrdered})

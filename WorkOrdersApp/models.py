@@ -47,12 +47,9 @@ class TaskPartsModel(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     history = HistoricalRecords()
 
-    @property
+    # @property
     def isComplete(self):
-        if self.quantityRequired == self.quantityCompleted:
-            return True
-        else:
-            return False
+        return self.quantityRequired == self.quantityCompleted
 
     def updateQuantity(self, newval):
         change = newval-self.quantityCompleted
