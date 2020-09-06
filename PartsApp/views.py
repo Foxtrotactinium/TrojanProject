@@ -54,7 +54,6 @@ def info_part(request, part_id):
         previouslevel = 0
         for movement in movements:
             movements.change = movement.stockOnHand - previouslevel
-            print(movements.change)
             previouslevel = movement.stockOnHand
         return render(request, 'infoPart.html', {'partform': form1,
                                                  'partsuppliers': PartSupplierModel.objects.all().filter(
@@ -70,7 +69,6 @@ def info_part(request, part_id):
 def info_supplier(request, id):
     supplierparts = PartSupplierModel.objects.filter(supplier=id)
     if request.method == "POST":
-        print(request.POST)
         if 'supplier' in request.POST:
             supplierform = SupplierForm(request.POST, instance=SupplierModel.objects.filter(pk=id),
                                         prefix='supplierform')
@@ -81,12 +79,12 @@ def info_supplier(request, id):
             taskform = TaskForm(request.POST, prefix='taskForm')
             if taskform.is_valid():
                 ordertask = taskform.save()
-                print(taskform.cleaned_data)
                 for part in supplierparts:
                     quantity = int(request.POST.get(f'{part.part.pk}'))
                     if quantity > 0:
                         temp = TaskPartsModel(task=ordertask,
                                               part=part.part,
+                                              increment=True,
                                               quantityRequired=quantity,
                                               quantityCompleted=0,
                                               )

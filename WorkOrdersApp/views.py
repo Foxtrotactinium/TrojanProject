@@ -11,8 +11,11 @@ from django.contrib.auth.decorators import login_required
 def task_list(request):
     # print(TaskModel.objects.filter(group__workCenter__contains='LC'))
     # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
+    completedList = TaskModel.objects.all()
+    completedList = [task for task in completedList if not task.isComplete()]
+
     return render(request, 'listTasks.html', {'header': 'Outstanding Tasks',
-                                              'tasks': TaskModel.objects.all()})
+                                              'tasks': completedList})
 
 
 @login_required
@@ -35,6 +38,7 @@ def add_task(request):
                 for required in required_list:
                     temp = TaskPartsModel(task=taskMy,
                                           part=required.part,
+                                          increment= required.increment,
                                           quantityRequired=required.quantity,
                                           quantityCompleted=0,
                                           )
@@ -50,13 +54,27 @@ def add_task(request):
 def info_task_activities(request, taskid):
     task = get_object_or_404(TaskModel, id=taskid)
     activities = GroupActivityModel.objects.filter(group=task.group)
+
     if activities.count() == 1:
         activity = activities.first()
-        return info_task_parts(request, taskid, activity.id)
+        return info_task_parts(request, taskid, activity.activity.id)
+
+    for activity in activities:
+        partsRequired = ActivityPartModel.objects.filter(activity=activity.activity)
+        taskPartsRequired = TaskPartsModel.objects \
+            .filter(task=taskid) \
+            .filter(part_id__in=partsRequired.values_list("part"))
+
+        completedList = [part for part in taskPartsRequired if not part.isComplete()]
+
+        if len(completedList) > 0:
+            activity.status = activity.activity.getStatus()
+        else:
+            activity.status = "Done"
+
     return render(request, 'infoTaskActivities.html', {'header': 'Grouped Activities',
                                                        'taskid': taskid,
                                                        'taskactivities': activities})
-
 
 @login_required
 def info_task_parts(request, taskid, activityid):
@@ -67,14 +85,6 @@ def info_task_parts(request, taskid, activityid):
                 updatedvalue.updateQuantity(int(request.POST[completed]))
             except ValueError:
                 pass
-
-        completedList = TaskPartsModel.objects.filter(task=taskid)
-        completedList = [part for part in completedList if not part.isComplete()]
-
-        len(completedList)
-
-        if len(completedList) == 0:
-            TaskModel.objects.get(id=taskid).triggerNextGroup()
 
     partsRequired = ActivityPartModel.objects.filter(activity=activityid) \
         .filter(increment=False)

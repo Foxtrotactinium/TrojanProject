@@ -15,6 +15,15 @@ class ActivityModel(models.Model):
     def __str__(self):
         return str(self.activityName)
 
+    def getStatus(self):
+        parts = ActivityPartModel.objects.filter(activity=self,
+                                                 increment=False,
+                                                 part__stockOnHand__gt=0)
+
+        if parts.count() == 0:
+            return "Waiting"
+
+        return "Active"
 
 
 class ActivityPartModel(models.Model):
@@ -60,9 +69,9 @@ class GroupActivityModel(models.Model):
     def __str__(self):
         return str(self.group) + ' - ' + str(self.activity)
 
-class GroupTriggerModel(models.Model):
-    completedGroup = models.ForeignKey(GroupModel, related_name='completed_group', on_delete=models.CASCADE)
-    triggerGroup = models.ForeignKey(GroupModel, related_name='trigger_group', on_delete=models.CASCADE)
+# class GroupTriggerModel(models.Model):
+#     completedGroup = models.ForeignKey(GroupModel, related_name='completed_group', on_delete=models.CASCADE)
+#     triggerGroup = models.ForeignKey(GroupModel, related_name='trigger_group', on_delete=models.CASCADE)
 
 # class instruction(models.Model):
 #     job = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
