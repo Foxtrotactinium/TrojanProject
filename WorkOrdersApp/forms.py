@@ -41,7 +41,7 @@ class WorkPartsForm(forms.ModelForm):
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            Field('task', css_class='form-control'),
+            Field('activity', css_class='form-control'),
             Field('part', css_class='form-control'),
             Field('quantityCompleted', css_class='form-control'),
             Field('user', css_class='form-control'),
@@ -51,5 +51,5 @@ class WorkPartsForm(forms.ModelForm):
 
     class Meta:
         model = TaskPartsModel
-        fields = ['task', 'part']
+        fields = ['activity', 'part']
 

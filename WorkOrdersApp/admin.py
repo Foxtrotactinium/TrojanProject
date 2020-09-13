@@ -5,4 +5,5 @@ from simple_history.admin import SimpleHistoryAdmin
 from .models import *
 
 admin.site.register(TaskModel)
+admin.site.register(TaskActivityModel)
 admin.site.register(TaskPartsModel, SimpleHistoryAdmin)

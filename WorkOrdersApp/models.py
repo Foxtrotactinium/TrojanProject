@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.db import models
+from django.utils import timezone
 from simple_history.models import HistoricalRecords
 from PartsApp.models import *
 
@@ -16,8 +17,8 @@ class TaskModel(models.Model):
     group = models.ForeignKey(GroupModel, on_delete=models.PROTECT)
 
     def isComplete(self):
-        completedList = TaskPartsModel.objects.filter(task=self)
-        completedList = [part for part in completedList if not part.isComplete()]
+        completedList = TaskActivityModel.objects.filter(task=self)
+        completedList = [activity for activity in completedList if not activity.isComplete()]
         return len(completedList) == 0
 
     def __str__(self):
@@ -43,9 +44,23 @@ class TaskModel(models.Model):
     #                                       )
     #                 temp.save()
 
+class TaskActivityModel(models.Model):
+    task = models.ForeignKey(TaskModel, on_delete=models.PROTECT)
+    activity = models.ForeignKey(ActivityModel, on_delete=models.PROTECT)
+    startTime = models.DateTimeField(default=timezone.now)
+    finishTime = models.DateTimeField(null=True)
+
+    def isComplete(self):
+        completedList = TaskPartsModel.objects.filter(activity=self)
+        completedList = [part for part in completedList if not part.isComplete()]
+        return len(completedList) == 0
+
+    def __str__(self):
+        return str(self.activity)
+
 
 class TaskPartsModel(models.Model):
-    task = models.ForeignKey(TaskModel, on_delete=models.PROTECT)
+    activity = models.ForeignKey(TaskActivityModel, on_delete=models.PROTECT, null=True)
     part = models.ForeignKey(PartModel, on_delete=models.PROTECT)
     increment = models.BooleanField()
     quantityRequired = models.IntegerField()
