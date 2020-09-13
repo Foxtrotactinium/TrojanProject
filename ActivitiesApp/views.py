@@ -68,12 +68,11 @@ def add_required_part_to_activity(request, id, increment):
 
 
 @login_required
-def groups(request, type):
+def groups(request):
     # print(WorkCenterTypes.objects.filter(wcType=type))
 
     return render(request, 'listGroups.html', {'header': 'GroupModel',
-                                               'groups': GroupModel.objects.filter(workCenter=type),
-                                               'types': WorkCenterTypes.objects.all()})
+                                               'groups': GroupModel.objects.all()})
 
 
 @login_required
@@ -83,8 +82,7 @@ def add_group(request):
 
         if form.is_valid():
             form.save()
-            type = form.cleaned_data['workCenter'].id
-            return redirect('groups', type)
+            return redirect('groups')
 
     else:
         form = group_form()
@@ -117,7 +115,7 @@ def add_required_activity_to_group(request, id):
         form = required_activity_form(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('groups', group.workCenter.id)
+        return redirect('groups')
 
     else:
         form = required_activity_form(initial={'group': id})
@@ -127,19 +125,12 @@ def add_required_activity_to_group(request, id):
                    }
     return render(request, 'addGroupActivity.html', context)
 
-@login_required
-def work_center(request):
-    # print(GroupModel.objects.values('workCenter').distinct())
-    # print(GroupModel.objects.first().get_workCenter_display())
-    # print(GroupModel.WorkCenterTypes)
-
-
-    # form = TypesForm()
-
-    return render(request, 'listWorkCenters.html', {'header': 'GroupModel',
-                                                    'workcenters': GroupModel.objects.all(),
-                                                    'types': WorkCenterTypes.objects.all()})
-                                                    # 'workcentertypesform': form})
+# @login_required
+# def work_center(request):
+#
+#     return render(request, 'listWorkCenters.html', {'header': 'GroupModel',
+#                                                     'workcenters': GroupModel.objects.all(),
+#                                                     'types': WorkCenterTypes.objects.all()})
 
 # # use for getting all files in instruction model relating to job from ActivityModel model
 # some_manual = Manual.objects.get(id=1)

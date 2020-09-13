@@ -6,10 +6,27 @@ from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
 
 
-# Create your models here.
+class WorkCenterTypes(models.Model):
+    wcType = models.CharField(max_length=2)
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f'{self.wcType} - {self.description}'
+
+        # PICKING = 'PK', _('Picking')
+        # LAZERCUTTING = 'LC', _('Lazer Cutting')
+        # POWDERCOATING = 'PC', _('Powder Coating')
+        # ZINCCOATING = 'ZN', _('Zinc Coating')
+        # HEATTREAT = 'HT', _('Heat Treatment & Shot Peening')
+        # ROTARYSAW = 'RS', _('Brobo Rotary Saw')
+        # SHAKEOUT = 'SK', _('Shakeout')
+        # FOLDING = 'FD', _('Sheet Metal Folding')
+
+
 class ActivityModel(models.Model):
     activityName = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
+    workCenter = models.ForeignKey(WorkCenterTypes, on_delete=models.PROTECT)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -37,26 +54,8 @@ class ActivityPartModel(models.Model):
         return str(self.activity) + " - " + str(self.part)
 
 
-class WorkCenterTypes(models.Model):
-    wcType = models.CharField(max_length=2)
-    description = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f'{self.wcType} - {self.description}'
-
-        # PICKING = 'PK', _('Picking')
-        # LAZERCUTTING = 'LC', _('Lazer Cutting')
-        # POWDERCOATING = 'PC', _('Powder Coating')
-        # ZINCCOATING = 'ZN', _('Zinc Coating')
-        # HEATTREAT = 'HT', _('Heat Treatment & Shot Peening')
-        # ROTARYSAW = 'RS', _('Brobo Rotary Saw')
-        # SHAKEOUT = 'SK', _('Shakeout')
-        # FOLDING = 'FD', _('Sheet Metal Folding')
-
-
 class GroupModel(models.Model):
     groupName = models.CharField(max_length=50)
-    workCenter = models.ForeignKey(WorkCenterTypes, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.groupName

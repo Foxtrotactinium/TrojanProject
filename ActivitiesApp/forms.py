@@ -15,6 +15,7 @@ class activity_form(forms.ModelForm):
         self.helper.layout = Layout(
             Field('activityName', css_class='form-control'),
             Field('description', css_class='form-control'),
+            'workCenter',
             HTML('<br>'),
             Submit('save', 'Save')
         )
@@ -54,13 +55,12 @@ class group_form(forms.ModelForm):
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
             Field('groupName', css_class='form-control'),
-            'workCenter',
             Submit('save', 'Save')
         )
 
     class Meta:
         model = GroupModel
-        fields = ['groupName', 'workCenter']
+        fields = ['groupName']
 
 
 class required_activity_form(forms.ModelForm):

@@ -57,7 +57,8 @@ class TaskPartsModel(models.Model):
     def isComplete(self):
         return self.quantityRequired == self.quantityCompleted
 
-    def updateQuantity(self, newval):
+    def updateQuantity(self, newval, user):
+        self.user = user
         change = newval-self.quantityCompleted
         if self.increment:
             self.part.stockOnHand += change
