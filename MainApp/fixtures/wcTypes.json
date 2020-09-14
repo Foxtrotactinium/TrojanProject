@@ -62,5 +62,21 @@
         "wcType": "FD",
         "description": "Sheet Metal Folding"
     }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 9,
+    "fields": {
+        "wcType": "AS",
+        "description": "Assembly"
+    }
+},
+{
+    "model": "ActivitiesApp.workcentertypes",
+    "pk": 10,
+    "fields": {
+        "wcType": "WD",
+        "description": "Welding"
+    }
 }
 ]

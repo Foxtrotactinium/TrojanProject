@@ -41,7 +41,8 @@ def add_task(request):
                 for required in required_list:
                     temp = TaskPartsModel(activity=tempactivity,
                                           part=required.part,
-                                          increment= required.increment,
+                                          task=taskMy,
+                                          increment=required.increment,
                                           quantityRequired=required.quantity,
                                           quantityCompleted=0,
                                           )
@@ -56,7 +57,6 @@ def add_task(request):
 @login_required
 def info_task_activities(request, taskid):
     task = get_object_or_404(TaskModel, id=taskid)
-    print(task)
     activities = TaskActivityModel.objects.filter(task=task)
 
     if activities.count() == 1:
@@ -64,6 +64,7 @@ def info_task_activities(request, taskid):
         return info_task_parts(request, taskid, activity.id)
 
     for activity in activities:
+        activity.complete = activity.isComplete()
         partsRequired = TaskPartsModel.objects.filter(activity=activity)
         # taskPartsRequired = TaskPartsModel.objects \
         #     .filter(task=taskid) \
@@ -80,8 +81,11 @@ def info_task_activities(request, taskid):
                                                        'taskid': taskid,
                                                        'taskactivities': activities})
 
+
 @login_required
 def info_task_parts(request, taskid, activityid):
+    # print(get_object_or_404(TaskActivityModel, activity=activityid).id)
+    print(TaskActivityModel.objects.filter(activity=activityid))
     if request.method == "POST":
         for completed in request.POST:
             try:
@@ -90,50 +94,45 @@ def info_task_parts(request, taskid, activityid):
             except ValueError:
                 pass
 
-    taskPartsRequired = ActivityPartModel.objects.filter(activity=activityid) \
+    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=activityid) \
         .filter(increment=False)
-    # taskPartsRequired = TaskPartsModel.objects \
-    #     .filter(task=taskid) \
-    #     .filter(part_id__in=partsRequired.values_list("part"))
-    taskPartsProduced = ActivityPartModel.objects.filter(activity=activityid) \
+
+    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=activityid) \
         .filter(increment=True)
-    # taskPartsProduced = TaskPartsModel.objects \
-    #     .filter(task=taskid) \
-    #     .filter(part_id__in=partsProduced.values_list("part"))
 
     if get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'PK':
         return render(request, 'infoTaskParts.html', {'header': 'Kits',
                                                       'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'LC':
-        return render(request, 'infoTaskLaserCuttingParts.html', {'header': 'Kits',
-                                                                  'producedparts': taskPartsProduced,
+        for producedpart in taskPartsProduced:
+            if producedpart.quantityCompleted == producedpart.quantityRequired:
+                for requiredpart in taskPartsRequired:
+                    requiredpart.quantityCompleted = requiredpart.quantityRequired
+                break
+        return render(request, 'infoTaskLaserCuttingParts.html', {'producedparts': taskPartsProduced,
                                                                   'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'PC':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
+        return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'ZN':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
+        return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'HT':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
+        return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'RS':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
+        return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'SK':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
+        return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'FD':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
+        return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
                                                       'requiredparts': taskPartsRequired})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'OR':
         taskPartsOrdered = TaskPartsModel.objects.filter(task=taskid)
-        return render(request, 'infoTaskOrderingParts.html', {'header': 'Ordered',
-                                                              'orderedparts': taskPartsOrdered})
+        return render(request, 'infoTaskOrderingParts.html', {'orderedparts': taskPartsOrdered})
+    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'AS':
+        return render(request, 'infoTaskAssemblyParts.html', {'producedparts': taskPartsProduced,
+                                                              'requiredparts': taskPartsRequired})
