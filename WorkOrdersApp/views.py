@@ -83,9 +83,9 @@ def info_task_activities(request, taskid):
 
 
 @login_required
-def info_task_parts(request, taskid, activityid):
-    # print(get_object_or_404(TaskActivityModel, activity=activityid).id)
-    print(TaskActivityModel.objects.filter(activity=activityid))
+def info_task_parts(request, taskid, taskactivityid):
+    # print(get_object_or_404(TaskActivityModel, activity=taskactivityid).id)
+    print(TaskActivityModel.objects.filter(activity=taskactivityid))
     if request.method == "POST":
         for completed in request.POST:
             try:
@@ -94,10 +94,10 @@ def info_task_parts(request, taskid, activityid):
             except ValueError:
                 pass
 
-    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=activityid) \
+    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
         .filter(increment=False)
 
-    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=activityid) \
+    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
         .filter(increment=True)
 
     if get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'PK':
