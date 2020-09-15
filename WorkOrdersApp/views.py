@@ -84,8 +84,11 @@ def info_task_activities(request, taskid):
 
 @login_required
 def info_task_parts(request, taskid, taskactivityid):
-    # print(get_object_or_404(TaskActivityModel, activity=taskactivityid).id)
-    print(TaskActivityModel.objects.filter(activity=taskactivityid))
+    # ac = get_object_or_404(TaskActivityModel, id=taskactivityid)
+    # for part in TaskPartsModel.objects.filter(task=taskid,activity=taskactivityid):
+    #     print(str(part.quantityRequired)+" - "+str(part.quantityCompleted))
+    # print(TaskActivityModel.isComplete(ac))
+
     if request.method == "POST":
         for completed in request.POST:
             try:
@@ -109,6 +112,8 @@ def info_task_parts(request, taskid, taskactivityid):
             if producedpart.quantityCompleted == producedpart.quantityRequired:
                 for requiredpart in taskPartsRequired:
                     requiredpart.quantityCompleted = requiredpart.quantityRequired
+                    requiredpart.quantityCompleted
+                    requiredpart.save()
                 break
         return render(request, 'infoTaskLaserCuttingParts.html', {'producedparts': taskPartsProduced,
                                                                   'requiredparts': taskPartsRequired})
