@@ -22,7 +22,7 @@
     {% for activity in taskactivities %}
 
     <tr class="{% if activity.complete == True %} table-success{% endif %}"
-        data-href="{% url 'infotaskparts' taskid=taskid activityid=activity.id %}">
+        data-href="{% url 'infotaskparts' taskid=taskid taskactivityid=activity.id %}">
         <td>{{ activity }}</td>
 
     </tr>
