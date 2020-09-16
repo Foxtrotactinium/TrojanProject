@@ -69,3 +69,8 @@ class PartCommentModel(models.Model):
 
     def __str__(self):
         return str(self.timestamp.strftime("%d/%m/%Y")) + " - " + str(self.author) + " - " + str(self.comment)
+
+
+class PartImageModel(models.Model):
+    part = models.ForeignKey(PartModel, on_delete=models.PROTECT)
+    image = models.ImageField(upload_to='images/')

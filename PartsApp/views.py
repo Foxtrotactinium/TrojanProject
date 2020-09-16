@@ -1,6 +1,7 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 
+from ActivitiesApp.models import GroupActivityModel, ActivityModel, ActivityPartModel
 from WorkOrdersApp.forms import TaskForm, TaskPartsModel
 from .models import *
 from .forms import *
@@ -38,6 +39,7 @@ def info_part(request, part_id):
     part = PartModel.objects.all().filter(pk=part_id).first()
 
     if request.method == "POST":
+        imageform = ImageForm(request.POST, request.FILES, initial={'part': part})
         form1 = PartForm(request.POST, instance=part)
         form2 = PartCommentForm(request.POST, initial={'author': request.user, 'part': part})
         if form1.is_valid():
@@ -46,21 +48,37 @@ def info_part(request, part_id):
         if form2.is_valid():
             form2.save()
             return redirect('inventory')
+        if imageform.is_valid():
+            imageform.save()
+            return redirect('inventory')
 
     else:
+        imageform = ImageForm(initial={'part': part})
+        image = PartImageModel.objects.filter(part=part)
         form1 = PartForm(instance=part)
         form2 = PartCommentForm(initial={'author': request.user, 'part': part})
         movements = part.history.all()[:10]
         previouslevel = 0
+        activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
+        print(activities.count())
+        for activity in activities:
+            activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part)
+            # activity.qty = qty.quantity
+            # print(activity.qty)
+            # print(qty)
+
         for movement in movements:
             movements.change = movement.stockOnHand - previouslevel
             previouslevel = movement.stockOnHand
         return render(request, 'infoPart.html', {'partform': form1,
+                                                 'images': image,
+                                                 'imageform': imageform,
                                                  'partsuppliers': PartSupplierModel.objects.all().filter(
                                                      part=part.id),
                                                  'commentForm': form2,
                                                  'part_id': part.id,
                                                  'movements': movements,
+                                                 'activities':activities,
                                                  'partcomments': PartCommentModel.objects.all().filter(part=part.id),
                                                  })
 

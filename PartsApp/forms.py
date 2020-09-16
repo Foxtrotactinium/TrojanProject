@@ -113,3 +113,21 @@ class PartSupplierForm(forms.ModelForm):
     class Meta:
         model = PartSupplierModel
         fields = '__all__'
+
+
+class ImageForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ImageForm, self).__init__(*args, **kwargs)
+
+        # If you pass FormHelper constructor a form instance
+        # It builds a default layout with all its fields
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            Field('part', type="hidden"),
+            'image'
+        )
+
+
+    class Meta:
+        model = PartImageModel
+        fields = "__all__"

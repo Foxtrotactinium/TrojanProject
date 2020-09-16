@@ -13,6 +13,17 @@
                 {% crispy partform %}
             </form>
             <br>
+            {% for image in images %}
+                <img src="{{ image.image.url }}" class="img-responsive"
+                     style="width: 100%; float: middle; margin-right: 10px;"/>
+            {% endfor %}
+            <br>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ imageform.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+            <br>
             <table class="table table-hover">
                 <tbody>
                 {% for comment in partcomments %}
@@ -43,9 +54,10 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="{% url 'addpartsupplier' part_id=part_id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add
+            <a href="{% url 'addpartsupplier' part_id=part_id %}" class="btn btn-secondary btn-sm btn-pad"
+               role="button">Add
                 Supplier</a>
-             <table class="h-75 table table-hover table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="h-25 table table-hover table-wrapper-scroll-y my-custom-scrollbar">
                 <thead>
                 <tr>
                     <th>Movements</th>
@@ -57,6 +69,22 @@
                     <td>{{ movement.history_date }}</td>
                     <td>{{ movement.history_user }}</td>
                     <td>{{ movement.change }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <table class="h-25 table table-hover table-wrapper-scroll-y my-custom-scrollbar">
+                <thead>
+                <tr>
+                    <th>Used in</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for activity in activities %}
+                <tr>
+                    <td>{{ activity.group.groupName }}</td>
+                    <td>{{ activity.activity.activityName }}</td>
+                    <td>{{ activity.qty.quantity }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
