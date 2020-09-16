@@ -1,4 +1,5 @@
 # Create your views here.
+from django.db.models import Sum
 from django.shortcuts import render, redirect
 
 from ActivitiesApp.models import GroupActivityModel, ActivityModel, ActivityPartModel
@@ -62,10 +63,9 @@ def info_part(request, part_id):
         activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
         print(activities.count())
         for activity in activities:
-            activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part)
-            # activity.qty = qty.quantity
-            # print(activity.qty)
-            # print(qty)
+            # activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).first().quantity
+            activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).aggregate(Sum("quantity"))
+
 
         for movement in movements:
             movements.change = movement.stockOnHand - previouslevel

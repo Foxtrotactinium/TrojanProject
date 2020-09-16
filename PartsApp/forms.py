@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import HiddenInput
+
 from .models import *
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Layout, Div, Submit, HTML, Hidden, Row, Column, Field
@@ -122,12 +124,13 @@ class ImageForm(forms.ModelForm):
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
+        self.fields['part'].widget = HiddenInput()
         self.helper.layout = Layout(
-            Field('part', type="hidden"),
-            'image'
+            Field('part', css_class='form-control'),
+            'image',
+            Submit('submit', 'Add')
         )
-
 
     class Meta:
         model = PartImageModel
-        fields = "__all__"
+        fields = '__all__'

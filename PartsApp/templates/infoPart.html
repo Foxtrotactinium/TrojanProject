@@ -6,22 +6,24 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm">
+
+        <div class="col">
+            <div>
+                {% for image in images %}
+                <img class="img-responsive" src="{{ image.image.url }}"
+                     style="height: 25%; float: middle; margin-right: 10px;"/>
+                {% endfor %}
+                <br>
+                <form enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    {{ imageform.as_p }}
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
             <form method="POST">
                 <br>
                 {% csrf_token %}
                 {% crispy partform %}
-            </form>
-            <br>
-            {% for image in images %}
-                <img src="{{ image.image.url }}" class="img-responsive"
-                     style="width: 100%; float: middle; margin-right: 10px;"/>
-            {% endfor %}
-            <br>
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ imageform.as_p }}
-                <button type="submit">Upload</button>
             </form>
             <br>
             <table class="table table-hover">
@@ -39,62 +41,68 @@
                 {% crispy commentForm %}
             </form>
         </div>
-        <div class="col-sm">
-            <table class="h-25 table table-hover">
-                <thead>
-                <tr>
-                    <th>Supplier</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for supplier in partsuppliers %}
-                <tr data-href="{% url 'info_supplier' supplier.supplier.id %}">
-                    <td>{{ supplier }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <a href="{% url 'addpartsupplier' part_id=part_id %}" class="btn btn-secondary btn-sm btn-pad"
+        <div class="col">
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                <table class="table table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th>Supplier</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for supplier in partsuppliers %}
+                    <tr data-href="{% url 'info_supplier' supplier.supplier.id %}">
+                        <td>{{ supplier }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a class="btn btn-secondary btn-sm btn-pad" href="{% url 'addpartsupplier' part_id=part_id %}"
                role="button">Add
                 Supplier</a>
-            <table class="h-25 table table-hover table-wrapper-scroll-y my-custom-scrollbar">
-                <thead>
-                <tr>
-                    <th>Movements</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for movement in movements %}
-                <tr>
-                    <td>{{ movement.history_date }}</td>
-                    <td>{{ movement.history_user }}</td>
-                    <td>{{ movement.change }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <table class="h-25 table table-hover table-wrapper-scroll-y my-custom-scrollbar">
-                <thead>
-                <tr>
-                    <th>Used in</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for activity in activities %}
-                <tr>
-                    <td>{{ activity.group.groupName }}</td>
-                    <td>{{ activity.activity.activityName }}</td>
-                    <td>{{ activity.qty.quantity }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                <table class="table table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th>Movements</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for movement in movements %}
+                    <tr>
+                        <td>{{ movement.history_date }}</td>
+                        <td>{{ movement.history_user }}</td>
+                        <td>{{ movement.change }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-wrapper-scroll-y my-custom-scrollbar">
+
+                <table class="table table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th>Used in</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for activity in activities %}
+                    <tr>
+                        <td>{{ activity.group.groupName }}</td>
+                        <td>{{ activity.activity.activityName }}</td>
+                        <td>{{ activity.qty.quantity__sum }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<br>
-<div class="row justify-content-between">
 
-</div>
 {% endblock %}
