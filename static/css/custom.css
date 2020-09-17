@@ -16,3 +16,8 @@ overflow: auto;
 .table-wrapper-scroll-y {
 display: block;
 }
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

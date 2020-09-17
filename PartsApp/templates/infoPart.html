@@ -8,18 +8,7 @@
     <div class="row">
 
         <div class="col">
-            <div>
-                {% for image in images %}
-                <img class="img-responsive" src="{{ image.image.url }}"
-                     style="height: 25%; float: middle; margin-right: 10px;"/>
-                {% endfor %}
-                <br>
-                <form enctype="multipart/form-data" method="post">
-                    {% csrf_token %}
-                    {{ imageform.as_p }}
-                    <button type="submit">Upload</button>
-                </form>
-            </div>
+
             <form method="POST">
                 <br>
                 {% csrf_token %}
@@ -40,7 +29,20 @@
                 {% csrf_token %}
                 {% crispy commentForm %}
             </form>
+            <div>
+                {% for image in images %}
+                <img class="center img-responsive" src="{{ image.image.url }}"
+                     style="height: 25%"/>
+                {% endfor %}
+                <br>
+                <form enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    {{ imageform.as_p }}
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
         </div>
+
         <div class="col">
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
 
@@ -82,7 +84,6 @@
                 </table>
             </div>
             <div class="table-wrapper-scroll-y my-custom-scrollbar">
-
                 <table class="table table-hover mb-0">
                     <thead>
                     <tr>

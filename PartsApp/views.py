@@ -8,7 +8,7 @@ from .models import *
 from .forms import *
 from django.contrib.auth.decorators import login_required
 
-
+from django.contrib.auth.models import Group
 # Create your views here.
 @login_required
 def list_parts(request):
@@ -37,6 +37,7 @@ def list_supplier(request):
 
 @login_required
 def info_part(request, part_id):
+    print(Group.objects.all())
     part = PartModel.objects.all().filter(pk=part_id).first()
 
     if request.method == "POST":

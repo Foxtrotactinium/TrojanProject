@@ -4,29 +4,29 @@ from django.utils.translation import gettext_lazy as _
 from PartsApp.models import PartModel
 from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
+from django.contrib.auth.models import Group
 
-
-class WorkCenterTypes(models.Model):
-    wcType = models.CharField(max_length=2)
-    description = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f'{self.wcType} - {self.description}'
-
-        # PICKING = 'PK', _('Picking')
-        # LAZERCUTTING = 'LC', _('Lazer Cutting')
-        # POWDERCOATING = 'PC', _('Powder Coating')
-        # ZINCCOATING = 'ZN', _('Zinc Coating')
-        # HEATTREAT = 'HT', _('Heat Treatment & Shot Peening')
-        # ROTARYSAW = 'RS', _('Brobo Rotary Saw')
-        # SHAKEOUT = 'SK', _('Shakeout')
-        # FOLDING = 'FD', _('Sheet Metal Folding')
+# class WorkCenterTypes(models.Model):
+#     wcType = models.CharField(max_length=2)
+#     description = models.CharField(max_length=50)
+#
+#     def __str__(self):
+#         return f'{self.wcType} - {self.description}'
+#
+#         # PICKING = 'PK', _('Picking')
+#         # LAZERCUTTING = 'LC', _('Lazer Cutting')
+#         # POWDERCOATING = 'PC', _('Powder Coating')
+#         # ZINCCOATING = 'ZN', _('Zinc Coating')
+#         # HEATTREAT = 'HT', _('Heat Treatment & Shot Peening')
+#         # ROTARYSAW = 'RS', _('Brobo Rotary Saw')
+#         # SHAKEOUT = 'SK', _('Shakeout')
+#         # FOLDING = 'FD', _('Sheet Metal Folding')
 
 
 class ActivityModel(models.Model):
     activityName = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
-    workCenter = models.ForeignKey(WorkCenterTypes, on_delete=models.PROTECT)
+    workCenter = models.ForeignKey(Group, on_delete=models.PROTECT)
     history = HistoricalRecords()
 
     def __str__(self):
