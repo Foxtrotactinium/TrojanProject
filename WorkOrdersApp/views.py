@@ -9,7 +9,6 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def task_list(request):
-    # print(TaskModel.objects.filter(group__workCenter__contains='LC'))
     # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
     completedList = TaskModel.objects.all()
     completedList = [task for task in completedList if not task.isComplete()]
@@ -57,9 +56,7 @@ def add_task(request):
 @login_required
 def info_task_activities(request, taskid):
     task = get_object_or_404(TaskModel, id=taskid)
-    activities = TaskActivityModel.objects.filter(task=task)
-    print(request.user.groups.all())
-    print(TaskActivityModel.objects.filter(activity__workCenter=request.user.groups.id))
+    activities = TaskActivityModel.objects.filter(task=task, activity__workCenter__in=request.user.groups.all())
 
     if activities.count() == 1:
         activity = activities.first()
@@ -68,9 +65,6 @@ def info_task_activities(request, taskid):
     for activity in activities:
         activity.complete = activity.isComplete()
         partsRequired = TaskPartsModel.objects.filter(activity=activity)
-        # taskPartsRequired = TaskPartsModel.objects \
-        #     .filter(task=taskid) \
-        #     .filter(part_id__in=partsRequired.values_list("part"))
 
         completedList = [part for part in partsRequired if not part.isComplete()]
 
