@@ -44,8 +44,7 @@
         </div>
 
         <div class="col">
-            <div class="table-wrapper-scroll-y my-custom-scrollbar">
-
+            <div>
                 <table class="table table-hover mb-0">
                     <thead>
                     <tr>
@@ -61,12 +60,12 @@
                     </tbody>
                 </table>
             </div>
-            <a class="btn btn-secondary btn-sm btn-pad" href="{% url 'addpartsupplier' part_id=part_id %}"
-               role="button">Add
-                Supplier</a>
-            <div class="table-wrapper-scroll-y my-custom-scrollbar">
 
-                <table class="table table-hover mb-0">
+            <a class="btn btn-secondary btn-sm btn-pad" href="{% url 'addpartsupplier' part_id=part_id %}"
+               role="button">Add Supplier</a>
+
+            <div>
+                <table class="table table-hover">
                     <thead>
                     <tr>
                         <th>Movements</th>
@@ -83,8 +82,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                <table class="table table-hover mb-0">
+
+            <div class="my-custom-scrollbar table-wrapper-scroll-y">
+                <table class="table table-hover">
                     <thead>
                     <tr>
                         <th>Used in</th>

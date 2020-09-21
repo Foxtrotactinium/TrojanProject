@@ -3,7 +3,7 @@ from django.forms import HiddenInput
 
 from .models import *
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Layout, Div, Submit, HTML, Hidden, Row, Column, Field
+from crispy_forms.layout import HTML, Layout, Div, Submit, HTML, Hidden, Row, Column, Field, Button
 
 
 # from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
@@ -24,15 +24,16 @@ class PartForm(forms.ModelForm):
             Row(
                 Column(
                     Field('stockOnHand', css_class='form-control', required=True),
-                    css_class='col-md-4'
+                    css_class='col-md-3'
                 ),
+                Button('add stock', 'Add Stock'),
                 Column(
                     Field('minimumStock', css_class='form-control', required=True),
-                    css_class='col-md-4'
+                    css_class='col-md-3'
                 ),
                 Column(
                     Field('reorderQtys', css_class='form-control', required=True),
-                    css_class='col-md-4'
+                    css_class='col-md-3'
                 ),
                 css_class='form-row'
             ),

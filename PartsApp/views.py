@@ -9,6 +9,8 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.models import Group
+
+
 # Create your views here.
 @login_required
 def list_parts(request):
@@ -46,42 +48,42 @@ def info_part(request, part_id):
         form2 = PartCommentForm(request.POST, initial={'author': request.user, 'part': part})
         if form1.is_valid():
             form1.save()
-            return redirect('inventory')
         if form2.is_valid():
             form2.save()
-            return redirect('inventory')
         if imageform.is_valid():
             imageform.save()
-            return redirect('inventory')
-
-    else:
-        imageform = ImageForm(initial={'part': part})
-        image = PartImageModel.objects.filter(part=part)
-        form1 = PartForm(instance=part)
-        form2 = PartCommentForm(initial={'author': request.user, 'part': part})
-        movements = part.history.all()[:10]
-        previouslevel = 0
-        activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
-        print(activities.count())
-        for activity in activities:
-            # activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).first().quantity
-            activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).aggregate(Sum("quantity"))
 
 
-        for movement in movements:
-            movements.change = movement.stockOnHand - previouslevel
-            previouslevel = movement.stockOnHand
-        return render(request, 'infoPart.html', {'partform': form1,
-                                                 'images': image,
-                                                 'imageform': imageform,
-                                                 'partsuppliers': PartSupplierModel.objects.all().filter(
-                                                     part=part.id),
-                                                 'commentForm': form2,
-                                                 'part_id': part.id,
-                                                 'movements': movements,
-                                                 'activities':activities,
-                                                 'partcomments': PartCommentModel.objects.all().filter(part=part.id),
-                                                 })
+
+    imageform = ImageForm(initial={'part': part})
+    image = PartImageModel.objects.filter(part=part)
+    form1 = PartForm(instance=part)
+    form2 = PartCommentForm(initial={'author': request.user, 'part': part})
+    movements = part.history.all()[:10]
+    previouslevel = 0
+    activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
+
+    for activity in activities:
+        activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).aggregate(
+            Sum("quantity"))
+
+    for movement in movements:
+        movement.change = movement.stockOnHand - previouslevel
+        previouslevel = movement.stockOnHand
+
+    context = {'partform': form1,
+               'images': image,
+               'imageform': imageform,
+               'partsuppliers': PartSupplierModel.objects.all().filter(
+                   part=part.id),
+               'commentForm': form2,
+               'part_id': part.id,
+               'movements': movements,
+               'activities': activities,
+               'partcomments': PartCommentModel.objects.all().filter(part=part.id),
+               }
+
+    return render(request, 'infoPart.html', context)
 
 
 @login_required
@@ -115,7 +117,7 @@ def info_supplier(request, id):
         for part in supplierparts:
             part.low = part.part.stockOnHand < part.part.minimumStock
             part.ordered = 0
-        supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first(),prefix='supplierform')
+        supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first(), prefix='supplierform')
         taskform = TaskForm(prefix='taskForm')
         return render(request, 'infoSupplier.html', {'supplierform': supplierform,
                                                      'supplierparts': supplierparts,

@@ -30,6 +30,18 @@ $(document).ready(function()
         $("tr:not(.table-danger)").hide();
     });
 
+    $("#button-id-add-stock").click(function(e)
+    {
+    var input = prompt('How much to add ?','0');
+    var num = parseInt(input);
+
+    var previous = $("#id_stockOnHand").val();
+    var previous_num = parseInt(previous);
+
+    $("#id_stockOnHand").val(previous_num + num);
+    $("#submit-id-save").click();
+    });
+
 });
 
 

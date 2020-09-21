@@ -3,15 +3,15 @@
 }
 td a {
   display:inline-block;
-  min-height:100%;
   width:100%;
   padding: 10px; /* add your padding here */
 }
 .my-custom-scrollbar
 {
-position: relative;
+position: absolute;
 max-height: 25%;
-overflow: auto;
+overflow-y: scroll;
+width: 95%;
 }
 .table-wrapper-scroll-y {
 display: block;
