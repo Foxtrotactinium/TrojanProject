@@ -6,49 +6,49 @@
 
 <br>
 
-<div class="row justify-content-between">
-    <div class="row">
-        <div class="col-sm">
-            <br>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="Search()" placeholder="Search" aria-label="Search">
-            </form>
-            <br>
-            <table class="table table-hover" id="selection">
-                <thead>
-                <tr>
-                    <th>Activity Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for activity in allactivities %}
-                <tr data-aid="{{ activity.id }}">
-                    <td>{{ activity.activityName }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="col-sm">
-        <table class="table table-hover">
+<div class="row">
+    <div class="col-sm">
+        <p class="font-weight-bold">Add Activity to Group</p>
+        <br>
+        <form class="form-inline">
+            <input class="form-control" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+        </form>
+        <br>
+        <table class="table table-hover" id="selection">
+            <thead>
+            <tr>
+                <th>Activity Name</th>
+            </tr>
+            </thead>
             <tbody>
-            {% for part in activityrequiredparts %}
-            <tr data-href="{% url 'detail' activity.id %}">
-                <td>{{ part.activityid }}</td>
+            {% for activity in allactivities %}
+            <tr data-aid="{{ activity.id }}">
+                <td>{{ activity.activityName }}</td>
             </tr>
             {% endfor %}
             </tbody>
         </table>
-        <br>
+    </div>
+    <div class="col-sm">
         <div class="container">
             <form method="POST">
                 {% csrf_token %}
                 {% crispy requiredactivityform %}
             </form>
         </div>
-    </div>
+        <table class="table table-hover">
+            <tbody>
+            {% for activity in grouprequiredactivity %}
+            <tr data-href="{% url 'activityinformation' activity.activity.id %}">
+                <td>{{ activity.activity.activityName }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
     </div>
 </div>
+
 
 {% endblock %}
 

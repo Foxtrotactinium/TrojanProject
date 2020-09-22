@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-
+<a href="{% url 'groups' %}" class="badge badge-light">Groups</a>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm">
@@ -22,7 +22,8 @@
                 {% for activity in groupactivities %}
                 <tr data-href="{% url 'activityinformation' activity.activity.pk %}">
                     <td>{{ activity.activity }}</td>
-                    <td>{{ activity.description }}</td>
+                    <td>{{ activity.activity.description }}</td>
+                    <td>{{ activity.activity.workCenter.name }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

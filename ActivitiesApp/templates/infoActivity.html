@@ -3,7 +3,9 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-
+<a href="{% url 'activities' %}" class="badge badge-light">Activities</a>
+<br>
+<p class="font-weight-bold">{{ activity.activityName }}</p>
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm">
@@ -16,46 +18,52 @@
     </div>
     <div class="row">
         <div class="col-sm">
-            <br>
-            <table class="h-50 table table-hover">
-                <thead>
-                <tr>
-                    <th>Parts Required</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for required in activitypartsrequired %}
-                <tr data-href="{% url 'info_part' required.part.id %}">
-                    <td>{{ required.part.partNumber }}</td>
-                    <td>{{ required.part.description }}</td>
-                    <td>{{ required.quantity }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <a href="{% url 'addrequired' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required
+            <div class="h-100">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Parts Required</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for required in activitypartsrequired %}
+                    <tr data-href="{% url 'info_part' required.part.id %}">
+                        <td><img src="{{ required.thumbnail.image.url }}"
+                         style="height: 200px;"/></td>
+                        <td>{{ required.part.partNumber }}</td>
+                        <td>{{ required.part.description }}</td>
+                        <td>{{ required.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required
                 Part</a>
 
         </div>
         <div class="col-sm">
-            <br>
-            <table class="h-50 table table-hover">
-                <thead>
-                <tr>
-                    <th>Parts Produced</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for produced in activitypartsproduced %}
-                <tr data-href="{% url 'info_part' produced.part.id %}">
-                    <td>{{ produced.part.partNumber }}</td>
-                    <td>{{ produced.part.description }}</td>
-                    <td>{{ produced.quantity }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <a href="{% url 'addproduced' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Produced
+            <div class="h-100">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Parts Produced</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for produced in activitypartsproduced %}
+                    <tr data-href="{% url 'info_part' produced.part.id %}">
+                        <td><img class="img-responsive" src="{{ required.image.image.url }}"
+                         style="height: 200px"/></td>
+                        <td>{{ produced.part.partNumber }}</td>
+                        <td>{{ produced.part.description }}</td>
+                        <td>{{ produced.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Produced
                 Part</a>
         </div>
     </div>

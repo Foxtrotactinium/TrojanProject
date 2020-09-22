@@ -9,7 +9,7 @@ td a {
 .my-custom-scrollbar
 {
 position: absolute;
-max-height: 25%;
+height: 50%;
 overflow-y: scroll;
 width: 95%;
 }

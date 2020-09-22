@@ -23,19 +23,22 @@ class PartForm(forms.ModelForm):
             Field('location', css_class='form-control'),
             Row(
                 Column(
-                    Field('stockOnHand', css_class='form-control', required=True),
-                    css_class='col-md-3'
-                ),
-                Button('add stock', 'Add Stock'),
+                    Div(
+                        Field('stockOnHand', css_class='form-control', required=True),
+
+                        Button('add stock', '+ / -', css_class="btn btn-success"),
+
+                        css_class="input-group-append"),
+                    css_class='input-group col-md-2'),
                 Column(
                     Field('minimumStock', css_class='form-control', required=True),
-                    css_class='col-md-3'
+                    css_class='col-md-2'
                 ),
                 Column(
                     Field('reorderQtys', css_class='form-control', required=True),
-                    css_class='col-md-3'
+                    css_class='col-md-2'
                 ),
-                css_class='form-row'
+                css_class='row justify-content-between form-row'
             ),
             Field('leadtime', css_class='form-control'),
             Row(

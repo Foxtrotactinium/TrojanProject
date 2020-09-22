@@ -74,13 +74,13 @@ def info_task_activities(request, taskid):
             activity.status = "Done"
 
     return render(request, 'infoTaskActivities.html', {'header': 'Grouped Activities',
-                                                       'taskid': taskid,
+                                                       'task': task,
                                                        'taskactivities': activities})
 
 
 @login_required
 def info_task_parts(request, taskid, taskactivityid):
-    # ac = get_object_or_404(TaskActivityModel, id=taskactivityid)
+    taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
     # for part in TaskPartsModel.objects.filter(task=taskid,activity=taskactivityid):
     #     print(str(part.quantityRequired)+" - "+str(part.quantityCompleted))
     # print(TaskActivityModel.isComplete(ac))
@@ -102,7 +102,9 @@ def info_task_parts(request, taskid, taskactivityid):
     if get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Picking':
         return render(request, 'infoTaskParts.html', {'header': 'Kits',
                                                       'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                      'requiredparts': taskPartsRequired,
+                                                      'taskid': taskid,
+                                                      'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Laser Cutting':
         for producedpart in taskPartsProduced:
             if producedpart.quantityCompleted == producedpart.quantityRequired:
@@ -112,28 +114,46 @@ def info_task_parts(request, taskid, taskactivityid):
                     requiredpart.save()
                 break
         return render(request, 'infoTaskLaserCuttingParts.html', {'producedparts': taskPartsProduced,
-                                                                  'requiredparts': taskPartsRequired})
+                                                                  'requiredparts': taskPartsRequired,
+                                                                  'taskid': taskid,
+                                                                  'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Powder Coating':
         return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                      'requiredparts': taskPartsRequired,
+                                                      'taskid': taskid,
+                                                      'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Zinc Coating':
         return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                      'requiredparts': taskPartsRequired,
+                                                      'taskid': taskid,
+                                                      'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Heat Treatment & Shot Peening':
         return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                      'requiredparts': taskPartsRequired,
+                                                      'taskid': taskid,
+                                                      'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Brobo Rotary Saw':
         return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                      'requiredparts': taskPartsRequired,
+                                                      'taskid': taskid,
+                                                      'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Shakeout':
         return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                      'requiredparts': taskPartsRequired,
+                                                      'taskid': taskid,
+                                                      'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Sheet Metal Folding':
         return render(request, 'infoTaskParts.html', {'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
+                                                      'requiredparts': taskPartsRequired,
+                                                      'taskid': taskid,
+                                                      'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Ordering':
         taskPartsOrdered = TaskPartsModel.objects.filter(task=taskid)
-        return render(request, 'infoTaskOrderingParts.html', {'orderedparts': taskPartsOrdered})
+        return render(request, 'infoTaskOrderingParts.html', {'orderedparts': taskPartsOrdered,
+                                                              'taskid': taskid,
+                                                              'taskactivity': taskactivity})
     elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Assembly':
         return render(request, 'infoTaskAssemblyParts.html', {'producedparts': taskPartsProduced,
-                                                              'requiredparts': taskPartsRequired})
+                                                              'requiredparts': taskPartsRequired,
+                                                              'taskid': taskid,
+                                                              'taskactivity': taskactivity})

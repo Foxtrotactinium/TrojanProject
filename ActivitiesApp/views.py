@@ -1,3 +1,4 @@
+from PartsApp.models import PartImageModel
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
@@ -38,32 +39,45 @@ def activity_information(request, id):
             form.save()
             return redirect('activities')
 
-    else:
-        form = activity_form(instance=activity)
-        context = {'activityform': form,
-                   'activitypartsrequired': ActivityPartModel.objects.filter(activity=id).filter(increment=False),
-                   'activitypartsproduced': ActivityPartModel.objects.filter(activity=id).filter(increment=True),
-                   'id': id}
-        return render(request, 'infoActivity.html', context)
+    required = ActivityPartModel.objects.filter(activity=id).filter(increment=False)
+    for part in required:
+        required.thumbnail = PartImageModel.objects.filter(part=part.part)
+        # print(required.thumbnail.image.url)
+    produced = ActivityPartModel.objects.filter(activity=id).filter(increment=True)
+    for part in required:
+        produced.thumbnail = PartImageModel.objects.filter(part=part.part)
+    form = activity_form(instance=activity)
+    context = {'activityform': form,
+               'activitypartsrequired': required,
+               'activitypartsproduced': produced,
+               'activity': activity}
+    return render(request, 'infoActivity.html', context)
 
 
 @login_required
 def add_required_part_to_activity(request, id, increment):
+    activity = get_object_or_404(ActivityModel, id=id)
     activity_parts = ActivityPartModel.objects.filter(activity=id).filter(increment=increment)
     parts = PartModel.objects.all()
+    form = required_part_form(initial={'activity': id, 'increment': increment})
+    if increment == False:
+        header = "Parts Required"
+    else:
+        header = "Parts Produced"
+    context = {'activity': activity,
+               'requiredpartform': form,
+               'activityrequiredparts': activity_parts,
+               'parts': parts,
+               'header': header
+               }
+
     if request.method == "POST":
         form = required_part_form(request.POST)
 
         if form.is_valid():
             form.save()
-        return redirect('activities')
+        return render(request, 'addActivityPart.html', context)
 
-    else:
-        form = required_part_form(initial={'activity': id, 'increment': increment})
-        context = {'requiredpartform': form,
-                   'activityrequiredparts': activity_parts,
-                   'parts': parts,
-                   }
     return render(request, 'addActivityPart.html', context)
 
 
@@ -117,12 +131,11 @@ def add_required_activity_to_group(request, id):
             form.save()
         return redirect('groups')
 
-    else:
-        form = required_activity_form(initial={'group': id})
-        context = {'requiredactivityform': form,
-                   'grouprequiredactivity': group_activities,
-                   'allactivities': activities,
-                   }
+    form = required_activity_form(initial={'group': id})
+    context = {'requiredactivityform': form,
+               'grouprequiredactivity': group_activities,
+               'allactivities': activities,
+               }
     return render(request, 'addGroupActivity.html', context)
 
 # @login_required

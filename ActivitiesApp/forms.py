@@ -38,7 +38,7 @@ class required_part_form(forms.ModelForm):
             Field('quantity', css_class='form-control'),
             Field('increment', type='hidden'),
             HTML('<br>'),
-            Submit('save', 'Save')
+            Submit('save', 'Add to Activity')
         )
 
     class Meta:
@@ -74,7 +74,7 @@ class required_activity_form(forms.ModelForm):
             Field('group', type="hidden"),
             Field('activity', css_class='form-control'),
             HTML('<br>'),
-            Submit('save', 'Save')
+            Submit('save', 'Add Activity')
         )
 
     class Meta:

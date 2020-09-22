@@ -1,16 +1,21 @@
 <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'inventory' %}" tabindex="-1">Inventory</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">Inventory</a>
+        <div class="dropdown-menu" aria-labelledby="inventoryDropdown">
+            <a class="dropdown-item" href="{% url 'inventory' %}">Inventory</a>
+            <a class="dropdown-item" href="{% url 'suppliers' %}">Suppliers</a>
+        </div>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'suppliers' %}">Suppliers</a>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="activitiesDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">Activities</a>
+        <div class="dropdown-menu" aria-labelledby="activitiesDropdown">
+            <a class="dropdown-item" href="{% url 'activities' %}">Activities</a>
+            <a class="dropdown-item" href="{% url 'groups' %}">Work Groups</a>
+        </div>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'activities' %}">Activities</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'groups' %}">Work Groups</a>
-    </li>
+
     <li class="nav-item">
         <a class="nav-link" href="{% url 'tasks' %}">Tasks</a>
     </li>

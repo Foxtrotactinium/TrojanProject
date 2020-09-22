@@ -39,7 +39,6 @@ def list_supplier(request):
 
 @login_required
 def info_part(request, part_id):
-    print(Group.objects.all())
     part = PartModel.objects.all().filter(pk=part_id).first()
 
     if request.method == "POST":
