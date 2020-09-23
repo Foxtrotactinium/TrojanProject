@@ -41,11 +41,12 @@ def activity_information(request, id):
 
     required = ActivityPartModel.objects.filter(activity=id).filter(increment=False)
     for part in required:
-        required.thumbnail = PartImageModel.objects.filter(part=part.part)
-        # print(required.thumbnail.image.url)
+        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        # print(required.thumbnail)
     produced = ActivityPartModel.objects.filter(activity=id).filter(increment=True)
-    for part in required:
-        produced.thumbnail = PartImageModel.objects.filter(part=part.part)
+    for part in produced:
+        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        # print(produced.thumbnail.image.url)
     form = activity_form(instance=activity)
     context = {'activityform': form,
                'activitypartsrequired': required,

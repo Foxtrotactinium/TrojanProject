@@ -16,9 +16,9 @@
             </form>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="min-height: 400px;">
         <div class="col-sm">
-            <div class="h-100">
+            <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -29,7 +29,7 @@
                     {% for required in activitypartsrequired %}
                     <tr data-href="{% url 'info_part' required.part.id %}">
                         <td><img src="{{ required.thumbnail.image.url }}"
-                         style="height: 200px;"/></td>
+                         style="height: 100px;"/></td>
                         <td>{{ required.part.partNumber }}</td>
                         <td>{{ required.part.description }}</td>
                         <td>{{ required.quantity }}</td>
@@ -38,12 +38,14 @@
                     </tbody>
                 </table>
             </div>
+            <div style="position: absolute; bottom: 0;">
             <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required
                 Part</a>
+            </div>
 
         </div>
         <div class="col-sm">
-            <div class="h-100">
+            <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -53,8 +55,8 @@
                     <tbody>
                     {% for produced in activitypartsproduced %}
                     <tr data-href="{% url 'info_part' produced.part.id %}">
-                        <td><img class="img-responsive" src="{{ required.image.image.url }}"
-                         style="height: 200px"/></td>
+                        <td><img class="img-responsive" src="{{ produced.thumbnail.image.url }}"
+                         style="height: 100px"/></td>
                         <td>{{ produced.part.partNumber }}</td>
                         <td>{{ produced.part.description }}</td>
                         <td>{{ produced.quantity }}</td>
@@ -63,10 +65,14 @@
                     </tbody>
                 </table>
             </div>
+            <div style="position: absolute; bottom: 0;">
             <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Produced
                 Part</a>
+            </div>
         </div>
     </div>
 </div>
+
+
 
 {% endblock %}
