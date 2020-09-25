@@ -2,6 +2,7 @@ $(document).ready(function()
 {
     $('.setbutton').click(function() {
     $('input[name='+$(this).data("partid")+']').val( $(this).data("value"));
+    $("#submit-id-save").click();
     });
 
     $('[data-href]').click(function()

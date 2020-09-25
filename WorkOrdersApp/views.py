@@ -109,12 +109,10 @@ def info_task_parts(request, taskid, taskactivityid):
                'taskid': taskid,
                'taskactivity': taskactivity}
 
-    if get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Picking':
-        return render(request, 'infoTaskParts.html', context)
+    if get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Picking':
+        return render(request, 'infoTaskPickingParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.name == 'Laser Cutting':
-        print(get_object_or_404(ActivityModel, id=taskid).workCenter.name)
-        print(taskactivityid)
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Laser Cutting':
         for producedpart in taskPartsProduced:
             if producedpart.quantityCompleted == producedpart.quantityRequired:
                 for requiredpart in taskPartsRequired:
@@ -124,29 +122,29 @@ def info_task_parts(request, taskid, taskactivityid):
                 break
         return render(request, 'infoTaskLaserCuttingParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Powder Coating':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Powder Coating':
         return render(request, 'infoTaskParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Zinc Coating':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Zinc Coating':
         return render(request, 'infoTaskParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Heat Treatment & Shot Peening':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Heat Treatment & Shot Peening':
         return render(request, 'infoTaskParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Brobo Rotary Saw':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Brobo Rotary Saw':
         return render(request, 'infoTaskParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Shakeout':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Shakeout':
         return render(request, 'infoTaskParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Sheet Metal Folding':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Sheet Metal Folding':
         return render(request, 'infoTaskParts.html', context)
 
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Ordering':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Ordering':
         taskPartsOrdered = TaskPartsModel.objects.filter(task=taskid)
         return render(request, 'infoTaskOrderingParts.html', {'orderedparts': taskPartsOrdered,
                                                               'taskid': taskid,
                                                               'taskactivity': taskactivity})
-    elif get_object_or_404(ActivityModel, id=taskactivityid).workCenter.name == 'Assembly':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Assembly':
         return render(request, 'infoTaskAssemblyParts.html', context)
 
