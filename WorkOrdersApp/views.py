@@ -112,7 +112,7 @@ def info_task_parts(request, taskid, taskactivityid):
     if get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Picking':
         return render(request, 'WorkOrdersApp/infoTaskPickingParts.html', context)
 
-    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Laser Cutting':
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Lazer Cutting':
         for producedpart in taskPartsProduced:
             if producedpart.quantityCompleted == producedpart.quantityRequired:
                 for requiredpart in taskPartsRequired:
@@ -147,4 +147,6 @@ def info_task_parts(request, taskid, taskactivityid):
                                                               'taskactivity': taskactivity})
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Assembly':
         return render(request, 'WorkOrdersApp/infoTaskAssemblyParts.html', context)
+
+    print(f'{get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name=}')
 
