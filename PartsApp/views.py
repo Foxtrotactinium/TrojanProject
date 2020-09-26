@@ -25,7 +25,7 @@ def list_parts(request):
         'header': 'Inventory'
     }
 
-    return render(request, 'listParts.html', context)
+    return render(request, 'PartsApp/listParts.html', context)
 
 
 @login_required
@@ -34,7 +34,7 @@ def list_supplier(request):
         'header': 'Supplier List',
         'suppliers': SupplierModel.objects.all(),
     }
-    return render(request, 'listSuppliers.html', context)
+    return render(request, 'PartsApp/listSuppliers.html', context)
 
 
 @login_required
@@ -82,7 +82,7 @@ def info_part(request, part_id):
                'partcomments': PartCommentModel.objects.all().filter(part=part.id),
                }
 
-    return render(request, 'infoPart.html', context)
+    return render(request, 'PartsApp/infoPart.html', context)
 
 
 @login_required
@@ -118,7 +118,7 @@ def info_supplier(request, id):
             part.ordered = 0
         supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first(), prefix='supplierform')
         taskform = TaskForm(prefix='taskForm')
-        return render(request, 'infoSupplier.html', {'supplierform': supplierform,
+        return render(request, 'PartsApp/infoSupplier.html', {'supplierform': supplierform,
                                                      'supplierparts': supplierparts,
                                                      'taskform': taskform})
 
@@ -134,7 +134,7 @@ def add_supplier(request):
 
     else:
         form = SupplierForm()
-        return render(request, 'addSupplier.html', {'supplierForm': form})
+        return render(request, 'PartsApp/addSupplier.html', {'supplierForm': form})
 
 
 @login_required
@@ -148,7 +148,7 @@ def add_part(request):
 
     else:
         form = PartForm()
-        return render(request, 'addPart.html', {'PartForm': form})
+        return render(request, 'PartsApp/addPart.html', {'PartForm': form})
 
 
 @login_required
@@ -170,4 +170,4 @@ def add_supplier_to_part(request, part_id):
                    'part': part,
                    'suppliers': suppliers,
                    }
-    return render(request, 'addPartSupplier.html', context)
+    return render(request, 'PartsApp/addPartSupplier.html', context)

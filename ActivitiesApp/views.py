@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 @login_required
 def activity_list(request):
-    return render(request, 'listActivities.html', {'header': 'ActivityModel',
+    return render(request, 'ActivitiesApp/listActivities.html', {'header': 'ActivityModel',
                                                    'activities': ActivityModel.objects.all()})
 
 
@@ -26,7 +26,7 @@ def add_activity(request):
     else:
         form = activity_form()
 
-        return render(request, 'addActivity.html', {'activityform': form})
+        return render(request, 'ActivitiesApp/addActivity.html', {'activityform': form})
 
 
 @login_required
@@ -50,7 +50,7 @@ def activity_information(request, id):
                'activitypartsrequired': required,
                'activitypartsproduced': produced,
                'activity': activity}
-    return render(request, 'infoActivity.html', context)
+    return render(request, 'ActivitiesApp/infoActivity.html', context)
 
 
 @login_required
@@ -75,16 +75,16 @@ def add_required_part_to_activity(request, id, increment):
 
         if form.is_valid():
             form.save()
-        return render(request, 'addActivityPart.html', context)
+        return render(request, 'ActivitiesApp/addActivityPart.html', context)
 
-    return render(request, 'addActivityPart.html', context)
+    return render(request, 'ActivitiesApp/addActivityPart.html', context)
 
 
 @login_required
 def groups(request):
     # print(WorkCenterTypes.objects.filter(wcType=type))
 
-    return render(request, 'listGroups.html', {'header': 'GroupModel',
+    return render(request, 'ActivitiesApp/listGroups.html', {'header': 'GroupModel',
                                                'groups': GroupModel.objects.all()})
 
 
@@ -99,7 +99,7 @@ def add_group(request):
 
     else:
         form = group_form()
-        return render(request, 'addGroup.html', {'groupform': form})
+        return render(request, 'ActivitiesApp/addGroup.html', {'groupform': form})
 
 
 @login_required
@@ -116,7 +116,7 @@ def group_information(request, id):
         context = {'groupform': form,
                    'groupactivities': GroupActivityModel.objects.filter(group=id),
                    'id': id}
-        return render(request, 'infoGroups.html', context)
+        return render(request, 'ActivitiesApp/infoGroups.html', context)
 
 
 @login_required
@@ -135,7 +135,7 @@ def add_required_activity_to_group(request, id):
                'grouprequiredactivity': group_activities,
                'allactivities': activities,
                }
-    return render(request, 'addGroupActivity.html', context)
+    return render(request, 'ActivitiesApp/addGroupActivity.html', context)
 
 # @login_required
 # def work_center(request):

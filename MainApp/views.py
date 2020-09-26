@@ -20,17 +20,17 @@ def register(request):
                 messages.error(request, f"{msg}: {login_form.error_messages[msg]}")
 
             return render(request=request,
-                          template_name="register.html",
+                          template_name="MainApp/register.html",
                           context={"login_form": login_form})
 
             login_form = UserCreationForm
         return render(request=request,
-                      template_name="register.html",
+                      template_name="MainApp/register.html",
                       context={"login_form": login_form})
     else:
         login_form = UserCreationForm
         return render(request=request,
-                      template_name="register.html",
+                      template_name="MainApp/register.html",
                       context={"login_form": login_form})
 
 
@@ -60,5 +60,5 @@ def login_request(request):
 
     login_form = AuthenticationForm()
     return render(request=request,
-                  template_name="login.html",
+                  template_name="MainApp/login.html",
                   context={"login_form": login_form})

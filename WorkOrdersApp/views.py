@@ -13,7 +13,7 @@ def task_list(request):
     completedList = TaskModel.objects.all()
     completedList = [task for task in completedList if not task.isComplete()]
 
-    return render(request, 'listTasks.html', {'header': 'Outstanding Tasks',
+    return render(request, 'WorkOrdersApp/listTasks.html', {'header': 'Outstanding Tasks',
                                               'tasks': completedList})
 
 
@@ -50,7 +50,7 @@ def add_task(request):
             return redirect('tasks')
     else:
         form = TaskForm()
-        return render(request, 'addTask.html', {'taskform': form})
+        return render(request, 'WorkOrdersApp/addTask.html', {'taskform': form})
 
 
 @login_required
@@ -73,7 +73,7 @@ def info_task_activities(request, taskid):
         else:
             activity.status = "Done"
 
-    return render(request, 'infoTaskActivities.html', {'header': 'Grouped Activities',
+    return render(request, 'WorkOrdersApp/infoTaskActivities.html', {'header': 'Grouped Activities',
                                                        'task': task,
                                                        'taskactivities': activities})
 
@@ -110,7 +110,7 @@ def info_task_parts(request, taskid, taskactivityid):
                'taskactivity': taskactivity}
 
     if get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Picking':
-        return render(request, 'infoTaskPickingParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskPickingParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Laser Cutting':
         for producedpart in taskPartsProduced:
@@ -120,31 +120,31 @@ def info_task_parts(request, taskid, taskactivityid):
                     requiredpart.quantityCompleted
                     requiredpart.save()
                 break
-        return render(request, 'infoTaskLaserCuttingParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskLaserCuttingParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Powder Coating':
-        return render(request, 'infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Zinc Coating':
-        return render(request, 'infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Heat Treatment & Shot Peening':
-        return render(request, 'infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Brobo Rotary Saw':
-        return render(request, 'infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Shakeout':
-        return render(request, 'infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Sheet Metal Folding':
-        return render(request, 'infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Ordering':
         taskPartsOrdered = TaskPartsModel.objects.filter(task=taskid)
-        return render(request, 'infoTaskOrderingParts.html', {'orderedparts': taskPartsOrdered,
+        return render(request, 'WorkOrdersApp/infoTaskOrderingParts.html', {'orderedparts': taskPartsOrdered,
                                                               'taskid': taskid,
                                                               'taskactivity': taskactivity})
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Assembly':
-        return render(request, 'infoTaskAssemblyParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskAssemblyParts.html', context)
 
