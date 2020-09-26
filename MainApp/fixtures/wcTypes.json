@@ -68,5 +68,12 @@
     "fields": {
         "name": "Welding"
     }
+},
+{
+    "model": "auth.group",
+    "pk": 11,
+    "fields": {
+        "name": "Hose Cutting"
+    }
 }
 ]
