@@ -6,7 +6,7 @@ from simple_history.models import HistoricalRecords
 
 # Inventory Model with fields
 class PartModel(models.Model):
-    partNumber = models.CharField(max_length=50, blank=False)
+    partNumber = models.CharField(max_length=50, blank=False, unique=True)
     description = models.CharField(max_length=200)
     location = models.CharField(max_length=20)
     stockOnHand = models.IntegerField(blank=True)
