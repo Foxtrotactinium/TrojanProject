@@ -46,12 +46,12 @@
                     <td>{{ part.part.description }}</td>
                     <td>{{ part.quantityRequired }}</td>
                     <td>
-                        <input class='input-group col-md-2' type="number" value="{{ part.quantityCompleted }}"
+                        <input class='input-group col-md-3' type="number" value="{{ part.quantityCompleted }}"
                                name="{{ part.pk }}">
                     </td>
                     <td>
                         <button type="button" data-partid="{{ part.pk }}" data-value="{{ part.quantityRequired }}"
-                                class="setbutton">complete
+                                class="btn btn-secondary setbutton">complete
                         </button>
                     </td>
                 </tr>
@@ -61,7 +61,14 @@
             </tbody>
 
         </table>
-        <input id="submit-id-save" type="submit" value="Save"> <button id="completeAll" type="button">Complete ALL + Save</button>
+        <div>
+            <a href="{% url 'includerequiredpart' taskid taskactivity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Include Part</a>
+        </div>
+        <br>
+        <div>
+            <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Save">
+            <button class="btn btn-secondary btn-sm" id="completeAll" type="button">Complete ALL + Save</button>
+        </div>
         {% csrf_token %}
     </form>
 

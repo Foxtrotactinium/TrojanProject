@@ -40,7 +40,7 @@ $(document).ready(function () {
     });
 
     $('.low-stock-button').click(function () {
-        $("tr:not(.table-danger)").hide();
+        $("tr:not(.table-danger)").toggle();
     });
 
     $("#button-id-add-stock").click(function () {

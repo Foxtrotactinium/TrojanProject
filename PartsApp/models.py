@@ -31,9 +31,7 @@ class PartModel(models.Model):
 
 class SupplierModel(models.Model):
     supplierName = models.CharField(max_length=50)
-    phoneNumber = models.IntegerField(blank=True)
-    address = models.CharField(max_length=200)
-    accountNumber = models.CharField(max_length=50)
+
 
     def __str__(self):
         return self.supplierName

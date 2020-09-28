@@ -58,7 +58,7 @@ def info_part(request, part_id):
     image = PartImageModel.objects.filter(part=part)
     form1 = PartForm(instance=part)
     form2 = PartCommentForm(initial={'author': request.user, 'part': part})
-    movements = part.history.all()[:10]
+    movements = part.history.all()
     previouslevel = 0
     activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
 
@@ -70,6 +70,10 @@ def info_part(request, part_id):
         movement.change = movement.stockOnHand - previouslevel
         previouslevel = movement.stockOnHand
 
+    # print(movements.filter(change__lt=0,change__gt=0))
+    # filtered = (x for x in movements if x.change != 0)
+    # print(movements.exclude(change=0))
+    # print(filtered.count())
     context = {'partform': form1,
                'images': image,
                'imageform': imageform,

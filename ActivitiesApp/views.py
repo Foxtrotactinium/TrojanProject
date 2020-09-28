@@ -128,7 +128,7 @@ def add_required_activity_to_group(request, id):
         form = required_activity_form(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('groups')
+        return redirect('groupinformation', id)
 
     form = required_activity_form(initial={'group': id})
     context = {'requiredactivityform': form,

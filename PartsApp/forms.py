@@ -70,9 +70,6 @@ class SupplierForm(forms.ModelForm):
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
             Field('supplierName', css_class='form-control'),
-            Field('phoneNumber', css_class='form-control'),
-            Field('address', css_class='form-control'),
-            Field('accountNumber', css_class='form-control'),
             HTML('<br>'),
             Submit('save', 'Save')
         )
