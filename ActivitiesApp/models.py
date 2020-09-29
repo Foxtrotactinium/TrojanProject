@@ -50,6 +50,10 @@ class ActivityPartModel(models.Model):
     increment = models.BooleanField(default=False)  # TRUE/FALSE used to represent parts ActivityPartModel/produced
     history = HistoricalRecords()
 
+    def updateQuantity(self, newval):
+        self.quantity = newval
+        self.save()
+
     def __str__(self):
         return str(self.activity) + " - " + str(self.part)
 

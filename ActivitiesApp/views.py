@@ -37,7 +37,14 @@ def activity_information(request, id):
         form = activity_form(request.POST, instance=activity)
         if form.is_valid():
             form.save()
-            return redirect('activities')
+            return activity_information(request, id)
+        # for qty in request.POST[required.pk]:
+        #     print(qty)
+        #     try:
+        #         updatedvalue = get_object_or_404(ActivityPartModel, id=int(completed))
+        #         updatedvalue.updateQuantity(int(request.POST[completed])
+        #     except ValueError:
+        #         pass
 
     required = ActivityPartModel.objects.filter(activity=id).filter(increment=False)
     for part in required:
@@ -45,6 +52,7 @@ def activity_information(request, id):
     produced = ActivityPartModel.objects.filter(activity=id).filter(increment=True)
     for part in produced:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+
     form = activity_form(instance=activity)
     context = {'activityform': form,
                'activitypartsrequired': required,

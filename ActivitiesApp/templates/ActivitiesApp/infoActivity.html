@@ -27,20 +27,25 @@
                     </thead>
                     <tbody>
                     {% for required in activitypartsrequired %}
-                    <tr data-href="{% url 'info_part' required.part.id %}">
+                    <tr>
                         <td><img src="{{ required.thumbnail.image.url }}"
-                         style="height: 100px;"/></td>
-                        <td>{{ required.part.partNumber }}</td>
-                        <td>{{ required.part.description }}</td>
-                        <td>{{ required.quantity }}</td>
+                                 style="height: 100px;"/></td>
+                        <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.partNumber }}</td>
+                        <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.description }}</td>
+                        <form>
+                        <td>
+                            <input type="number" value="{{ required.quantity }}" name="{{ required.pk }}">
+                        </td>
+                        <td><button type="button" data-partid="{{ required.pk }}" class="setbutton">Update</button></td>
+                        </form>
                     </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
             <div style="position: absolute; bottom: 0;">
-            <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required
-                Part</a>
+                <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Required
+                    Part</a>
             </div>
 
         </div>
@@ -54,11 +59,11 @@
                     </thead>
                     <tbody>
                     {% for produced in activitypartsproduced %}
-                    <tr data-href="{% url 'info_part' produced.part.id %}">
+                    <tr>
                         <td><img class="img-responsive" src="{{ produced.thumbnail.image.url }}"
-                         style="height: 100px"/></td>
-                        <td>{{ produced.part.partNumber }}</td>
-                        <td>{{ produced.part.description }}</td>
+                                 style="height: 100px"/></td>
+                        <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.partNumber }}</td>
+                        <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.description }}</td>
                         <td>{{ produced.quantity }}</td>
                     </tr>
                     {% endfor %}
@@ -66,11 +71,12 @@
                 </table>
             </div>
             <div style="position: absolute; bottom: 0;">
-            <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Produced
-                Part</a>
+                <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad" role="button">Add Produced
+                    Part</a>
             </div>
         </div>
     </div>
+                <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Update Quantities">
 </div>
 
 

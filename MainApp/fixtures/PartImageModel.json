@@ -1,0 +1,10 @@
+[
+{
+  "model": "PartsApp.partimagemodel",
+  "pk": 1,
+  "fields": {
+    "part": 691,
+    "image": "images/252.00.0870.00.gif"
+  }
+}
+]
