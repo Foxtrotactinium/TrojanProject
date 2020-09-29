@@ -76,13 +76,14 @@ class TaskPartsModel(models.Model):
     def updateQuantity(self, newval, user):
         self.user = user
         change = newval-self.quantityCompleted
-        if self.increment:
-            self.part.stockOnHand += change
-        else:
-            self.part.stockOnHand -= change
-        self.quantityCompleted = newval
-        self.save()
-        self.part.save()
+        if change != 0:
+            if self.increment:
+                self.part.stockOnHand += change
+            else:
+                self.part.stockOnHand -= change
+            self.quantityCompleted = newval
+            self.save()
+            self.part.save()
 
     def __str__(self):
         return str(self.part)

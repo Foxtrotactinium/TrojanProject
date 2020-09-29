@@ -1,3 +1,6 @@
+from django.urls import reverse_lazy, reverse
+from django.views.generic import UpdateView, DeleteView
+
 from PartsApp.models import PartImageModel
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
@@ -144,6 +147,24 @@ def add_required_activity_to_group(request, id):
                'allactivities': activities,
                }
     return render(request, 'ActivitiesApp/addGroupActivity.html', context)
+
+
+class ActivityPartUpdate(UpdateView):
+    http_method_names = ['post']
+    model = ActivityPartModel
+    fields = ['quantity']
+
+    def get_success_url(self):
+        return reverse('activityinformation', args=[str(self.object.activity.pk)])
+
+
+class ActivityPartDelete(DeleteView):
+    http_method_names = ['post']
+    model = ActivityPartModel
+
+    def get_success_url(self):
+        return reverse('activityinformation', args=[str(self.object.activity.pk)])
+
 
 # @login_required
 # def work_center(request):

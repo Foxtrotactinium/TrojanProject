@@ -1,6 +1,9 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
+from django.views.generic import UpdateView, DeleteView
+
 from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel
 from PartsApp.models import PartModel
 from .forms import TaskForm, TaskActivityPartsForm
@@ -129,7 +132,8 @@ def info_task_parts(request, taskid, taskactivityid):
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Zinc Coating':
         return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
-    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Heat Treatment & Shot Peening':
+    elif get_object_or_404(TaskActivityModel,
+                           id=taskactivityid).activity.workCenter.name == 'Heat Treatment & Shot Peening':
         return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Brobo Rotary Saw':
@@ -182,5 +186,29 @@ def info_task_part_include(request, taskid, taskactivityid, increment):
                "task": task,
                "taskactivity": taskactivity}
 
-
     return render(request, 'WorkOrdersApp/addTaskActivityParts.html', context)
+
+
+class TaskPartRequiredUpdate(UpdateView):
+    http_method_names = ['post']
+    model = TaskPartsModel
+    fields = ['quantityRequired']
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+
+class TaskPartCompletedUpdate(UpdateView):
+    # http_method_names = ['post']
+    model = TaskPartsModel
+    fields = ['quantityCompleted']
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+# class ActivityPartDelete(DeleteView):
+#     http_method_names = ['post']
+#     model = ActivityPartModel
+#
+#     def get_success_url(self):
+#         return reverse('activityinformation', args=[str(self.object.activity.pk)])
