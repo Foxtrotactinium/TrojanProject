@@ -129,6 +129,13 @@ def group_information(request, id):
                    'id': id}
         return render(request, 'ActivitiesApp/infoGroups.html', context)
 
+class GroupActivityDelete(DeleteView):
+    # http_method_names = ['post']
+    model = GroupActivityModel
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse('groupinformation', args=[str(self.object.group.pk)])
 
 @login_required
 def add_required_activity_to_group(request, id):

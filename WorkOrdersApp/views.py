@@ -81,6 +81,14 @@ def info_task_activities(request, taskid):
                                                                      'task': task,
                                                                      'taskactivities': activities})
 
+class TaskActivityDelete(DeleteView):
+    # http_method_names = ['post']
+    model = TaskActivityModel
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse('infotaskactivities', args=[str(self.object.task.pk)])
+
 
 @login_required
 def info_task_parts(request, taskid, taskactivityid):
@@ -202,6 +210,14 @@ class TaskPartCompletedUpdate(UpdateView):
     # http_method_names = ['post']
     model = TaskPartsModel
     fields = ['quantityCompleted']
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+class TaskPartDelete(DeleteView):
+    # http_method_names = ['post']
+    model = TaskPartsModel
+    fields = "__all__"
 
     def get_success_url(self):
         return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])

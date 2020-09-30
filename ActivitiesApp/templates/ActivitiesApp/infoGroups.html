@@ -24,11 +24,20 @@
                     <td>{{ activity.activity }}</td>
                     <td>{{ activity.activity.description }}</td>
                     <td>{{ activity.activity.workCenter.name }}</td>
+                    <form action="{% url 'deletegroupactivity' activity.pk %}" method="post"
+                          style="display: inline;">
+                        <td>
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-danger" value="Delete"
+                                   onclick="return confirm('Are you sure you want to delete {{ activity.activity.activityName }} from {{ activity.group.groupName }}?');">
+                        </td>
+                    </form>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="{% url 'addrequiredactivity' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Item</a>
+            <a href="{% url 'addrequiredactivity' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">New
+                Item</a>
         </div>
     </div>
 </div>

@@ -60,7 +60,7 @@ class TaskActivityModel(models.Model):
 
 
 class TaskPartsModel(models.Model):
-    activity = models.ForeignKey(TaskActivityModel, on_delete=models.PROTECT, null=True)
+    activity = models.ForeignKey(TaskActivityModel, on_delete=models.CASCADE, null=True)
     part = models.ForeignKey(PartModel, on_delete=models.PROTECT)
     task = models.ForeignKey(TaskModel, on_delete=models.PROTECT, null=True)
     increment = models.BooleanField()

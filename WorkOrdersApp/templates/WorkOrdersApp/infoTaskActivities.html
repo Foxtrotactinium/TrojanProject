@@ -5,6 +5,7 @@
 <a href="{% url 'tasks' %}" class="badge badge-light">Tasks</a>>
 <br>
 <p class="font-weight-bold">{{ task.taskName }}</p>
+<p class="font-weight-bold">{{ task.fleetNumber }}</p>
 
 <table class="table table-hover" id="selection">
     <thead>
@@ -22,7 +23,14 @@
         data-href="{% url 'infotaskparts' taskid=task.id taskactivityid=activity.id %}">
         <td>{{ activity }}</td>
         <td>{{ activity.activity.workCenter.name }}</td>
-
+        <form action="{% url 'deletetaskactivity' activity.pk %}" method="post"
+              style="display: inline;">
+            <td>
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger" value="Delete"
+                       onclick="return confirm('Are you sure you want to delete {{ activity.activity.activityName }} from {{ activity.task.taskName }}?');">
+            </td>
+        </form>
     </tr>
 
     {% endfor %}

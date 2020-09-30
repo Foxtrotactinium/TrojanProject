@@ -13,6 +13,8 @@ urlpatterns = [
     path('groups/', groups, name='groups'),
     path('groups/addgroup/', add_group, name='addgroup'),
     path('groups/<int:id>/', group_information, name='groupinformation'),
+    path('groups/deletegroupactivity/<int:pk>', GroupActivityDelete.as_view(), name='deletegroupactivity'),
+
     path('groups/<int:id>/addrequired', add_required_activity_to_group, name='addrequiredactivity'),
 
 ]

@@ -3,107 +3,107 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <a href="{% url 'activities' %}" class="badge badge-light">Activities</a>
-    <br>
-    <p class="font-weight-bold">{{ activity.activityName }}</p>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm">
-                <form method="POST">
-                    <br>
-                    {% csrf_token %}
-                    {% crispy activityform %}
-                </form>
-            </div>
+<a href="{% url 'activities' %}" class="badge badge-light">Activities</a>
+<br>
+<p class="font-weight-bold">{{ activity.activityName }}</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm">
+            <form method="POST">
+                <br>
+                {% csrf_token %}
+                {% crispy activityform %}
+            </form>
         </div>
-        <div class="row" style="min-height: 400px;">
-            <div class="col-sm">
-                <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>Parts Required</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for required in activitypartsrequired %}
-                            <tr>
-                                <td><img src="{{ required.thumbnail.image.url }}"
-                                         style="height: 100px;"/></td>
-                                <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.partNumber }}</td>
-                                <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.description }}</td>
-                                <form method="POST" action="{% url 'editactivitypart' required.pk %}">
-                                    <td>
-                                        {% csrf_token %}
-                                        <input type="number" value="{{ required.quantity }}" name="quantity"
-                                               id="id_quantity">
-                                    </td>
-                                    <td><input type="submit" class="btn btn-primary" value="Update"></td>
-                                </form>
-                                <form action="{% url 'deleteactivitypart' required.pk %}" method="post"
-                                      style="display: inline;">
-                                    <td>
-                                        {% csrf_token %}
-                                        <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete {{ required.part.partNumber }} from {{ activity.activityName }}?');">
-                                    </td>
-                                </form>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div style="position: absolute; bottom: 0;">
-                    <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
-                       role="button">Add Required
-                        Part</a>
-                </div>
-
-            </div>
-            <div class="col-sm">
-                <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>Parts Produced</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for produced in activitypartsproduced %}
-                            <tr>
-                                <td><img class="img-responsive" src="{{ produced.thumbnail.image.url }}"
-                                         style="height: 100px"/></td>
-                                <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.partNumber }}</td>
-                                <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.description }}</td>
-                                <form method="POST" action="{% url 'editactivitypart' produced.pk %}">
-                                    <td>
-                                        {% csrf_token %}
-                                        <input type="number" value="{{ produced.quantity }}" name="quantity"
-                                               id="id_quantity">
-                                    </td>
-                                    <td><input type="submit" class="btn btn-primary" value="Update"></td>
-                                </form>
-                                <form action="{% url 'deleteactivitypart' produced.pk %}" method="post"
-                                      style="display: inline;">
-                                    <td>
-                                        {% csrf_token %}
-                                        <input type="submit" class="btn btn-danger" value="Delete" onclick="return confirm('Are you sure you want to delete {{ produced.part.partNumber }} from {{ activity.activityName }}?');">
-                                    </td>
-                                </form>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div style="position: absolute; bottom: 0;">
-                    <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
-                       role="button">Add Produced
-                        Part</a>
-                </div>
-            </div>
-        </div>
-        <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Update Quantities">
     </div>
+    <div class="row" style="min-height: 400px;">
+        <div class="col-sm">
+            <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Parts Required</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for required in activitypartsrequired %}
+                    <tr>
+                        <td><img src="{{ required.thumbnail.image.url }}"
+                                 style="height: 100px;"/></td>
+                        <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.partNumber }}</td>
+                        <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.description }}</td>
+                        <form method="POST" action="{% url 'editactivitypart' required.pk %}">
+                            <td>
+                                {% csrf_token %}
+                                <input type="number" value="{{ required.quantity }}" name="quantity"
+                                       id="id_quantity">
+                            </td>
+                            <td><input type="submit" class="btn btn-primary" value="Update"></td>
+                        </form>
+                        <form action="{% url 'deleteactivitypart' required.pk %}" method="post"
+                              style="display: inline;">
+                            <td>
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-danger" value="Delete"
+                                       onclick="return confirm('Are you sure you want to delete {{ required.part.partNumber }} from {{ activity.activityName }}?');">
+                            </td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="position: absolute; bottom: 0;">
+                <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
+                   role="button">Add Required
+                    Part</a>
+            </div>
 
-
+        </div>
+        <div class="col-sm">
+            <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Parts Produced</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for produced in activitypartsproduced %}
+                    <tr>
+                        <td><img class="img-responsive" src="{{ produced.thumbnail.image.url }}"
+                                 style="height: 100px"/></td>
+                        <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.partNumber }}</td>
+                        <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.description }}</td>
+                        <form method="POST" action="{% url 'editactivitypart' produced.pk %}">
+                            <td>
+                                {% csrf_token %}
+                                <input type="number" value="{{ produced.quantity }}" name="quantity"
+                                       id="id_quantity">
+                            </td>
+                            <td><input type="submit" class="btn btn-primary" value="Update"></td>
+                        </form>
+                        <form action="{% url 'deleteactivitypart' produced.pk %}" method="post"
+                              style="display: inline;">
+                            <td>
+                                {% csrf_token %}
+                                <input type="submit" class="btn btn-danger" value="Delete"
+                                       onclick="return confirm('Are you sure you want to delete {{ produced.part.partNumber }} from {{ activity.activityName }}?');">
+                            </td>
+                        </form>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="position: absolute; bottom: 0;">
+                <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
+                   role="button">Add Produced
+                    Part</a>
+            </div>
+        </div>
+    </div>
+    <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Update Quantities">
+</div>
 
 {% endblock %}
