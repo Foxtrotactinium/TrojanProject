@@ -1,8 +1,9 @@
+from django import http
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView, DeleteView, CreateView
 
 from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel
 from PartsApp.models import PartModel
@@ -81,6 +82,7 @@ def info_task_activities(request, taskid):
                                                                      'task': task,
                                                                      'taskactivities': activities})
 
+
 class TaskActivityDelete(DeleteView):
     # http_method_names = ['post']
     model = TaskActivityModel
@@ -129,7 +131,7 @@ def info_task_parts(request, taskid, taskactivityid):
             if producedpart.quantityCompleted == producedpart.quantityRequired:
                 for requiredpart in taskPartsRequired:
                     requiredpart.quantityCompleted = requiredpart.quantityRequired
-                    requiredpart.quantityCompleted
+                    # requiredpart.quantityCompleted
                     requiredpart.save()
                 break
         return render(request, 'WorkOrdersApp/infoTaskLaserCuttingParts.html', context)
@@ -163,7 +165,7 @@ def info_task_parts(request, taskid, taskactivityid):
             if requiredpart.quantityCompleted == requiredpart.quantityRequired:
                 for producedpart in taskPartsProduced:
                     producedpart.quantityCompleted = producedpart.quantityRequired
-                    producedpart.quantityCompleted
+                    # producedpart.quantityCompleted
                     producedpart.save()
                 break
         return render(request, 'WorkOrdersApp/infoTaskAssemblyParts.html', context)
@@ -214,6 +216,7 @@ class TaskPartCompletedUpdate(UpdateView):
     def get_success_url(self):
         return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
 
+
 class TaskPartDelete(DeleteView):
     # http_method_names = ['post']
     model = TaskPartsModel
@@ -222,9 +225,37 @@ class TaskPartDelete(DeleteView):
     def get_success_url(self):
         return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
 
-# class ActivityPartDelete(DeleteView):
-#     http_method_names = ['post']
-#     model = ActivityPartModel
-#
-#     def get_success_url(self):
-#         return reverse('activityinformation', args=[str(self.object.activity.pk)])
+
+class TaskActivityCreate(CreateView):
+    model = TaskActivityModel
+    fields = ('activity',)
+
+    # def get_initial(self):
+    #     task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
+    #     return {'task': task}
+
+    def form_valid(self, form):
+        task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
+        form.instance.task = task
+
+        tempactivity = form.save()
+
+        activity = tempactivity.activity
+
+        required_list = ActivityPartModel.objects.filter(activity=activity)
+        for required in required_list:
+            temp = TaskPartsModel(activity=tempactivity,
+                                  part=required.part,
+                                  task=task,
+                                  increment=required.increment,
+                                  quantityRequired=required.quantity,
+                                  quantityCompleted=0,
+                                  )
+            temp.save()
+
+        # return super(TaskActivityCreate, self).form_valid(form)
+        return http.HttpResponseRedirect(reverse('infotaskactivities', args=[str(task.pk)]))
+        # return reverse('infotaskactivities', args=[str(task.pk)])
+
+    # def get_success_url(self):
+    #     return reverse('infotaskactivities', args=[str(self.object.task.pk)])
