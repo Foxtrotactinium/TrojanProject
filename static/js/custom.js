@@ -23,9 +23,9 @@ $(document).ready(function () {
     });
 
     $('[data-href]').click(function () {
-        // window.location = $(this).data('href');
-        window.open($(this).data('href'));
-        // return false;
+         window.location = $(this).data('href');
+//        window.open($(this).data('href'));
+//         return false;
     });
 
     $('[data-id]').click(function () {

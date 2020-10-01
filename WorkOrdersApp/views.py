@@ -135,10 +135,10 @@ def info_task_parts(request, taskid, taskactivityid):
         return render(request, 'WorkOrdersApp/infoTaskLaserCuttingParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Powder Coating':
-        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskPowderCoatingParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Zinc Coating':
-        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskZincCoatingParts.html', context)
 
     elif get_object_or_404(TaskActivityModel,
                            id=taskactivityid).activity.workCenter.name == 'Heat Treatment & Shot Peening':
