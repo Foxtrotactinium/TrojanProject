@@ -22,6 +22,7 @@
             <tr class="{% if activity.complete == True %} table-success{% endif %}"
                 data-href="{% url 'infotaskparts' taskid=task.id taskactivityid=activity.id %}">
                 <td>{{ activity }}</td>
+                <td>{{ activity.activity.description }}</td>
                 <td>{{ activity.activity.workCenter.name }}</td>
                 <form action="{% url 'deletetaskactivity' activity.pk %}" method="post"
                       style="display: inline;">

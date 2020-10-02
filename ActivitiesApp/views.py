@@ -40,7 +40,7 @@ def activity_information(request, id):
         form = activity_form(request.POST, instance=activity)
         if form.is_valid():
             form.save()
-            return activity_information(request, id)
+            return redirect('activityinformation', id)
         # for qty in request.POST[required.pk]:
         #     print(qty)
         #     try:
