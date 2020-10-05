@@ -24,6 +24,7 @@
             {% for activity in allactivities %}
             <tr data-aid="{{ activity.id }}">
                 <td>{{ activity.activityName }}</td>
+                <td>{{ activity.description }}</td>
             </tr>
             {% endfor %}
             </tbody>
@@ -41,6 +42,7 @@
             {% for activity in grouprequiredactivity %}
             <tr data-href="{% url 'activityinformation' activity.activity.id %}">
                 <td>{{ activity.activity.activityName }}</td>
+                <td>{{ activity.activity.description }}</td>
             </tr>
             {% endfor %}
             </tbody>
