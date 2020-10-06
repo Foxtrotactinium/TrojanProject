@@ -3,6 +3,8 @@
 {% load crispy_forms_tags %}
 
 {% block body%}
+<a href="{% url 'groups' %}" class="badge badge-light">Groups</a>>
+<a href="{% url 'groupinformation' id %}" class="badge badge-light">{{ grouprequiredactivity.first.group.groupName }}</a>
 
 <br>
 

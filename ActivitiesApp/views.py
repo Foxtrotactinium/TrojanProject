@@ -142,17 +142,20 @@ def add_required_activity_to_group(request, id):
     activities = ActivityModel.objects.all()
     group_activities = GroupActivityModel.objects.filter(group=id)
     group = get_object_or_404(GroupModel, id=id)
-    if request.method == "POST":
-        form = required_activity_form(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('groupinformation', id)
 
     form = required_activity_form(initial={'group': id})
     context = {'requiredactivityform': form,
                'grouprequiredactivity': group_activities,
                'allactivities': activities,
+               'id': id
                }
+    if request.method == "POST":
+        form = required_activity_form(request.POST)
+        if form.is_valid():
+            form.save()
+        return render(request, 'ActivitiesApp/addGroupActivity.html', context)
+
+
     return render(request, 'ActivitiesApp/addGroupActivity.html', context)
 
 
