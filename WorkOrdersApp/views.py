@@ -170,6 +170,15 @@ def info_task_parts(request, taskid, taskactivityid):
                 break
         return render(request, 'WorkOrdersApp/infoTaskAssemblyParts.html', context)
 
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Hose Cutting':
+        for requiredpart in taskPartsRequired:
+            if requiredpart.quantityCompleted == requiredpart.quantityRequired:
+                for producedpart in taskPartsProduced:
+                    producedpart.quantityCompleted = producedpart.quantityRequired
+                    # producedpart.quantityCompleted
+                    producedpart.save()
+                break
+        return render(request, 'WorkOrdersApp/infoTaskHoseCuttingParts.html', context)
 
 def info_task_part_include(request, taskid, taskactivityid, increment):
     taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)

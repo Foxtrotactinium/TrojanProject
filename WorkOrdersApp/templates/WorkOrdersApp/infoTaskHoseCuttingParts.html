@@ -5,18 +5,18 @@
 <a href="{% url 'tasks' %}" class="badge badge-light">Tasks</a>>
 <a href="{% url 'infotaskactivities' taskid %}" class="badge badge-light">Activities</a>
 <br>
-<p class="font-weight-bold">{{ taskactivity.activity }}</p>
-<form method="POST">
+<p class="font-weight-bold">{{ taskactivity.activity }} Hose</p>
 
 <table class="table table-hover" id="selection">
     <thead>
     <tr>
-        <th colspan="6" style="text-align: center">Sheets Required</th>
+        <th colspan="6" style="text-align: center">Parts</th>
     </tr>
     <tr>
         <th>Image</th>
         <th>Part Number</th>
         <th>Description</th>
+        <th>Location</th>
         <th>Required</th>
         <th>Complete</th>
 
@@ -31,6 +31,7 @@
         <td><img src="{{ part.thumbnail.image.url }}" style="height: 100px;"/></td>
         <td>{{ part.part.partNumber }}</td>
         <td>{{ part.part.description }}</td>
+        <td>{{ part.part.location }}</td>
         <td>
             <form method="POST" action="{% url 'edittaskpart-required' part.pk %}">
 
@@ -68,7 +69,7 @@
     </tbody>
     <thead>
     <tr>
-        <th colspan="6" style="text-align: center"> Parts Produced</th>
+        <th colspan="6" style="text-align: center">Parts Returned</th>
     </tr>
     <tr>
         <th>Image</th>
@@ -131,7 +132,7 @@
        role="button">Include Part</a>
 </div>
 <br>
-
+<form method="POST">
     <div>
         <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Save">
         <button class="btn btn-secondary btn-sm" id="completeAll" type="button">Complete ALL + Save</button>
