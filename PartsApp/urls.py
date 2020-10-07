@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('', list_parts, name='inventory'),  # URL path for inventory_list view
+    path('history', PartHistoryListView.as_view(), name='parts_history'),  # URL path for inventory_list view
     path('addpart/', add_part, name='addpart'),
     path('parts/<int:part_id>/', info_part, name='info_part'),
     path('parts/<int:part_id>/addsupplier', add_supplier_to_part, name='addpartsupplier'),

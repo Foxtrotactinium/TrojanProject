@@ -1,6 +1,9 @@
 # Create your views here.
 from django.db.models import Sum
 from django.shortcuts import render, redirect
+from django.utils import timezone
+from django.views.generic import ListView
+from simple_history.utils import update_change_reason
 
 from ActivitiesApp.models import GroupActivityModel, ActivityModel, ActivityPartModel
 from WorkOrdersApp.forms import TaskForm, TaskPartsModel
@@ -28,6 +31,17 @@ def list_parts(request):
     return render(request, 'PartsApp/listParts.html', context)
 
 
+class PartHistoryListView(ListView):
+    model = PartModel.history.model
+
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+
 @login_required
 def list_supplier(request):
     context = {
@@ -46,13 +60,12 @@ def info_part(request, part_id):
         form1 = PartForm(request.POST, instance=part)
         form2 = PartCommentForm(request.POST, initial={'author': request.user, 'part': part})
         if form1.is_valid():
-            form1.save()
+            part = form1.save()
+            update_change_reason(part, 'Manual')
         if form2.is_valid():
             form2.save()
         if imageform.is_valid():
             imageform.save()
-
-
 
     imageform = ImageForm(initial={'part': part})
     image = PartImageModel.objects.filter(part=part)
@@ -123,8 +136,8 @@ def info_supplier(request, id):
         supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first(), prefix='supplierform')
         taskform = TaskForm(prefix='taskForm')
         return render(request, 'PartsApp/infoSupplier.html', {'supplierform': supplierform,
-                                                     'supplierparts': supplierparts,
-                                                     'taskform': taskform})
+                                                              'supplierparts': supplierparts,
+                                                              'taskform': taskform})
 
 
 @login_required

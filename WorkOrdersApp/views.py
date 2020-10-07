@@ -180,6 +180,7 @@ def info_task_parts(request, taskid, taskactivityid):
                 break
         return render(request, 'WorkOrdersApp/infoTaskHoseCuttingParts.html', context)
 
+
 def info_task_part_include(request, taskid, taskactivityid, increment):
     taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
     task = get_object_or_404(TaskModel, id=taskid)
@@ -224,6 +225,16 @@ class TaskPartCompletedUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            taskPart = get_object_or_404(TaskPartsModel, id=int(self.object.pk))
+            taskPart.updateQuantity(self.object.quantityCompleted, request.user)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class TaskPartDelete(DeleteView):

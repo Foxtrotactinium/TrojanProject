@@ -24,14 +24,12 @@ class PartModel(models.Model):
             return None
         return supplierList.first().supplier
 
-
     def __str__(self):
         return self.partNumber
 
 
 class SupplierModel(models.Model):
     supplierName = models.CharField(max_length=50)
-
 
     def __str__(self):
         return self.supplierName
@@ -53,7 +51,6 @@ class PartSupplierModel(models.Model):
             PartSupplierModel.objects.filter(part=self.part, preferred=True) \
                 .update(preferred=False)
             return super(PartSupplierModel, self).save(*args, **kwargs)
-
 
     def __str__(self):
         return str(self.supplier) + " - " + str(self.supplierPartNumber)

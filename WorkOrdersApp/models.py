@@ -83,6 +83,8 @@ class TaskPartsModel(models.Model):
                 self.part.stockOnHand -= change
             self.quantityCompleted = newval
             self.save()
+
+            self.part._change_reason = f'{self.activity}:{change}'
             self.part.save()
 
     def __str__(self):

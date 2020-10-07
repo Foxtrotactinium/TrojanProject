@@ -6,21 +6,23 @@ from .models import *
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
+
 # Register your models here.
 class partsresource(resources.ModelResource):
-
     class Meta:
         model = PartModel
 
-class suppliersresource(resources.ModelResource):
 
+class suppliersresource(resources.ModelResource):
     class Meta:
         model = SupplierModel
 
-class partsuppliersresource(resources.ModelResource):
 
+class partsuppliersresource(resources.ModelResource):
     class Meta:
         model = PartSupplierModel
+
+
 #
 # class partcommentsresource(resources.ModelResource):
 #
@@ -35,11 +37,15 @@ class partsuppliersresource(resources.ModelResource):
 class importparts(ImportExportModelAdmin):
     resource_class = partsresource
 
+
 class importsuppliers(ImportExportModelAdmin):
     resource_class = suppliersresource
 
+
 class importpartsuppliers(ImportExportModelAdmin):
     resource_class = partsuppliersresource
+
+
 # class jobsresource(resources.ModelResource):
 #
 #     class Meta:
@@ -52,6 +58,7 @@ admin.site.register(SupplierModel, importsuppliers)
 admin.site.register(PartSupplierModel, importpartsuppliers)
 # admin.site.register(ActivityPartModel)
 admin.site.register(PartCommentModel)
+admin.site.register(PartModel.history.model)
 # admin.site.register(GroupModel)
 # admin.site.register(GroupActivityModel)
 # admin.site.register(TaskModel)
