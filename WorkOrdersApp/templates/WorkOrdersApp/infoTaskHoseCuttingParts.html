@@ -27,7 +27,7 @@
 
     {% for part in requiredparts %}
 
-    <tr>
+    <tr class="{% if part.quantityRequired == part.quantityCompleted %} table-success{% endif %}">
         <td><img src="{{ part.thumbnail.image.url }}" style="height: 100px;"/></td>
         <td>{{ part.part.partNumber }}</td>
         <td>{{ part.part.description }}</td>

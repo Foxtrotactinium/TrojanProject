@@ -15,11 +15,13 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def task_list(request):
     # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
-    completedList = TaskModel.objects.all()
-    completedList = [task for task in completedList if not task.isComplete()]
+    tasks = TaskModel.objects.all()
+    activeList = [task for task in tasks if not task.isComplete()]
+    completedList = [task for task in tasks if task.isComplete()]
 
     return render(request, 'WorkOrdersApp/listTasks.html', {'header': 'Outstanding Tasks',
-                                                            'tasks': completedList})
+                                                            'activetasks': activeList,
+                                                            'completedtasks': completedList})
 
 
 @login_required

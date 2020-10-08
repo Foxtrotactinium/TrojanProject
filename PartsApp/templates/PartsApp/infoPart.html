@@ -44,7 +44,7 @@
         </div>
 
         <div class="col">
-            <div style="height: 25%">
+            <div class='overflow-auto' style="height: 200px; overflow-y : scroll">
                 <table class="table table-hover mb-0">
                     <thead>
                     <tr>
@@ -53,8 +53,17 @@
                     </thead>
                     <tbody>
                     {% for supplier in partsuppliers %}
-                    <tr data-href="{% url 'info_supplier' supplier.supplier.id %}">
-                        <td>{{ supplier }}</td>
+                    <tr>
+                        <td data-href="{% url 'info_supplier' supplier.supplier.id %}">{{ supplier }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'editsupplierpartnumber' supplier.part.pk %}">
+
+                                {% csrf_token %}
+                                <input type="text" value="{{ supplier.supplierPartNumber }}" name="supplierPartNumber"
+                                       id="id_supplierPartNumber" class="input-group col-md-5">
+                                <input type="submit" class="btn btn-sm btn-warning" value="Update">
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -64,7 +73,7 @@
             <a class="btn btn-secondary btn-sm btn-pad" href="{% url 'addpartsupplier' part_id=part_id %}"
                role="button">Add Supplier</a>
 
-            <div style="height: 25%">
+            <div class='overflow-auto' style="height: 300px; overflow-y : scroll">
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -83,7 +92,7 @@
                 </table>
             </div>
 
-            <div class="my-custom-scrollbar table-wrapper-scroll-y">
+            <div class='overflow-auto' style="height: 300px; overflow-y : scroll">
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -92,10 +101,9 @@
                     </thead>
                     <tbody>
                     {% for activity in activities %}
-                    <tr>
-                        <td>{{ activity.group.groupName }}</td>
+                    <tr data-href="{% url 'activityinformation' activity.activity.id %}">
                         <td>{{ activity.activity.activityName }}</td>
-                        <td>{{ activity.qty.quantity__sum }}</td>
+                        <td>{{ activity.quantity }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>

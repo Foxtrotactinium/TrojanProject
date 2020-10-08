@@ -1,8 +1,9 @@
 # Create your views here.
 from django.db.models import Sum
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.utils import timezone
-from django.views.generic import ListView
+from django.views.generic import ListView, UpdateView
 from simple_history.utils import update_change_reason
 
 from ActivitiesApp.models import GroupActivityModel, ActivityModel, ActivityPartModel
@@ -41,6 +42,13 @@ class PartHistoryListView(ListView):
         context['now'] = timezone.now()
         return context
 
+    # def get_queryset(self):
+    #     model = PartModel.objects.history.all()
+    #     for part in model:
+    #         part.change = part.stockOnHand - part.prev_record.stockOnHand
+    #         print(part.change)
+    #     return model
+
 
 @login_required
 def list_supplier(request):
@@ -73,20 +81,19 @@ def info_part(request, part_id):
     form2 = PartCommentForm(initial={'author': request.user, 'part': part})
     movements = part.history.all()
     previouslevel = 0
-    activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
+    # activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
+    #
+    # for activity in activities:
+    #     activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).aggregate(
+    #         Sum("quantity"))
 
-    for activity in activities:
-        activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).aggregate(
-            Sum("quantity"))
+    activities = ActivityPartModel.objects.filter(part=part)
+    print(activities)
 
     for movement in movements:
         movement.change = movement.stockOnHand - previouslevel
         previouslevel = movement.stockOnHand
 
-    # print(movements.filter(change__lt=0,change__gt=0))
-    # filtered = (x for x in movements if x.change != 0)
-    # print(movements.exclude(change=0))
-    # print(filtered.count())
     context = {'partform': form1,
                'images': image,
                'imageform': imageform,
@@ -101,6 +108,13 @@ def info_part(request, part_id):
 
     return render(request, 'PartsApp/infoPart.html', context)
 
+class SupplierPartNumberUpdate(UpdateView):
+    http_method_names = ['post']
+    model = PartSupplierModel
+    fields = ['supplierPartNumber']
+
+    def get_success_url(self):
+        return reverse('info_part', args=[str(self.object.part.pk)])
 
 @login_required
 def info_supplier(request, id):

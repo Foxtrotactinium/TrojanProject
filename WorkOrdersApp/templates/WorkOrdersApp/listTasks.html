@@ -2,41 +2,86 @@
 {% load static %}
 {% block body %}
 
-<br>
-<form class="form-inline my-2 my-lg-0">
-    <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search"
-           aria-label="Search">
-</form>
+    <ul class="nav nav-tabs">
+        <li><a class="nav-link active" data-toggle="tab" href="#active">Active</a></li>
+        <li><a class="nav-link" data-toggle="tab" href="#completed">Completed</a></li>
+    </ul>
 
-<br>
+    <div class="tab-content">
+        <div id="active" class="tab-pane active">
+            <br>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search"
+                       aria-label="Search">
+            </form>
 
-<div class="container-fluid">
-    <a href="{% url 'addtask' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Task</a>
-</div>
+            <br>
 
-<br>
+            <div class="container-fluid">
+                <a href="{% url 'addtask' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Task</a>
+            </div>
 
-<table class="table table-hover" id="selection">
-    <thead>
-    <tr>
-        <th>Outstanding Tasks</th>
+            <br>
 
-    </tr>
-    </thead>
+            <table class="table table-hover" id="selection">
+                <thead>
+                <tr>
+                    <th>Outstanding Tasks</th>
 
-    <tbody>
+                </tr>
+                </thead>
 
-    {% for task in tasks %}
+                <tbody>
 
-    <tr data-href="{% url 'infotaskactivities' taskid=task.id %}">
-        <td>{{ task }}</td>
+                {% for task in activetasks %}
 
-    </tr>
+                <tr data-href="{% url 'infotaskactivities' taskid=task.id %}">
+                    <td>{{ task }}</td>
 
-    {% endfor %}
+                </tr>
 
-    </tbody>
+                {% endfor %}
 
-</table>
+                </tbody>
+
+            </table>
+        </div>
+        <div id="completed" class="tab-pane">
+            <br>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" id="searchBar" onkeyup="search()" placeholder="Search"
+                       aria-label="Search">
+            </form>
+
+            <br>
+
+            <br>
+
+            <br>
+
+            <table class="table table-hover" id="selection">
+                <thead>
+                <tr>
+                    <th>Completed Tasks</th>
+
+                </tr>
+                </thead>
+
+                <tbody>
+
+                {% for task in completedtasks %}
+
+                <tr data-href="{% url 'infotaskactivities' taskid=task.id %}">
+                    <td>{{ task }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
 
 {% endblock %}
