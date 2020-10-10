@@ -68,6 +68,7 @@ class GroupModel(models.Model):
 class GroupActivityModel(models.Model):
     group = models.ForeignKey(GroupModel, on_delete=models.PROTECT)
     activity = models.ForeignKey(ActivityModel, on_delete=models.PROTECT)
+    order = models.IntegerField(blank=False, default=100_000)
 
     def __str__(self):
         return str(self.group) + ' - ' + str(self.activity)

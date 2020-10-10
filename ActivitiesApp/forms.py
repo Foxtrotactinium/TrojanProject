@@ -80,14 +80,7 @@ class required_activity_form(forms.ModelForm):
     class Meta:
         model = GroupActivityModel
         fields = '__all__'
-#
-#
-# class TypesForm(forms.ModelForm):
-#     def __init__(self, *args, **kwargs):
-#         super(TypesForm, self).__init__(*args, **kwargs)
-#         self.helper = FormHelper(self)
-#         self.helper.layout = Layout('workCenter')
-#
-#     class Meta:
-#         model = GroupModel
-#         fields = ['workCenter']
+
+
+class OrderingForm(forms.Form):
+    ordering = forms.CharField()

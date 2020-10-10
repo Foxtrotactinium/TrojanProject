@@ -4,8 +4,8 @@ $(document).ready(function () {
         $("#submit-id-save").click();
     });
 
-    $('#completeAll').click(function (){
-        $(".setbutton").each(function() {
+    $('#completeAll').click(function () {
+        $(".setbutton").each(function () {
             $('input[name=' + $(this).data("partid") + ']').val($(this).data("value"));
         });
         $("#submit-id-save").click();
@@ -23,7 +23,7 @@ $(document).ready(function () {
     });
 
     $('[data-href]').click(function () {
-         window.location = $(this).data('href');
+        window.location = $(this).data('href');
 //        window.open($(this).data('href'));
 //         return false;
     });
@@ -55,6 +55,38 @@ $(document).ready(function () {
 
         htmlSelector.val(previous_num + num);
         $("#submit-id-save").click();
+    });
+
+    $("#orderingForm").each(function (index, elem) {
+        // REF:
+        // https://dev.to/nemecek_f/django-how-to-let-user-re-order-sort-table-of-content-with-drag-and-drop-3nlp
+        let tblId = $(this).data('tblid');
+        let btnId = $(this).data('btnid');
+
+        const groups = document.getElementById(tblId);
+        let sortable = Sortable.create(groups, {
+            handle: '.handle',
+            chosenClass: 'table-primary',
+            onChange: () => {
+                saveOrderingButton.disabled = false;
+            }
+        });
+
+        const saveOrderingButton = document.getElementById(btnId);
+        const formInput = $(elem).children('#orderingInput');
+
+
+        function saveOrdering() {
+            const rows = document.getElementById(tblId).querySelectorAll('tr');
+            let ids = [];
+            for (let row of rows) {
+                ids.push(row.dataset.lookup);
+            }
+            $(formInput).val(ids.join(','));
+            elem.submit();
+        }
+
+        saveOrderingButton.addEventListener('click', saveOrdering);
     });
 
 });

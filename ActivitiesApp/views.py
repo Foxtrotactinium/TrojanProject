@@ -1,4 +1,6 @@
+from django.db import transaction
 from django.urls import reverse_lazy, reverse
+from django.views.decorators.http import require_POST
 from django.views.generic import UpdateView, DeleteView
 
 from PartsApp.models import PartImageModel
@@ -125,7 +127,7 @@ def group_information(request, id):
     else:
         form = group_form(instance=group)
         context = {'groupform': form,
-                   'groupactivities': GroupActivityModel.objects.filter(group=id),
+                   'groupactivities': GroupActivityModel.objects.filter(group=id).order_by('order'),
                    'id': id}
         return render(request, 'ActivitiesApp/infoGroups.html', context)
 
@@ -155,7 +157,6 @@ def add_required_activity_to_group(request, id):
             form.save()
         return render(request, 'ActivitiesApp/addGroupActivity.html', context)
 
-
     return render(request, 'ActivitiesApp/addGroupActivity.html', context)
 
 
@@ -175,6 +176,23 @@ class ActivityPartDelete(DeleteView):
     def get_success_url(self):
         return reverse('activityinformation', args=[str(self.object.activity.pk)])
 
+
+@require_POST
+def save_new_ordering_activities_of_group(request, id):
+    form = OrderingForm(request.POST)
+
+    if form.is_valid():
+        ordered_ids = form.cleaned_data["ordering"].split(',')
+
+        with transaction.atomic():
+            current_order = 1
+            for lookup_id in ordered_ids:
+                group = GroupActivityModel.objects.get(id=lookup_id)
+                group.order = current_order
+                group.save()
+                current_order += 1
+
+    return redirect('groupinformation', id)
 
 # @login_required
 # def work_center(request):

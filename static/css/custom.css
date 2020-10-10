@@ -1,22 +1,52 @@
 *[data-href] {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 td a {
-  display:inline-block;
-  width:100%;
-  padding: 10px; /* add your padding here */
+    display: inline-block;
+    width: 100%;
+    padding: 10px; /* add your padding here */
 }
-.my-custom-scrollbar
-{
-position: absolute;
-overflow-y: scroll;
-width: 95%;
+
+.my-custom-scrollbar {
+    position: absolute;
+    overflow-y: scroll;
+    width: 95%;
 }
+
 .table-wrapper-scroll-y {
-display: block;
+    display: block;
 }
+
 .center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.handle {
+    display: inline-block;
+    border-top: 3px solid var(--dark);
+    width: 30px;
+    padding-top: 5px;
+    cursor: grab;
+}
+
+.handle:after, .handle:before {
+    display: block;
+    content: "";
+    padding-top: 5px;
+    border-top: 3px solid var(--dark);
+}
+
+.handle:hover, .handle:hover:before, .handle:hover:after {
+    border-color: var(--primary);
+}
+
+.handle:active, .handle:active:before, .handle:active:after {
+    cursor: grabbing;
+}
+
+.dragged{
+
 }

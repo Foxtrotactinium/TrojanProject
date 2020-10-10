@@ -37,7 +37,7 @@ def add_task(request):
             taskMy = form.save()
             groupname = form.cleaned_data['group']
 
-            groupactivitylist = GroupActivityModel.objects.filter(group=groupname)
+            groupactivitylist = GroupActivityModel.objects.filter(group=groupname).order_by('order')
 
             for groupactivity in groupactivitylist:
                 tempactivity = TaskActivityModel(task=taskMy,
