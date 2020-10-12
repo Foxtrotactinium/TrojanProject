@@ -69,7 +69,7 @@ def info_part(request, part_id):
         form2 = PartCommentForm(request.POST, initial={'author': request.user, 'part': part})
         if form1.is_valid():
             part = form1.save()
-            update_change_reason(part, 'Manual')
+            # update_change_reason(part, 'Manual')
         if form2.is_valid():
             form2.save()
         if imageform.is_valid():
@@ -88,7 +88,6 @@ def info_part(request, part_id):
     #         Sum("quantity"))
 
     activities = ActivityPartModel.objects.filter(part=part)
-    print(activities)
 
     for movement in movements:
         movement.change = movement.stockOnHand - previouslevel

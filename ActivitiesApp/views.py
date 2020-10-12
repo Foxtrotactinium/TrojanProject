@@ -92,6 +92,22 @@ def add_required_part_to_activity(request, id, increment):
 
     return render(request, 'ActivitiesApp/addActivityPart.html', context)
 
+@require_POST
+def save_new_ordering_parts_of_activity(request, id):
+    form = PartOrderingForm(request.POST)
+
+    if form.is_valid():
+        ordered_ids = form.cleaned_data["ordering"].split(',')
+
+        with transaction.atomic():
+            current_order = 1
+            for lookup_id in ordered_ids:
+                group = ActivityPartModel.objects.get(id=lookup_id)
+                group.order = current_order
+                group.save()
+                current_order += 1
+
+    return redirect('activityinformation', id)
 
 @login_required
 def groups(request):
@@ -145,7 +161,7 @@ def add_required_activity_to_group(request, id):
     group_activities = GroupActivityModel.objects.filter(group=id)
     group = get_object_or_404(GroupModel, id=id)
 
-    form = required_activity_form(initial={'group': id})
+    form = required_activity_form(initial={'group': id, 'order': 100_000})
     context = {'requiredactivityform': form,
                'grouprequiredactivity': group_activities,
                'allactivities': activities,

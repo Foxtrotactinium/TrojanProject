@@ -32,8 +32,8 @@
                     {% for supplierpart in supplierparts %}
                     <tr {% if supplierpart.part.obsolete %} class="table-dark" {% endif %}
                         {% if supplierpart.low %} class="table-danger" {% endif %}>
-                        <td data-href="{% url 'info_part' supplierpart.part.id %}">{{ supplierpart.part.partNumber }}</td>
-                        <td>{{ supplierpart.part.description }}</td>
+                        <td>{{ supplierpart.part.partNumber }}</td>
+                        <td data-href="{% url 'info_part' supplierpart.part.id %}">{{ supplierpart.part.description }}</td>
                         <td>{{ supplierpart.part.stockOnHand }}</td>
                         <td>{{ supplierpart.part.minimumStock }}</td>
                         <td>{{ supplierpart.part.reorderQtys }}</td>

@@ -8,7 +8,7 @@ from simple_history.models import HistoricalRecords
 class PartModel(models.Model):
     partNumber = models.CharField(max_length=50, blank=False, unique=True)
     description = models.CharField(max_length=200)
-    location = models.CharField(max_length=20)
+    location = models.CharField(max_length=40)
     stockOnHand = models.IntegerField(blank=True)
     minimumStock = models.IntegerField(blank=True)
     reorderQtys = models.IntegerField(blank=True)

@@ -48,6 +48,7 @@ class ActivityPartModel(models.Model):
     part = models.ForeignKey(PartModel, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     increment = models.BooleanField(default=False)  # TRUE/FALSE used to represent parts ActivityPartModel/produced
+    order = models.IntegerField(blank=False, default=100_000)
     history = HistoricalRecords()
 
     def updateQuantity(self, newval):

@@ -1,7 +1,7 @@
 from django import forms
 from .models import ActivityModel, ActivityPartModel, GroupModel, GroupActivityModel
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field,Hidden
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 
@@ -72,6 +72,7 @@ class required_activity_form(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Field('group', type="hidden"),
+            Field('order', type="hidden"),
             Field('activity', css_class='form-control'),
             HTML('<br>'),
             Submit('save', 'Add Activity')
@@ -83,4 +84,7 @@ class required_activity_form(forms.ModelForm):
 
 
 class OrderingForm(forms.Form):
+    ordering = forms.CharField()
+
+class PartOrderingForm(forms.Form):
     ordering = forms.CharField()

@@ -19,15 +19,24 @@
     <div class="row" style="min-height: 400px;">
         <div class="col-sm">
             <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
+                <form id="orderingForm" data-tblid="requiredTbl" data-btnid="requiredBtn" method="post"
+                      action="{% url 'save-part-ordering' activity.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="orderingInput" name="ordering">
+                    <button id="requiredBtn" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save
+                        ordering - Required
+                    </button>
+                </form>
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th>Parts Required</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="requiredTbl">
                     {% for required in activitypartsrequired %}
-                    <tr>
+                    <tr data-lookup="{{ required.pk }}">
+                        <td><span class="handle"></span></td>
                         <td><img src="{{ required.thumbnail.image.url }}"
                                  style="height: 100px;"/></td>
                         <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.partNumber }}</td>
@@ -62,15 +71,24 @@
         </div>
         <div class="col-sm">
             <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
+                <form id="orderingForm" data-tblid="producedTbl" data-btnid="producedOrder" method="post"
+                      action="{% url 'save-part-ordering' activity.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" id="orderingInput" name="ordering2">
+                    <button id="producedOrder" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save
+                        ordering - Produced
+                    </button>
+                </form>
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th>Parts Produced</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="producedTbl">
                     {% for produced in activitypartsproduced %}
-                    <tr>
+                    <tr data-lookup="{{ produced.pk }}">
+                        <td><span class="handle"></span></td>
                         <td><img class="img-responsive" src="{{ produced.thumbnail.image.url }}"
                                  style="height: 100px"/></td>
                         <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.partNumber }}</td>

@@ -180,7 +180,7 @@ def info_task_parts(request, taskid, taskactivityid):
                     # producedpart.quantityCompleted
                     producedpart.save()
                 break
-        return render(request, 'WorkOrdersApp/infoTaskHoseCuttingParts.html', context)
+        return render(request, 'WorkOrdersApp/infoTaskHoseCuttingParts.html', context,)
 
 
 def info_task_part_include(request, taskid, taskactivityid, increment):
