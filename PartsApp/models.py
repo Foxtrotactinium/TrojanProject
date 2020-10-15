@@ -2,6 +2,8 @@
 from django.db import models, transaction
 from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
+from django.utils.html import mark_safe
+
 
 
 # Inventory Model with fields
@@ -69,3 +71,8 @@ class PartCommentModel(models.Model):
 class PartImageModel(models.Model):
     part = models.ForeignKey(PartModel, on_delete=models.PROTECT)
     image = models.ImageField(upload_to='images/')
+
+    def image_tag(self):
+        return mark_safe('<img src="/media/images/%s" width="150" height="150" />' % (self.image))
+
+    image_tag.short_description = 'Image'

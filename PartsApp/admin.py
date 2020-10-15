@@ -58,6 +58,9 @@ admin.site.register(SupplierModel, importsuppliers)
 admin.site.register(PartSupplierModel, importpartsuppliers)
 # admin.site.register(ActivityPartModel)
 admin.site.register(PartCommentModel)
+
+admin.site.register(PartImageModel)
+
 admin.site.register(PartModel.history.model)
 # admin.site.register(GroupModel)
 # admin.site.register(GroupActivityModel)

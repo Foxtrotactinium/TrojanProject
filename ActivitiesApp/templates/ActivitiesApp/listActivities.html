@@ -24,6 +24,7 @@
     <tr data-href="{% url 'activityinformation' activity.id %}">
         <td>{{ activity.activityName }}</td>
         <td>{{ activity.description }}</td>
+        <td>{{ activity.workCenter.name }}</td>
     </tr>
 
     {% endfor %}
