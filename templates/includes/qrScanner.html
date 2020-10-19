@@ -1,0 +1,26 @@
+<style>
+    #qr-canvas {
+        margin: auto;
+        width: calc(100% - 20px);
+        max-width: 800px;
+    }
+</style>
+
+<br>
+<form class="form-inline my-2 my-lg-0" action="">
+    <input class="form-control mr-sm-2" type="text" id="q" name="q" placeholder="Search"
+           aria-label="Search">
+    <input type="submit"/>
+</form>
+<br>
+<button id="btn-scan-qr" class="btn btn-primary">Start Scanning</button>
+
+<p id="test"></p>
+
+<div>
+    <canvas hidden="" id="qr-canvas"></canvas>
+</div>
+
+{% load static %}
+<script src="{% static '/js/qr_packed.js' %}"></script>
+<script src="{% static '/js/qrCodeReaderMy.js' %}"></script>

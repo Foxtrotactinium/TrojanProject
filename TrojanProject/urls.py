@@ -19,10 +19,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 import PartsApp
-from PartsApp.views import list_parts
+from PartsApp.views import qr_scan
 
 urlpatterns = [
-    path('', list_parts),
+    path('', qr_scan),
     path('admin/', admin.site.urls),
     path('main/',include('MainApp.urls')),
     path('inventory/',include('PartsApp.urls')),

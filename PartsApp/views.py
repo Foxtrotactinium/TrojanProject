@@ -1,21 +1,53 @@
 # Create your views here.
-from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView, UpdateView
-from simple_history.utils import update_change_reason
 
-from ActivitiesApp.models import GroupActivityModel, ActivityModel, ActivityPartModel
+from ActivitiesApp.models import ActivityPartModel
 from WorkOrdersApp.forms import TaskForm, TaskPartsModel
-from .models import *
 from .forms import *
-from django.contrib.auth.decorators import login_required
-
-from django.contrib.auth.models import Group
 
 
 # Create your views here.
+@login_required
+def qr_scan(request):
+    query = request.GET.get('q', None)
+    context = {
+        'header': 'Scanner',
+        'infoText': 'Please scan first'
+    }
+
+    if query is not None and query != '':
+
+        parts = PartModel.objects.filter(partNumber__contains=query)
+
+        if parts.count() == 0:
+            context['infoText'] = f'Nothing found for partNumber "{query}"'
+        elif parts.count() == 1:
+            part = parts.first()
+
+            return redirect('info_part', part.id)  # info_part(request, part.id)
+
+        else:
+            # print(f'{parts=}')
+
+            for part in parts:
+                part.low = part.stockOnHand < part.minimumStock
+            for part in parts:
+                part.supplier = part.getPreferredSupplier()
+
+            context = {
+                'parts': parts,
+                'header': 'Inventory'
+            }
+
+            return render(request, 'PartsApp/partsQrScan.html', context)
+
+    return render(request, 'PartsApp/partsQrScan.html', context)
+
+
 @login_required
 def list_parts(request):
     parts = PartModel.objects.all()
@@ -107,6 +139,7 @@ def info_part(request, part_id):
 
     return render(request, 'PartsApp/infoPart.html', context)
 
+
 class SupplierPartNumberUpdate(UpdateView):
     http_method_names = ['post']
     model = PartSupplierModel
@@ -114,6 +147,7 @@ class SupplierPartNumberUpdate(UpdateView):
 
     def get_success_url(self):
         return reverse('info_part', args=[str(self.object.part.pk)])
+
 
 @login_required
 def info_supplier(request, id):

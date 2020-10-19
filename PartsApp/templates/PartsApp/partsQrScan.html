@@ -1,0 +1,53 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block body %}
+
+    <div class="container">
+        {% include "includes/qrScanner.html" %}
+    </div>
+
+
+    <div class="container">
+
+        {% if parts %}
+            <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Part Number</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Supplier</th>
+                <th>S.O.H</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for part in parts %}
+
+                <tr data-href="{% url 'info_part' part.id %}"
+                        {% if part.obsolete %} class="table-dark" {% endif %}
+                        {% if part.low %} class="table-danger" {% endif %}>
+                    <td>{{ part.partNumber }}</td>
+                    <td>{{ part.description }}</td>
+                    <td>{{ part.location }}</td>
+                    <td>{{ part.supplier }}</td>
+                    <td>{{ part.stockOnHand }}</td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+        {% else %}
+
+            <p>{{ infoText }}</p>
+
+        {% endif %}
+
+
+    </div>
+
+
+{% endblock %}

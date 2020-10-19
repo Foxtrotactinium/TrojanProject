@@ -10,10 +10,9 @@ const btnScanQR = document.getElementById("btn-scan-qr");
 
 let scanning = false;
 
- canvasElement.hidden = true;
+canvasElement.hidden = true;
 
-btnScanQR.onclick = () =>
-{
+btnScanQR.onclick = () => {
     console.log("CLICKED");
     navigator.mediaDevices
         .getUserMedia({video: {facingMode: "environment"}})
@@ -47,7 +46,8 @@ function scan() {
 
 qrcode.callback = (res) => {
     if (res) {
-        qrResult.value = res;
+        // qrResult.value = res;
+
         scanning = false;
 
         video.srcObject.getTracks().forEach(track => {
@@ -55,5 +55,7 @@ qrcode.callback = (res) => {
         });
 
         canvasElement.hidden = true;
+
+        window.location = window.location.origin + '?q='+res;
     }
 };
