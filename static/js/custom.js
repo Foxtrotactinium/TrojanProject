@@ -57,7 +57,7 @@ $(document).ready(function () {
         $("#submit-id-save").click();
     });
 
-    $("#orderingForm").each(function (index, elem) {
+    $(".orderingForm").each(function (index, elem) {
         // REF:
         // https://dev.to/nemecek_f/django-how-to-let-user-re-order-sort-table-of-content-with-drag-and-drop-3nlp
         let tblId = $(this).data('tblid');
@@ -73,7 +73,7 @@ $(document).ready(function () {
         });
 
         const saveOrderingButton = document.getElementById(btnId);
-        const formInput = $(elem).children('#orderingInput');
+        const formInput = $(elem).children('.orderingInput');
 
 
         function saveOrdering() {

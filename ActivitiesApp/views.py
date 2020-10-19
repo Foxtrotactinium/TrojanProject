@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def activity_list(request):
     return render(request, 'ActivitiesApp/listActivities.html', {'header': 'ActivityModel',
-                                                   'activities': ActivityModel.objects.all()})
+                                                                 'activities': ActivityModel.objects.all()})
 
 
 @login_required
@@ -51,10 +51,10 @@ def activity_information(request, id):
         #     except ValueError:
         #         pass
 
-    required = ActivityPartModel.objects.filter(activity=id).filter(increment=False)
+    required = ActivityPartModel.objects.filter(activity=id).filter(increment=False).order_by('order')
     for part in required:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
-    produced = ActivityPartModel.objects.filter(activity=id).filter(increment=True)
+    produced = ActivityPartModel.objects.filter(activity=id).filter(increment=True).order_by('order')
     for part in produced:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
 
@@ -92,6 +92,7 @@ def add_required_part_to_activity(request, id, increment):
 
     return render(request, 'ActivitiesApp/addActivityPart.html', context)
 
+
 @require_POST
 def save_new_ordering_parts_of_activity(request, id):
     form = PartOrderingForm(request.POST)
@@ -109,12 +110,13 @@ def save_new_ordering_parts_of_activity(request, id):
 
     return redirect('activityinformation', id)
 
+
 @login_required
 def groups(request):
     # print(WorkCenterTypes.objects.filter(wcType=type))
 
     return render(request, 'ActivitiesApp/listGroups.html', {'header': 'GroupModel',
-                                               'groups': GroupModel.objects.all()})
+                                                             'groups': GroupModel.objects.all()})
 
 
 @login_required
@@ -147,6 +149,7 @@ def group_information(request, id):
                    'id': id}
         return render(request, 'ActivitiesApp/infoGroups.html', context)
 
+
 class GroupActivityDelete(DeleteView):
     # http_method_names = ['post']
     model = GroupActivityModel
@@ -154,6 +157,7 @@ class GroupActivityDelete(DeleteView):
 
     def get_success_url(self):
         return reverse('groupinformation', args=[str(self.object.group.pk)])
+
 
 @login_required
 def add_required_activity_to_group(request, id):

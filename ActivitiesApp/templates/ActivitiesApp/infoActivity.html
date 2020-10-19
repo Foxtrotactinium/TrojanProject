@@ -19,10 +19,10 @@
     <div class="row" style="min-height: 400px;">
         <div class="col-sm">
             <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
-                <form id="orderingForm" data-tblid="requiredTbl" data-btnid="requiredBtn" method="post"
+                <form class="orderingForm" data-tblid="requiredTbl" data-btnid="requiredBtn" method="post"
                       action="{% url 'save-part-ordering' activity.id %}">
                     {% csrf_token %}
-                    <input type="hidden" id="orderingInput" name="ordering">
+                    <input type="hidden" class="orderingInput" name="ordering">
                     <button id="requiredBtn" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save
                         ordering - Required
                     </button>
@@ -71,10 +71,10 @@
         </div>
         <div class="col-sm">
             <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
-                <form id="orderingForm" data-tblid="producedTbl" data-btnid="producedOrder" method="post"
+                <form class="orderingForm" data-tblid="producedTbl" data-btnid="producedOrder" method="post"
                       action="{% url 'save-part-ordering' activity.id %}">
                     {% csrf_token %}
-                    <input type="hidden" id="orderingInput" name="ordering2">
+                    <input type="hidden" class="orderingInput" name="ordering">
                     <button id="producedOrder" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save
                         ordering - Produced
                     </button>

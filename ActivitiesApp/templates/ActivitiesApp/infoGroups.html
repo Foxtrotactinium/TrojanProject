@@ -12,9 +12,9 @@
                     {% csrf_token %}
                     {% crispy groupform %}
                 </form>
-                <form id="orderingForm" data-tblid="groups" data-btnid="saveOrdering" method="post" action="{% url 'save-activity-ordering' id %}">
+                <form class="orderingForm" data-tblid="groups" data-btnid="saveOrdering" method="post" action="{% url 'save-activity-ordering' id %}">
                     {% csrf_token %}
-                    <input type="hidden" id="orderingInput" name="ordering">
+                    <input type="hidden" class="orderingInput" name="ordering">
                     <button id="saveOrdering" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save ordering</button>
                 </form>
             </div>
