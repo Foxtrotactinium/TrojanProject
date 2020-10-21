@@ -129,3 +129,11 @@ dmypy.json
 .pyre/
 
 .idea/
+WorkOrdersApp/migrations/0002_auto_20201012_0824.py
+WorkOrdersApp/migrations/0001_initial.py
+PartsApp/templates/PartsApp/0003_auto_20201012_1219.py
+PartsApp/templates/PartsApp/0002_auto_20200928_1015.py
+PartsApp/migrations/0001_initial.py
+ActivitiesApp/migrations/0001_initial.py
+ActivitiesApp/migrations/0003_auto_20201012_1219.py
+ActivitiesApp/migrations/0002_groupactivitymodel_order.py
