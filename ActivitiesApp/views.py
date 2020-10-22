@@ -183,7 +183,7 @@ def add_required_activity_to_group(request, id):
 class ActivityPartUpdate(UpdateView):
     http_method_names = ['post']
     model = ActivityPartModel
-    fields = ['quantity']
+    fields = ['quantity', 'location']
 
     def get_success_url(self):
         return reverse('activityinformation', args=[str(self.object.activity.pk)])

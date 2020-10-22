@@ -55,7 +55,7 @@
                             {% if required.activity.workCenter.name == "Picking" %}
                             <td>
                                 {% csrf_token %}
-                                <input type="number" value="{{ produced.location }}" name="location"
+                                <input value="{{ required.location }}" name="location"
                                        id="id_location">
                             </td>
                             {% endif %}
@@ -118,7 +118,7 @@
                             {% if produced.activity.workCenter.name == "Picking" %}
                             <td>
                                 {% csrf_token %}
-                                <input type="number" value="{{ produced.location }}" name="location"
+                                <input value="{{ produced.location }}" name="location"
                                        id="id_location">
                             </td>
                             {% endif %}

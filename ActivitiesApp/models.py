@@ -49,7 +49,7 @@ class ActivityPartModel(models.Model):
     quantity = models.IntegerField(default=1)
     increment = models.BooleanField(default=False)  # TRUE/FALSE used to represent parts ActivityPartModel/produced
     order = models.IntegerField(blank=False, default=100_000)
-    location = models.CharField(max_length=4, null=True)
+    location = models.TextField(max_length=12, null=True)
     history = HistoricalRecords()
 
     def updateQuantity(self, newval):
