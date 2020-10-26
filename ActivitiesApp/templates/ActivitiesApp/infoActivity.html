@@ -49,7 +49,7 @@
                         <form method="POST" action="{% url 'editactivitypart' required.pk %}">
                             <td>
                                 {% csrf_token %}
-                                <input type="number" value="{{ required.quantity }}" name="quantity"
+                                <input class="md-2" type="number" value="{{ required.quantity }}" name="quantity"
                                        id="id_quantity">
                             </td>
                             {% if required.activity.workCenter.name == "Picking" %}

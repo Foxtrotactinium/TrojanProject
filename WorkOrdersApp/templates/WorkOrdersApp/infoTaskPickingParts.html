@@ -17,6 +17,7 @@
             <th>Part Number</th>
             <th>Description</th>
             <th>Location</th>
+            <th>Extra info</th>
             <th>Required</th>
             <th>Complete</th>
 
@@ -32,6 +33,7 @@
             <td>{{ part.part.partNumber }}</td>
             <td>{{ part.part.description }}</td>
             <td>{{ part.part.location }}</td>
+            <td>{{ part.extra.location }}</td>
             <td>
                 <form method="POST" action="{% url 'edittaskpart-required' part.pk %}">
 

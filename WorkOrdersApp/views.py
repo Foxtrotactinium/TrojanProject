@@ -97,9 +97,6 @@ class TaskActivityDelete(DeleteView):
 @login_required
 def info_task_parts(request, taskid, taskactivityid):
     taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
-    # for part in TaskPartsModel.objects.filter(task=taskid,activity=taskactivityid):
-    #     print(str(part.quantityRequired)+" - "+str(part.quantityCompleted))
-    # print(TaskActivityModel.isComplete(ac))
 
     if request.method == "POST":
         for completed in request.POST:
@@ -113,11 +110,13 @@ def info_task_parts(request, taskid, taskactivityid):
         .filter(increment=False)
     for part in taskPartsRequired:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivity).first()
 
     taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
         .filter(increment=True)
     for part in taskPartsProduced:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivityid).first()
 
     context = {'header': 'Kits',
                'producedparts': taskPartsProduced,
