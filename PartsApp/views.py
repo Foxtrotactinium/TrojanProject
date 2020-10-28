@@ -126,9 +126,10 @@ def info_part(request, part_id):
         previouslevel = movement.stockOnHand
 
     context = {'partform': form1,
+               'part':part,
                'images': image,
                'imageform': imageform,
-               'partsuppliers': PartSupplierModel.objects.all().filter(
+               'partsuppliers': PartSupplierModel.objects.filter(
                    part=part.id),
                'commentForm': form2,
                'part_id': part.id,

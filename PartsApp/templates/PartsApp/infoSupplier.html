@@ -20,7 +20,7 @@
     </div>
     <form method="POST">
         <div class="row">
-            <div class="col-sm" style="height:400px; overflow: scroll;">
+            <div class="col-sm tableFixHead" style="height:400px; overflow: scroll;">
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -38,6 +38,7 @@
                         {% if supplierpart.low %} class="table-danger" {% endif %}>
                         <td>{{ supplierpart.part.partNumber }}</td>
                         <td data-href="{% url 'info_part' supplierpart.part.id %}">{{ supplierpart.part.description }}</td>
+                        <td>{{ supplierpart.part.location }}</td>
                         <td>{{ supplierpart.part.stockOnHand }}</td>
                         <td>{{ supplierpart.part.minimumStock }}</td>
                         <td>{{ supplierpart.part.reorderQtys }}</td>

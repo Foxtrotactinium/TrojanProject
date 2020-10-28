@@ -1,6 +1,7 @@
 *[data-href] {
     cursor: pointer;
 }
+.tableFixHead thead th { position: sticky; top: 0; }
 
 td a {
     display: inline-block;

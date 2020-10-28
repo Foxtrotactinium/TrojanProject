@@ -40,6 +40,10 @@ def logout_request(request):
     return redirect("inventory")
 
 
+def composer_test(request):
+    return render(request, "MainApp/composerplayertest.html")
+
+
 def login_request(request):
     if request.method == 'POST':
         login_form = AuthenticationForm(request=request, data=request.POST)

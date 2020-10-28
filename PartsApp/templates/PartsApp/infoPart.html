@@ -56,7 +56,7 @@
                     <tr>
                         <td data-href="{% url 'info_supplier' supplier.supplier.id %}">{{ supplier }}</td>
                         <td>
-                            <form method="POST" action="{% url 'editsupplierpartnumber' supplier.part.pk %}">
+                            <form method="POST" action="{% url 'editsupplierpartnumber' supplier.pk %}">
 
                                 {% csrf_token %}
                                 <input type="text" value="{{ supplier.supplierPartNumber }}" name="supplierPartNumber"
