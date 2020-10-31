@@ -111,7 +111,7 @@ def info_part(request, part_id):
     image = PartImageModel.objects.filter(part=part)
     form1 = PartForm(instance=part)
     form2 = PartCommentForm(initial={'author': request.user, 'part': part})
-    movements = part.history.all()
+    movements = part.history.all().reverse()
     previouslevel = 0
     # activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
     #
@@ -133,7 +133,7 @@ def info_part(request, part_id):
                    part=part.id),
                'commentForm': form2,
                'part_id': part.id,
-               'movements': movements,
+               'movements': reversed(movements),
                'activities': activities,
                'partcomments': PartCommentModel.objects.all().filter(part=part.id),
                }

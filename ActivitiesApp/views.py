@@ -140,7 +140,7 @@ def group_information(request, id):
         form = group_form(request.POST, instance=group)
         if form.is_valid():
             form.save()
-            return redirect('groups', group.workCenter)
+            return redirect('groups')
 
     else:
         form = group_form(instance=group)

@@ -59,7 +59,6 @@ class ActivityPartModel(models.Model):
     def __str__(self):
         return str(self.activity) + " - " + str(self.part)
 
-
 class GroupModel(models.Model):
     groupName = models.CharField(max_length=50)
 

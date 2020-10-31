@@ -43,7 +43,7 @@ def add_task(request):
                 tempactivity = TaskActivityModel(task=taskMy,
                                                  activity=groupactivity.activity)
                 tempactivity.save()
-                required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity)
+                required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
                 for required in required_list:
                     temp = TaskPartsModel(activity=tempactivity,
                                           part=required.part,
@@ -106,17 +106,40 @@ def info_task_parts(request, taskid, taskactivityid):
             except ValueError:
                 pass
 
-    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
-        .filter(increment=False)
-    for part in taskPartsRequired:
-        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
-        part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivity).first()
+    activity_part_required = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=False).order_by('id')
 
-    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
-        .filter(increment=True)
-    for part in taskPartsProduced:
-        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
-        part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivityid).first()
+    activity_part_produced = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=True).order_by('id')
+
+    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=False).order_by('id')
+
+    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=True).order_by('id')
+
+    for (a_part, t_part) in zip(activity_part_required, taskPartsRequired):
+        t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
+        t_part.extra = a_part
+
+    for (a_part, t_part) in zip(activity_part_produced, taskPartsProduced):
+        t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
+        t_part.extra = a_part
+
+
+    # taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
+    #     .filter(increment=False)
+    # for part in taskPartsRequired:
+    #     part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+    #     .order_by('id')
+    #     required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
+    #
+    #
+    #     ActivityPartModel.objects.filter(activity=taskactivity.activity).filter(part=part).order_by('id')
+    #
+    #     part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivity).first()
+    #
+    # taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
+    #     .filter(increment=True)
+    # for part in taskPartsProduced:
+    #     part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+    #     part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivityid).first()
 
     context = {'header': 'Kits',
                'producedparts': taskPartsProduced,
