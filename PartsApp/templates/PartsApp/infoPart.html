@@ -82,10 +82,11 @@
                     </thead>
                     <tbody>
                     {% for movement in movements %}
-                    <tr>
-                        <td>{{ movement.history_date }}</td>
-                        <td>{{ movement.history_user }}</td>
-                        <td>{{ movement.change }}</td>
+                    <tr {% if movement.change < 0 %} class="table-danger" {% endif %}
+                    {% if movement.change > 0 %} class="table-success" {% endif %}>
+                    <td>{{ movement.history_date }}</td>
+                    <td>{{ movement.history_user }}</td>
+                    <td>{{ movement.change }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
