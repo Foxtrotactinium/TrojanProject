@@ -30,12 +30,12 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th>Parts Produced</th>
+                        <th>Parts Required</th>
                         <th>Image</th>
                         <th>Part Number</th>
                         <th>Description</th>
                         <th>Quantity</th>
-                        {% if required.activity.workCenter.name == "Picking" %}<th>Picking Location</th>{% endif %}
+                        {% if required.activity.workCenter.name == "Picking" or "Hose Cutting" %}<th>Extra Information</th>{% endif %}
                     </tr>
                     </thead>
                     <tbody id="requiredTbl">
@@ -52,7 +52,7 @@
                                 <input class="md-2" type="number" value="{{ required.quantity }}" name="quantity"
                                        id="id_quantity">
                             </td>
-                            {% if required.activity.workCenter.name == "Picking" %}
+                            {% if required.activity.workCenter.name == "Picking" or "Hose Cutting" %}
                             <td>
                                 {% csrf_token %}
                                 <input value="{{ required.location }}" name="location"
@@ -95,10 +95,11 @@
                     <thead>
                     <tr>
                         <th>Parts Produced</th>
+                        <th>Image</th>
                         <th>Part Number</th>
                         <th>Description</th>
                         <th>Quantity</th>
-                        {% if produced.activity.workCenter.name == "Picking" %}<th>Location</th>{% endif %}
+                        {% if produced.activity.workCenter.name == "Picking" or "Hose Cutting" %}<th>Extra Information</th>{% endif %}
                     </tr>
                     </thead>
                     <tbody id="producedTbl">
@@ -115,7 +116,7 @@
                                 <input type="number" value="{{ produced.quantity }}" name="quantity"
                                        id="id_quantity">
                             </td>
-                            {% if produced.activity.workCenter.name == "Picking" %}
+                            {% if produced.activity.workCenter.name == "Picking" or "Hose Cutting" %}
                             <td>
                                 {% csrf_token %}
                                 <input value="{{ produced.location }}" name="location"
