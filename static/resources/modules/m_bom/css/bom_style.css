@@ -1,0 +1,40 @@
+/* CSS Document */
+
+#BOM_Table_div tr{
+font-size:9px;
+/*color:grey;*/
+vertical-align:top;
+}
+
+#BOM_Table_div td{   
+vertical-align:top;
+height:18px;
+cursor:pointer;
+}
+#BOM_Table_div td img,#BOM_Table_div th img{
+margin-right: 8px;
+}
+
+#BOM_Table_div th{
+font-size:11px;
+color: #7d7d7d;
+font-weight:bolder;
+vertical-align:top;
+text-align: left;
+height:25px;
+}
+
+BOM_Table_div table{
+width:100%;
+}
+
+#table_container{
+overflow:auto;
+height:100%;
+width:100%;
+}
+#BOM_Table_div {
+     background-color: #ebebeb;
+     height: 80%;
+     overflow: auto;
+}

@@ -1,0 +1,54 @@
+/* CSS Document */
+
+
+
+#View_Zone{
+height:80%;
+width:100%;
+overflow:auto;
+list-style-image:none;
+list-style-position:outside;
+list-style-type:none;
+text-decoration:none;
+}
+
+#View_Zone a{
+/*float:left;*/
+}
+
+#View_Zone h5{
+margin:2px 0px 0px 0px;
+height:15%;
+}
+
+.h5_title{
+font-size:10px;
+color: #6d6d6d;
+text-align:center;
+}
+
+#View_Zone div{
+float:left;
+margin-bottom:2%;
+margin-right:8%;
+text-align:center;
+width:25%;
+height: 48%;
+}
+
+#View_Zone img{
+cursor:pointer;
+}
+
+.ui-widget-content2{
+   border: 0px;
+   background-color: #F2F2F2;
+}
+.ui-widget-content2 img{
+   margin-top: 7%;
+   
+}
+
+.ui-widget-header2{
+   border: 0px;
+}

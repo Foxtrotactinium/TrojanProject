@@ -1,4 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+    {% load static %}
+
 <html>
 <head>
     <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8">-->
@@ -8,12 +10,12 @@
     <!--  CSS  -->
     <!----------->
 
-    <link href="resources\css\template\init.css" rel="stylesheet" type="text/css" />
+    <link href="{% static 'resources\css\template\init.css' %}" rel="stylesheet" type="text/css" />
     <!--<link href="resources\css\skin\darkgrey\skin.css" rel="stylesheet" type="text/css" /> -->
-    <link href="resources\css\skin\windowshadow\skin.css" rel="stylesheet" type="text/css" />
-    <link type="text/css" href="resources/css/template/jquery-ui.css" rel="Stylesheet" />
+    <link href="{% static 'resources\css\skin\windowshadow\skin.css' %}" rel="stylesheet" type="text/css" />
+    <link type="text/css" href="{% static 'resources/css/template/jquery-ui.css' %}" rel="Stylesheet" />
 </head>
-<script type="text/javascript" src="resources/settings/settings.js"></script>
+<script type="text/javascript" src="{% static 'resources/settings/settings.js' %}"></script>
 <script type="text/javascript">
 function addSelectionEvent()
 {
@@ -60,7 +62,7 @@ function registerEvents()
 function ComposerWebPlayerLoaded()
 {
     registerEvents();
-    myObject.FileName = "280.T1.PA01.00_files\\280.T1.PA01.00.smgXml";
+    myObject.FileName = "{% static '280.T1.PA01.00_files/280.T1.PA01.00.smgXml' %}";
 }
 </script>
 <body onresize="Javascript:Is_Resized()" onload="registerEvents()">
@@ -89,13 +91,13 @@ function ComposerWebPlayerLoaded()
                     <div id="leftbloc" style="display: none;">
                         <div id="Logo_area">
                             <span class="logo"></span>
-                            <img src="resources/img/solidworks_logo.png" title="SolidWorks Logo" height="29" width="101">
+                            <img src="{% static 'resources/img/solidworks_logo.png' %}" title="SolidWorks Logo" height="29" width="101">
                         </div>
 
                             <div id="Tree_area">
                                 <div style="width: 100%; height: 100%; vertical-align: middle; text-align: center;">
                                     <div>
-                                        <img src="resources/img/loading.gif" title="loading" height="16" width="16">
+                                        <img src="{% static 'resources/img/loading.gif' %}" title="loading" height="16" width="16">
                                     </div>
                                 </div>
 
@@ -106,7 +108,14 @@ function ComposerWebPlayerLoaded()
                         <div id="dialog_detail_view" style="display: none;"></div>
                         <!-- details view  -->
                         <div id="3D" onmouseout="Javascript:get_select_mode()" onmouseover="Javascript:set_select_mode()">
+<<<<<<< HEAD
+                            <!--[if IE]>
+                            <object id="_ComposerPlayerActiveX" height="100%" width="100%" classid="CLSID:410B702D-FCFC-46B7-A954-E876C84AE4C0" codebase="{% static 'ComposerPlayerActiveX.cab' %}#version=7,7,3,129">
+                            <param name="FileName" value="{% static '280.T1.PA01.00_files/280.T1.PA01.00.smgXml' %}"/>
+							<!--<![endif]-->
+=======
 
+>>>>>>> f7280d94fb7456e3f2ce9458aba3cc2e2346e19f
 
                             <![if !IE]>
                             <object id="_ComposerPlayerPlugin" type="application/x-composerplayerwebplugin" width="100%" height="100%">
@@ -135,10 +144,10 @@ function ComposerWebPlayerLoaded()
                 </div>
                 <div style="width: 1%; vertical-align: top; float: left; margin-left: 1%">
                     <ul id="rightbuttons">
-                        <li><img src="resources/img/help.gif" title="Help" style="cursor: pointer;" onclick="Javascript:Show_Help()"></li>
-                        <li><img src="resources/img/properties.png" title="Properties" style="cursor: pointer;" onclick="Javascript:Show_App_prop()"></li>
-                        <li><img src="resources/img/show_standard_toolbar.gif" title="Standard Toolbar" style="cursor: pointer;" onclick="Javascript:ShowToolbar()"></li>
-                        <li><img src="resources/img/open.png" title="Open SolidWorks Composer Document" style="cursor: pointer;" onclick="Javascript:File_3D_path()"></li>
+                        <li><img src="{% static 'resources/img/help.gif' %}" title="Help" style="cursor: pointer;" onclick="Javascript:Show_Help()"></li>
+                        <li><img src="{% static 'resources/img/properties.png' %}" title="Properties" style="cursor: pointer;" onclick="Javascript:Show_App_prop()"></li>
+                        <li><img src="{% static 'resources/img/show_standard_toolbar.gif' %}" title="Standard Toolbar" style="cursor: pointer;" onclick="Javascript:ShowToolbar()"></li>
+                        <li><img src="{% static 'resources/img/open.png' %}" title="Open SolidWorks Composer Document" style="cursor: pointer;" onclick="Javascript:File_3D_path()"></li>
                     </ul>
                 </div>
             </div>
@@ -149,7 +158,7 @@ function ComposerWebPlayerLoaded()
             <!-------------->
             <div class="bottom_cell_close" id="bottom_bar">
                 <div style="width: 100%; height: 100%; vertical-align: middle; text-align: center;">
-                    <img id="bottom_loading" style="display: none;" src="resources/img/loading.gif" title="loading" height="16" width="16">
+                    <img id="bottom_loading" style="display: none;" src="{% static 'resources/img/loading.gif' %}" title="loading" height="16" width="16">
                 </div>
             </div>
         </div>
@@ -163,9 +172,9 @@ function ComposerWebPlayerLoaded()
 <!--  scripts -->
 <!-------------->
 
-<script type="text/javascript" src="resources/lib/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="resources/lib/jquery-ui.js"></script>
-<script type="text/javascript" src="resources/lib/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="{% static 'resources/lib/jquery-1.4.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'resources/lib/jquery-ui.js' %}"></script>
+<script type="text/javascript" src="{% static 'resources/lib/jquery.mousewheel.js' %}"></script>
 <!--scroll --->
     <!--<link rel="stylesheet" type="text/css" media="all" href="resources/css/template/jquery.jscrollpane.css" />
     <script type="text/javascript" src="resources/lib/scroll/jquery.jscrollpane.js"></script>-->
@@ -174,10 +183,10 @@ function ComposerWebPlayerLoaded()
 
 <!-------------->
 
-<script type="text/javascript" src="resources/js/init_template.js"></script>
-<script type="text/javascript" src="resources/js/include.js"></script>
+<script type="text/javascript" src="{% static 'resources/js/init_template.js' %}"></script>
+<script type="text/javascript" src="{% static 'resources/js/include.js' %}"></script>
 
-<script type="text/javascript" src="resources/lib/moo4q/mootools-1.2.4-base.js "></script>
-<script type="text/javascript" src="resources/lib/moo4q/Class.Mutators.jQuery.js"></script>
-<script type="text/javascript" src="resources/js/custom_classes.js"></script>
+<script type="text/javascript" src="{% static 'resources/lib/moo4q/mootools-1.2.4-base.js' %}"></script>
+<script type="text/javascript" src="{% static 'resources/lib/moo4q/Class.Mutators.jQuery.js' %}"></script>
+<script type="text/javascript" src="{% static 'resources/js/custom_classes.js' %}"></script>
 </html>

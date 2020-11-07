@@ -1,0 +1,16 @@
+/* CSS Document */
+
+.App_prop_lines{
+float:left;
+}
+
+.App_prop_lines_container{
+margin-left:15px;
+height:20px;
+width:320px;
+}
+
+.App_prop_block{
+margin-bottom:10px;
+margin-top:20px;
+}

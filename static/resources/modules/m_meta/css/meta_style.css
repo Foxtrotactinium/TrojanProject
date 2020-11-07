@@ -1,0 +1,15 @@
+#Meta_zone{
+height:80%;
+width:91%;
+overflow:auto;
+}
+
+#meta_list{
+/*height:210px;*/
+}
+
+#meta_list tr
+{
+color:black;
+font-size:10px;
+}

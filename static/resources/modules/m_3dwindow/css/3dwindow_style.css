@@ -1,0 +1,49 @@
+/* CSS Document */
+/*
+#dialog_detail_view{
+height:auto;
+list-style-image:none;
+list-style-position:outside;
+list-style-type:none;
+margin:10px 0px 0 8px; 
+outline-color:-moz-use-text-color;
+outline-style:none;
+outline-width:0;
+padding:0 0 4px 0;
+text-decoration:none;
+position:absolute;
+}
+
+#dialog_detail_view li{
+float:left;
+margin:6px 0 0 6px;
+text-align:center;
+width:150px;
+height:150px;
+color:red;
+}
+
+#dialog_detail_view h5{
+margin-top:-15px;
+font-size:10px;
+width:100%;
+margin-left:-1px;
+cursor: move;
+}
+
+#dialog_detail_view div{
+margin-top:-17px;
+}
+
+#dialog_detail_view .ui-resizable-w{width:15px;left:-15px;margin-top:0px;}
+#dialog_detail_view .ui-resizable-e{width:15px;right:-15px;margin-top:0px;}
+#dialog_detail_view .ui-resizable-s{height:15px;bottom:-15px;}
+#dialog_detail_view .ui-resizable-n{height:15px;top:-15px;}
+
+#dialog_detail_view .ui-resizable-nw{width:15px;height:15px;left:-10px;top:-10px;}
+#dialog_detail_view .ui-resizable-ne{width:15px;height:15px;right:-10px;top:-10px}
+#dialog_detail_view .ui-resizable-se{width:15px;height:15px;bottom:-10px;right:-10px;background-image:url("");}
+#dialog_detail_view .ui-resizable-sw{width:15px;height:15px;bottom:-10px;left:-10px;}
+
+
+*/

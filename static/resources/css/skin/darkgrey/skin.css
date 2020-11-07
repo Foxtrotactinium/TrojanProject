@@ -1,0 +1,123 @@
+/* CSS Document
+
+
+Skin DARK grey
+
+/* 
+-------
+BARS
+-------
+*/
+
+
+
+.bar_bottom{
+  /* background-image: url(img/bandeau_bottom.jpg);
+  background-repeat: repeat-x;
+  background-color:#aaaaaa;  */
+}
+.bar_top{
+  /* background-image: url(img/bandeau_top.jpg);
+  background-color:#aaaaaa; */
+}
+
+#bar_left{
+   width:30px;
+   background-image: url(img/bigshadowbkg_left.gif);
+   background-repeat: no-repeat;
+   background-position: bottom right;
+   background-color: #e8e8e8; 
+   vertical-align:top;
+}
+
+#bar_right{
+    width:30px;
+    background-image: url(img/bigshadowbkg_right.gif);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    background-color: #e8e8e8;
+}
+
+/* ___ magnet CELL INIT ___ */
+
+top_magnetcell_open{
+  background-image: url(img/top.jpg);
+  background-repeat: no-repeat;
+  background-position: top;
+} 
+
+
+
+
+/* Bottom Bar */
+
+#B_left {
+   /*width: 19px;       */ 
+   background-image: url(img/b_left.gif);
+   background-repeat: no-repeat;
+   background-position: bottom right; 
+   padding-right: 15px;
+   color: #808080;
+}
+#B_right {
+   /*width: 19px;       */ 
+    background-image: url(img/b_right.gif);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    padding-left: 15px;
+    color: #808080;
+}
+
+#B_container {
+    /*width: 502px;*/
+    border-top: rgb(226,226,226) solid 1px;
+    border-left: rgb(226,226,226) solid 1px;
+    border-right: rgb(226,226,226) solid 1px;
+    /*margin-left: 10px;
+    margin-right: 10px; */
+    background-color:white;
+    background-image: url(img/b_container_bkg.jpg);
+    background-repeat: repeat-x;
+    height:268px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#B_title {
+   padding-top:5px;
+   height:33px;
+   font-weight: bold;
+   color: #606060;
+   background-image: url(img/arrowtitle.gif);
+   background-repeat: no-repeat;
+   background-position: left bottom;
+}
+
+#B_greybar {
+   background-color:#c8c8c8;
+   height:12px;
+   display:none;
+}
+
+.module {
+   margin-top: 15px;
+   float: left;
+   /*width: 250px;*/
+   min-width:250px;
+   color: #808080;
+   
+}
+
+
+
+/* Common */
+
+p{ color: #808080; }
+
+h1, h2, h3{ color: #808080;}
+
+h1{ font-size: 16px;}
+
+h2{font-size: 14px;}
+
+h3{font-size: 12px;}
