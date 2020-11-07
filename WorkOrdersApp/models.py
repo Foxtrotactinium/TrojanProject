@@ -67,6 +67,9 @@ class TaskPartsModel(models.Model):
     quantityRequired = models.IntegerField()
     quantityCompleted = models.IntegerField(default=0)
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    serial = models.CharField(max_length=50, null=True)
+    order = models.IntegerField(blank=False)
+    extra = models.CharField(max_length=50, null=True)
     history = HistoricalRecords()
 
     # @property

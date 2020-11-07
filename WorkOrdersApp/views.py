@@ -50,6 +50,8 @@ def add_task(request):
                                           task=taskMy,
                                           increment=required.increment,
                                           quantityRequired=required.quantity,
+                                          order=required.order,
+                                          extra=required.location,
                                           quantityCompleted=0,
                                           )
                     temp.save()
@@ -106,13 +108,13 @@ def info_task_parts(request, taskid, taskactivityid):
             except ValueError:
                 pass
 
-    activity_part_required = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=False).order_by('id')
+    activity_part_required = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=False).order_by('order')
 
-    activity_part_produced = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=True).order_by('id')
+    activity_part_produced = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=True).order_by('order')
 
-    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=False).order_by('id')
+    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=False).order_by('order')
 
-    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=True).order_by('id')
+    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=True).order_by('order')
 
     for (a_part, t_part) in zip(activity_part_required, taskPartsRequired):
         t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
@@ -241,6 +243,13 @@ class TaskPartRequiredUpdate(UpdateView):
     def get_success_url(self):
         return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
 
+class TaskPartSerialUpdate(UpdateView):
+    http_method_names = ['post']
+    model = TaskPartsModel
+    fields = ['serial']
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
 
 class TaskPartCompletedUpdate(UpdateView):
     # http_method_names = ['post']
@@ -293,6 +302,8 @@ class TaskActivityCreate(CreateView):
                                   task=task,
                                   increment=required.increment,
                                   quantityRequired=required.quantity,
+                                  order=required.order,
+                                  extra=required.location,
                                   quantityCompleted=0,
                                   )
             temp.save()
