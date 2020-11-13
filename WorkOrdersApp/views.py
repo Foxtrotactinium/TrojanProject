@@ -108,21 +108,25 @@ def info_task_parts(request, taskid, taskactivityid):
             except ValueError:
                 pass
 
-    activity_part_required = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=False).order_by('order')
-
-    activity_part_produced = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=True).order_by('order')
+    # activity_part_required = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=False).order_by('order')
+    #
+    # activity_part_produced = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=True).order_by('order')
 
     taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=False).order_by('order')
+    for part in taskPartsRequired:
+        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
 
     taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=True).order_by('order')
+    for part in taskPartsProduced:
+        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
 
-    for (a_part, t_part) in zip(activity_part_required, taskPartsRequired):
-        t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
-        t_part.extra = a_part
-
-    for (a_part, t_part) in zip(activity_part_produced, taskPartsProduced):
-        t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
-        t_part.extra = a_part
+    # for (a_part, t_part) in zip(activity_part_required, taskPartsRequired):
+    #     t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
+    #     t_part.extra = a_part
+    #
+    # for (a_part, t_part) in zip(activity_part_produced, taskPartsProduced):
+    #     t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
+    #     t_part.extra = a_part
 
 
     # taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
@@ -215,6 +219,7 @@ def info_task_part_include(request, taskid, taskactivityid, increment):
 
     if request.method == 'POST':
         form = TaskActivityPartsForm(request.POST)
+        print(form.errors)
         if form.is_valid():
             form.save()
             return info_task_parts(request, taskid, taskactivityid)
@@ -223,6 +228,7 @@ def info_task_part_include(request, taskid, taskactivityid, increment):
                'task': task,
                'increment': increment,
                'quantityCompleted': 0,
+               'order': 100_000,
                'user': request.user
                }
     form = TaskActivityPartsForm(initial=initial)

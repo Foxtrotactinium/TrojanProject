@@ -40,6 +40,8 @@ class TaskActivityPartsForm(forms.ModelForm):
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
+        self.fields['serial'].required = False
+        self.fields['extra'].required = False
         self.helper.layout = Layout(
             Field('activity', type='hidden'),
             Field('part', css_class='form-control'),
@@ -48,6 +50,9 @@ class TaskActivityPartsForm(forms.ModelForm):
             Field('quantityRequired', css_class='form-control'),
             Field('quantityCompleted', type='hidden'),
             Field('user', type='hidden'),
+            Field('serial', type='form-control'),
+            Field('extra', type='form-control'),
+            Field('order', type='hidden'),
             HTML('<br>'),
             Submit('save', 'Save')
         )

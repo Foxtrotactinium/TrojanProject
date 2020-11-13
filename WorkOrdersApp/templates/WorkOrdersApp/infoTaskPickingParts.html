@@ -34,7 +34,7 @@
         <td>{{ part.part.partNumber }}</td>
         <td>{{ part.part.description }}</td>
         <td>{{ part.part.location }}</td>
-        <td>{{ part.extra.location }}</td>
+        <td>{{ part.extra }}</td>
         <td>
             <form method="POST" action="{% url 'edittaskpart-required' part.pk %}">
 
@@ -82,6 +82,7 @@
 
     </tbody>
     <thead>
+
     <tr>
         <th colspan="6" style="text-align: center"> Parts Produced</th>
     </tr>
