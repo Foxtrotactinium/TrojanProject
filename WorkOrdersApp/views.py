@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 def task_list(request):
     # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
     tasks = TaskModel.objects.all()
-    # tasks = TaskModel.objects.all(group__activity__workCenter__in=request.user.groups.all()))
+    # tasks = TaskModel.objects.filter(group__activity__workCenter__in=request.user.groups.all())
     activeList = [task for task in tasks if not task.isComplete()]
     completedList = [task for task in tasks if task.isComplete()]
 

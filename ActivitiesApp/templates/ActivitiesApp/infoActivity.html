@@ -6,146 +6,187 @@
 <a href="{% url 'activities' %}" class="badge badge-light">Activities</a>
 <br>
 <p class="font-weight-bold">{{ activity.activityName }}</p>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm">
-            <form method="POST">
-                <br>
-                {% csrf_token %}
-                {% crispy activityform %}
-            </form>
-        </div>
-    </div>
-    <div class="row" style="min-height: 400px;">
-        <div class="col-sm">
-            <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
-                <form class="orderingForm" data-tblid="requiredTbl" data-btnid="requiredBtn" method="post"
-                      action="{% url 'save-part-ordering' activity.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" class="orderingInput" name="ordering">
-                    <button id="requiredBtn" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save
-                        ordering - Required
-                    </button>
-                </form>
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Parts Required</th>
-                        <th>Image</th>
-                        <th>Part Number</th>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        {% if required.activity.workCenter.name == "Picking" or "Hose Cutting" %}<th>Extra Information</th>{% endif %}
-                    </tr>
-                    </thead>
-                    <tbody id="requiredTbl">
-                    {% for required in activitypartsrequired %}
-                    <tr data-lookup="{{ required.pk }}">
-                        <td><span class="handle"></span></td>
-                        <td><img src="{{ required.thumbnail.image.url }}"
-                                 style="height: 100px;"/></td>
-                        <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.partNumber }}</td>
-                        <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.description }}</td>
-                        <form method="POST" action="{% url 'editactivitypart' required.pk %}">
-                            <td>
-                                {% csrf_token %}
-                                <input class="md-2" type="number" value="{{ required.quantity }}" name="quantity"
-                                       id="id_quantity">
-                            </td>
-                            {% if required.activity.workCenter.name == "Picking" or "Hose Cutting" %}
-                            <td>
-                                {% csrf_token %}
-                                <input value="{{ required.location }}" name="location"
-                                       id="id_location">
-                            </td>
-                            {% endif %}
-                            <td><input type="submit" class="btn btn-primary" value="Update"></td>
-                        </form>
-                        <form action="{% url 'deleteactivitypart' required.pk %}" method="post"
-                              style="display: inline;">
-                            <td>
-                                {% csrf_token %}
-                                <input type="submit" class="btn btn-danger" value="Delete"
-                                       onclick="return confirm('Are you sure you want to delete {{ required.part.partNumber }} from {{ activity.activityName }}?');">
-                            </td>
-                        </form>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+<br>
+<ul class="nav nav-tabs">
+    <li><a class="nav-link active" data-toggle="tab" href="#information">Activity Information</a></li>
+    <li><a class="nav-link" data-toggle="tab" href="#instruction">Activity Instruction</a></li>
+</ul>
+<div class="tab-content">
+    <div id="information" class="tab-pane active">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm">
+                    <form method="POST">
+                        <br>
+                        {% csrf_token %}
+                        {% crispy activityform %}
+                    </form>
+                </div>
             </div>
-            <div style="position: absolute; bottom: 0;">
-                <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
-                   role="button">Add Required
-                    Part</a>
-            </div>
+            <div class="row" style="min-height: 400px;">
+                <div class="col-sm">
+                    <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
+                        <form class="orderingForm" data-tblid="requiredTbl" data-btnid="requiredBtn" method="post"
+                              action="{% url 'save-part-ordering' activity.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" class="orderingInput" name="ordering">
+                            <button id="requiredBtn" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>
+                                Save
+                                ordering - Required
+                            </button>
+                        </form>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Parts Required</th>
+                                <th>Image</th>
+                                <th>Part Number</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                {% if required.activity.workCenter.name == "Picking" or "Hose Cutting" %}
+                                <th>Extra Information</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody id="requiredTbl">
+                            {% for required in activitypartsrequired %}
+                            <tr data-lookup="{{ required.pk }}">
+                                <td><span class="handle"></span></td>
+                                <td><img src="{{ required.thumbnail.image.url }}"
+                                         style="height: 100px;"/></td>
+                                <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.partNumber }}
+                                </td>
+                                <td data-href="{% url 'info_part' required.part.id %}">{{ required.part.description }}
+                                </td>
+                                <form method="POST" action="{% url 'editactivitypart' required.pk %}">
+                                    <td>
+                                        {% csrf_token %}
+                                        <input class="md-2" type="number" value="{{ required.quantity }}"
+                                               name="quantity"
+                                               id="id_quantity">
+                                    </td>
+                                    {% if required.activity.workCenter.name == "Picking" or "Hose Cutting" %}
+                                    <td>
+                                        {% csrf_token %}
+                                        <input value="{{ required.location }}" name="location"
+                                               id="id_location">
+                                    </td>
+                                    {% endif %}
+                                    <td><input type="submit" class="btn btn-primary" value="Update"></td>
+                                </form>
+                                <form action="{% url 'deleteactivitypart' required.pk %}" method="post"
+                                      style="display: inline;">
+                                    <td>
+                                        {% csrf_token %}
+                                        <input type="submit" class="btn btn-danger" value="Delete"
+                                               onclick="return confirm('Are you sure you want to delete {{ required.part.partNumber }} from {{ activity.activityName }}?');">
+                                    </td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="position: absolute; bottom: 0;">
+                        <a href="{% url 'addrequired' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
+                           role="button">Add Required
+                            Part</a>
+                    </div>
 
-        </div>
-        <div class="col-sm">
-            <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
-                <form class="orderingForm" data-tblid="producedTbl" data-btnid="producedOrder" method="post"
-                      action="{% url 'save-part-ordering' activity.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" class="orderingInput" name="ordering">
-                    <button id="producedOrder" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save
-                        ordering - Produced
-                    </button>
-                </form>
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>Parts Produced</th>
-                        <th>Image</th>
-                        <th>Part Number</th>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        {% if produced.activity.workCenter.name == "Picking" or "Hose Cutting" %}<th>Extra Information</th>{% endif %}
-                    </tr>
-                    </thead>
-                    <tbody id="producedTbl">
-                    {% for produced in activitypartsproduced %}
-                    <tr data-lookup="{{ produced.pk }}">
-                        <td><span class="handle"></span></td>
-                        <td><img class="img-responsive" src="{{ produced.thumbnail.image.url }}"
-                                 style="height: 100px"/></td>
-                        <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.partNumber }}</td>
-                        <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.description }}</td>
-                        <form method="POST" action="{% url 'editactivitypart' produced.pk %}">
-                            <td>
-                                {% csrf_token %}
-                                <input type="number" value="{{ produced.quantity }}" name="quantity"
-                                       id="id_quantity">
-                            </td>
-                            {% if produced.activity.workCenter.name == "Picking" or "Hose Cutting" %}
-                            <td>
-                                {% csrf_token %}
-                                <input value="{{ produced.location }}" name="location"
-                                       id="id_location">
-                            </td>
-                            {% endif %}
-                            <td><input type="submit" class="btn btn-primary" value="Update"></td>
+                </div>
+                <div class="col-sm">
+                    <div class="my-custom-scrollbar table-wrapper-scroll-y" style="max-height: 90%;">
+                        <form class="orderingForm" data-tblid="producedTbl" data-btnid="producedOrder" method="post"
+                              action="{% url 'save-part-ordering' activity.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" class="orderingInput" name="ordering">
+                            <button id="producedOrder" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>
+                                Save
+                                ordering - Produced
+                            </button>
                         </form>
-                        <form action="{% url 'deleteactivitypart' produced.pk %}" method="post"
-                              style="display: inline;">
-                            <td>
-                                {% csrf_token %}
-                                <input type="submit" class="btn btn-danger" value="Delete"
-                                       onclick="return confirm('Are you sure you want to delete {{ produced.part.partNumber }} from {{ activity.activityName }}?');">
-                            </td>
-                        </form>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Parts Produced</th>
+                                <th>Image</th>
+                                <th>Part Number</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                {% if produced.activity.workCenter.name == "Picking" or "Hose Cutting" %}
+                                <th>Extra Information</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+                            <tbody id="producedTbl">
+                            {% for produced in activitypartsproduced %}
+                            <tr data-lookup="{{ produced.pk }}">
+                                <td><span class="handle"></span></td>
+                                <td><img class="img-responsive" src="{{ produced.thumbnail.image.url }}"
+                                         style="height: 100px"/></td>
+                                <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.partNumber }}
+                                </td>
+                                <td data-href="{% url 'info_part' produced.part.id %}">{{ produced.part.description }}
+                                </td>
+                                <form method="POST" action="{% url 'editactivitypart' produced.pk %}">
+                                    <td>
+                                        {% csrf_token %}
+                                        <input type="number" value="{{ produced.quantity }}" name="quantity"
+                                               id="id_quantity">
+                                    </td>
+                                    {% if produced.activity.workCenter.name == "Picking" or "Hose Cutting" %}
+                                    <td>
+                                        {% csrf_token %}
+                                        <input value="{{ produced.location }}" name="location"
+                                               id="id_location">
+                                    </td>
+                                    {% endif %}
+                                    <td><input type="submit" class="btn btn-primary" value="Update"></td>
+                                </form>
+                                <form action="{% url 'deleteactivitypart' produced.pk %}" method="post"
+                                      style="display: inline;">
+                                    <td>
+                                        {% csrf_token %}
+                                        <input type="submit" class="btn btn-danger" value="Delete"
+                                               onclick="return confirm('Are you sure you want to delete {{ produced.part.partNumber }} from {{ activity.activityName }}?');">
+                                    </td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="position: absolute; bottom: 0;">
+                        <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
+                           role="button">Add Produced
+                            Part</a>
+                    </div>
+                </div>
             </div>
-            <div style="position: absolute; bottom: 0;">
-                <a href="{% url 'addproduced' activity.id %}" class="btn btn-secondary btn-sm btn-pad"
-                   role="button">Add Produced
-                    Part</a>
-            </div>
+            <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Update Quantities">
         </div>
     </div>
-    <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Update Quantities">
+    <div id="instruction" class="tab-pane">
+        <div>
+            {% for instruction in instructions %}
+            <script
+                    var url='{{ instruction.pdf.url }}' ;
+                    src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
+
+            <canvas id="the-canvas"></canvas>
+
+            {% endfor %}
+            <br>
+            <form enctype="multipart/form-data" method="post">
+                {% csrf_token %}
+                {{ instructionform.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+            <embed src="https://drive.google.com/viewerng/
+viewer?embedded=true&url=https://drive.google.com/file/d/1KPgvdlIwah1smN1YAyu_VNFYSHBETeEG/view" width="500"
+                   height="375">
+        </div>
+    </div>
 </div>
 
 {% endblock %}

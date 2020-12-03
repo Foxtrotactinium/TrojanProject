@@ -58,10 +58,14 @@ def activity_information(request, id):
     for part in produced:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
 
+    instructions = instruction.objects.filter(activity=activity)
+    instructionform = InstructionForm(initial={'activity': activity})
     form = activity_form(instance=activity)
     context = {'activityform': form,
                'activitypartsrequired': required,
                'activitypartsproduced': produced,
+               'instructions': instructions,
+               'instructionform': instructionform,
                'activity': activity}
     return render(request, 'ActivitiesApp/infoActivity.html', context)
 

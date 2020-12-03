@@ -78,6 +78,6 @@ class GroupActivityModel(models.Model):
 #     completedGroup = models.ForeignKey(GroupModel, related_name='completed_group', on_delete=models.CASCADE)
 #     triggerGroup = models.ForeignKey(GroupModel, related_name='trigger_group', on_delete=models.CASCADE)
 
-# class instruction(models.Model):
-#     job = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
-#     pdf = models.FileField(upload_to='pdf')
+class instruction(models.Model):
+    activity = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
+    pdf = models.FileField(upload_to='pdf')

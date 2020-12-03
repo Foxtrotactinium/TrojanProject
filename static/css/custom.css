@@ -1,6 +1,12 @@
 *[data-href] {
     cursor: pointer;
 }
+
+#the-canvas {
+  border: 1px solid black;
+  direction: ltr;
+}
+
 .tableFixHead thead th { position: sticky; top: 0; }
 
 td a {
