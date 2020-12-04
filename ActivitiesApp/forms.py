@@ -101,7 +101,7 @@ class InstructionForm(forms.ModelForm):
         self.fields['activity'].widget = HiddenInput()
         self.helper.layout = Layout(
             Field('activity', css_class='form-control'),
-            'instruction',
+            'pdf',
             Submit('submit', 'Add')
         )
 

@@ -169,12 +169,7 @@
     <div id="instruction" class="tab-pane">
         <div>
             {% for instruction in instructions %}
-            <script
-                    var url='{{ instruction.pdf.url }}' ;
-                    src="//mozilla.github.io/pdf.js/build/pdf.js"></script>
-
-            <canvas id="the-canvas"></canvas>
-
+            <iframe src='{{ instruction.pdf.url }}#toolbar=0' width="80%" height="400px"></iframe>
             {% endfor %}
             <br>
             <form enctype="multipart/form-data" method="post">
@@ -182,9 +177,7 @@
                 {{ instructionform.as_p }}
                 <button type="submit">Upload</button>
             </form>
-            <embed src="https://drive.google.com/viewerng/
-viewer?embedded=true&url=https://drive.google.com/file/d/1KPgvdlIwah1smN1YAyu_VNFYSHBETeEG/view" width="500"
-                   height="375">
+
         </div>
     </div>
 </div>
