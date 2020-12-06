@@ -39,10 +39,21 @@ def activity_information(request, id):
     activity = get_object_or_404(ActivityModel, id=id)
 
     if request.method == "POST":
-        form = activity_form(request.POST, instance=activity)
-        if form.is_valid():
-            form.save()
+
+        actform = activity_form(request.POST, instance=activity)
+        insform = InstructionForm(request.POST, request.FILES, instance=activity)
+        print(request.FILES)
+        if actform.is_valid():
+            actform.save()
             return redirect('activityinformation', id)
+        if insform.is_valid():
+            print("hello")
+            # insform.save()
+            tempins = instruction(pdf=request.FILES["pdf"], activity=activity)
+            tempins.save()
+            return redirect('activityinformation', id)
+
+
         # for qty in request.POST[required.pk]:
         #     print(qty)
         #     try:
@@ -60,6 +71,7 @@ def activity_information(request, id):
 
     instructions = instruction.objects.filter(activity=activity)
     instructionform = InstructionForm(initial={'activity': activity})
+
     form = activity_form(instance=activity)
     context = {'activityform': form,
                'activitypartsrequired': required,
