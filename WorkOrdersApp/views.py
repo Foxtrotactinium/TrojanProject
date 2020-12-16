@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import UpdateView, DeleteView, CreateView
 
-from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel
+from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel, instruction
 from PartsApp.models import PartModel
 from .forms import TaskForm, TaskActivityPartsForm
 from .models import TaskModel, TaskPartsModel, TaskActivityModel, PartImageModel
@@ -100,6 +100,7 @@ class TaskActivityDelete(DeleteView):
 @login_required
 def info_task_parts(request, taskid, taskactivityid):
     taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
+    instructions = instruction.objects.filter(activity=taskactivity.activity)
 
     if request.method == "POST":
         for completed in request.POST:
@@ -152,7 +153,8 @@ def info_task_parts(request, taskid, taskactivityid):
                'producedparts': taskPartsProduced,
                'requiredparts': taskPartsRequired,
                'taskid': taskid,
-               'taskactivity': taskactivity}
+               'taskactivity': taskactivity,
+               'instructions': instructions}
 
     if get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Picking':
         return render(request, 'WorkOrdersApp/infoTaskPickingParts.html', context)

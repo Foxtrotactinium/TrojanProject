@@ -152,6 +152,9 @@ def add_group(request):
 @login_required
 def group_information(request, id):
     group = get_object_or_404(GroupModel, id=id)
+    activities = GroupActivityModel.objects.filter(group=id).values_list('activity', flat=True)
+    parts = ActivityPartModel.objects.filter(activity__in=activities, increment=False)
+    print(parts)
     if request.method == "POST":
         form = group_form(request.POST, instance=group)
         if form.is_valid():
@@ -162,7 +165,8 @@ def group_information(request, id):
         form = group_form(instance=group)
         context = {'groupform': form,
                    'groupactivities': GroupActivityModel.objects.filter(group=id).order_by('order'),
-                   'id': id}
+                   'id': id,
+                   'parts':parts}
         return render(request, 'ActivitiesApp/infoGroups.html', context)
 
 

@@ -3,49 +3,85 @@
 {% load crispy_forms_tags %}
 
 {% block body %}
-    <a href="{% url 'groups' %}" class="badge badge-light">Groups</a>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm">
-                <form method="POST">
-                    <br>
-                    {% csrf_token %}
-                    {% crispy groupform %}
-                </form>
-                <form class="orderingForm" data-tblid="groups" data-btnid="saveOrdering" method="post" action="{% url 'save-activity-ordering' id %}">
-                    {% csrf_token %}
-                    <input type="hidden" class="orderingInput" name="ordering">
-                    <button id="saveOrdering" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save ordering</button>
-                </form>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm">
+<a href="{% url 'groups' %}" class="badge badge-light">Groups</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm">
+            <form method="POST">
                 <br>
-                <table class="table table-hover">
-                    <tbody id="groups">
-                    {% for activity in groupactivities %}
-                        <tr data-lookup="{{ activity.pk }}"
-                            data-href="{% url 'activityinformation' activity.activity.pk %}">
-                            <td><span class="handle"></span></td>
-                            <td>{{ activity.activity }}</td>
-                            <td>{{ activity.activity.description }}</td>
-                            <td>{{ activity.activity.workCenter.name }}</td>
-                            <form action="{% url 'deletegroupactivity' activity.pk %}" method="post"
-                                  style="display: inline;">
-                                <td>
-                                    {% csrf_token %}
-                                    <input type="submit" class="btn btn-danger" value="Delete"
-                                           onclick="return confirm('Are you sure you want to delete {{ activity.activity.activityName }} from {{ activity.group.groupName }}?');">
-                                </td>
-                            </form>
+                {% csrf_token %}
+                {% crispy groupform %}
+            </form>
+            <ul class="nav nav-tabs">
+                <li><a class="nav-link active" data-toggle="tab" href="#activities">Activities</a></li>
+                <li><a class="nav-link" data-toggle="tab" href="#parts">Parts</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="activities" class="tab-pane active">
+                    <form class="orderingForm" data-tblid="groups" data-btnid="saveOrdering" method="post" action="{% url 'save-activity-ordering' id %}">
+                        {% csrf_token %}
+                        <input type="hidden" class="orderingInput" name="ordering">
+                        <button id="saveOrdering" class="btn btn-outline-primary btn-lg float-right mr-2" disabled>Save ordering</button>
+                    </form>
+                    <div class="row">
+                        <div class="col-sm">
+                            <br>
+                            <table class="table table-hover">
+                                <tbody id="groups">
+                                {% for activity in groupactivities %}
+                                <tr data-lookup="{{ activity.pk }}"
+                                    data-href="{% url 'activityinformation' activity.activity.pk %}">
+                                    <td><span class="handle"></span></td>
+                                    <td>{{ activity.activity }}</td>
+                                    <td>{{ activity.activity.description }}</td>
+                                    <td>{{ activity.activity.workCenter.name }}</td>
+                                    <form action="{% url 'deletegroupactivity' activity.pk %}" method="post"
+                                          style="display: inline;">
+                                        <td>
+                                            {% csrf_token %}
+                                            <input type="submit" class="btn btn-danger" value="Delete"
+                                                   onclick="return confirm('Are you sure you want to delete {{ activity.activity.activityName }} from {{ activity.group.groupName }}?');">
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <a href="{% url 'addrequiredactivity' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">New
+                                Item</a>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div id="parts" class="tab-pane">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th colspan="6" style="text-align: center"> Parts</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <a href="{% url 'addrequiredactivity' id=id %}" class="btn btn-secondary btn-sm btn-pad" role="button">New
-                    Item</a>
+                        <tr>
+                            <th>Part Number</th>
+                            <th>Description</th>
+                            <th>Required</th>
+                            <th>Activity</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for part in parts %}
+                        <tr class="{% if part.quantity >= part.part.stockOnHand %} table-danger{% endif %}">
+                            <td>{{ part.part.partNumber }}</td>
+                            <td>{{ part.part.description }}</td>
+                            <td>{{ part.quantity }}</td>
+                            <td>{{ part.activity }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
