@@ -15,10 +15,16 @@ class TaskModel(models.Model):
     taskName = models.CharField(max_length=50)
     fleetNumber = models.CharField(max_length=50)
     group = models.ForeignKey(GroupModel, on_delete=models.PROTECT)
+    #
+    # def isComplete(self):
+    #     completedList = TaskActivityModel.objects.filter(task=self)
+    #     completedList = [activity for activity in completedList if not activity.isComplete()]
+    #     return len(completedList) == 0
 
-    def isComplete(self):
+    def userGroupCompleted(self, userGroup):
         completedList = TaskActivityModel.objects.filter(task=self)
         completedList = [activity for activity in completedList if not activity.isComplete()]
+        completedList = [activity for activity in completedList if activity.activity.workCenter in userGroup]
         return len(completedList) == 0
 
     def __str__(self):
