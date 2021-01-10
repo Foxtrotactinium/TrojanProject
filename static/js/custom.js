@@ -89,6 +89,11 @@ $(document).ready(function () {
         saveOrderingButton.addEventListener('click', saveOrdering);
     });
 
+    $("form.silent_form").submit(function () {
+        alert("Updated");
+        return false;
+    });
+
 });
 
 

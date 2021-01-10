@@ -41,7 +41,7 @@ def activity_information(request, id):
     if request.method == "POST":
 
         actform = activity_form(request.POST, instance=activity)
-        insform = InstructionForm(request.POST, request.FILES, instance=activity)
+        insform = InstructionForm(request.POST, reques1t.FILES, instance=activity)
         print(request.FILES)
         if actform.is_valid():
             actform.save()
