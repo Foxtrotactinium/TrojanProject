@@ -2,6 +2,7 @@ from django.db import transaction
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import UpdateView, DeleteView
+from simple_history.utils import update_change_reason
 
 from PartsApp.models import PartImageModel
 from .models import *
@@ -78,7 +79,11 @@ def activity_information(request, id):
                'activitypartsproduced': produced,
                'instructions': instructions,
                'instructionform': instructionform,
-               'activity': activity}
+               'activity': activity,
+               'history': ActivityPartModel.history.filter(activity=activity)
+               }
+    print(activity)
+    print(ActivityPartModel.history.model.objects.all())
     return render(request, 'ActivitiesApp/infoActivity.html', context)
 
 
@@ -204,6 +209,19 @@ class ActivityPartUpdate(UpdateView):
     http_method_names = ['post']
     model = ActivityPartModel
     fields = ['quantity', 'location']
+
+    def form_valid(self, form):
+        oldObject = ActivityPartModel.objects.get(id=self.object.id)
+        change_reason = []
+        if 'quantity' in form.changed_data:
+            change_reason.append(f'quantity updated from {oldObject.quantity} to {self.object.quantity}')
+
+        if 'location' in form.changed_data:
+            change_reason.append(f'extra info amended from {oldObject.location} to {self.object.location}')
+
+        superReturn = super().form_valid(form)
+        update_change_reason(self.object, f'{",".join(change_reason)}')
+        return superReturn
 
     def get_success_url(self):
         return reverse('activityinformation', args=[str(self.object.activity.pk)])

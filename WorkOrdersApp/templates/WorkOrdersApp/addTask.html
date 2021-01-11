@@ -14,6 +14,25 @@
             </form>
         </div>
     </div>
+    <div>
+        <form class="form-inline">
+            <input class="form-control" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+        </form>
+        <table class="table table-hover" id="selection">
+            <thead>
+            <tr>
+                <th>Group Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for group in groups %}
+            <tr data-gid="{{ group.id }}">
+                <td>{{ group.groupName }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}

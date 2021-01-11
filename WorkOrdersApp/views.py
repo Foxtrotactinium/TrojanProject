@@ -62,7 +62,8 @@ def add_task(request):
             return redirect('tasks')
     else:
         form = TaskForm()
-        return render(request, 'WorkOrdersApp/addTask.html', {'taskform': form})
+        groups = GroupModel.objects.all()
+        return render(request, 'WorkOrdersApp/addTask.html', {'taskform': form, 'groups': groups})
 
 
 @login_required

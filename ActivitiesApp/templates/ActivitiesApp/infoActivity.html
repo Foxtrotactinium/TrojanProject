@@ -10,6 +10,7 @@
 <ul class="nav nav-tabs">
     <li><a class="nav-link active" data-toggle="tab" href="#information">Activity Information</a></li>
     <li><a class="nav-link" data-toggle="tab" href="#instruction">Activity Instruction</a></li>
+    <li><a class="nav-link" data-toggle="tab" href="#history">Activity History</a></li>
 </ul>
 <div class="tab-content">
     <div id="information" class="tab-pane active">
@@ -179,6 +180,43 @@
             </div>
         </div>
         <input class="btn btn-secondary btn-sm" id="submit-id-save" type="submit" value="Update Quantities">
+    </div>
+    <div id="history" class="tab-pane">
+        <table class="table table-hover" id="selection">
+            <thead>
+            <tr>
+                <th>Part Number</th>
+                <th>Description</th>
+                <th>User</th>
+                <th>Time</th>
+                <th>Quantity</th>
+                <th>Extra info</th>
+                <th>Change Reason</th>
+
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for part in history %}
+
+            <tr data-href="{% url 'info_part' part.id %}"
+                {% if part.obsolete %} class="table-dark" {% endif %}
+                {% if part.low %} class="table-danger" {% endif %}>
+                <td>{{ part.part.partNumber }}</td>
+                <td>{{ part.part.description }}</td>
+                <td>{{ part.history_user }}</td>
+                <td>{{ part.history_date }}</td>
+                <td>{{ part.quantity }}</td>
+                <td>{{ part.location }}</td>
+                <td>{{ part.history_change_reason }}</td>
+            </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
     </div>
 </div>
 

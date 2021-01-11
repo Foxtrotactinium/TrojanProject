@@ -209,7 +209,7 @@ def add_part(request):
 
         if form.is_valid():
             form.save()
-            return redirect('inventory')
+            return qr_scan(request)
 
     else:
         form = PartForm()

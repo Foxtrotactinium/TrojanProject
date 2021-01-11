@@ -36,6 +36,11 @@ $(document).ready(function () {
         $("#id_activity").val($(this).data('aid'));
     });
 
+    $('[data-gid]').click(function () {
+        $("#id_group").val($(this).data('gid'));
+    });
+
+
     $('[data-sid]').click(function () {
         $("#id_supplier").val($(this).data('sid'));
     });
@@ -89,9 +94,10 @@ $(document).ready(function () {
         saveOrderingButton.addEventListener('click', saveOrdering);
     });
 
-    $("form.silent_form").submit(function () {
+    $("form.silent_form").submit(function (e) {
+        e.preventDefault();
+        $.post($(this).attr('action'), $(this).serialize());
         alert("Updated");
-        return false;
     });
 
 });
