@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView, UpdateView
-
+from BrotherQL270NW.imageTest import print_label
 from ActivitiesApp.models import ActivityPartModel
 from WorkOrdersApp.forms import TaskForm, TaskPartsModel
 from .forms import *
@@ -90,6 +90,10 @@ def list_supplier(request):
     }
     return render(request, 'PartsApp/listSuppliers.html', context)
 
+def print_inventory_label(request, part_id):
+    part = PartModel.objects.get(id=part_id)
+    print_label(part.partNumber, part.description)
+    return redirect("info_part", part_id)
 
 @login_required
 def info_part(request, part_id):
