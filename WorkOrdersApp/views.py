@@ -120,10 +120,12 @@ def info_task_parts(request, taskid, taskactivityid):
     taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=False).order_by('order')
     for part in taskPartsRequired:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        part.low = part.part.stockOnHand < part.part.minimumStock
 
     taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=True).order_by('order')
     for part in taskPartsProduced:
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        part.low = part.part.stockOnHand < part.part.minimumStock
 
     # for (a_part, t_part) in zip(activity_part_required, taskPartsRequired):
     #     t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()

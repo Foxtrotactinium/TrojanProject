@@ -22,7 +22,8 @@
 
         {% for part in orderedparts %}
 
-        <tr>
+        <tr {% if part.quantityRequired == part.quantityCompleted %} class="table-success" {% endif %}
+            {% if part.low %} class="table-danger" {% endif %}>
             <td><img src="{{ part.thumbnail.image.url }}" style="height: 100px;"/></td>
             <td>{{ part.part.partNumber }}</td>
             <td>{{ part.quantityRequired }}</td>

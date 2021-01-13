@@ -29,14 +29,15 @@
 
     {% for part in requiredparts %}
 
-    <tr class="{% if part.quantityRequired == part.quantityCompleted %} table-success{% endif %}">
+    <tr {% if part.quantityRequired == part.quantityCompleted %} class="table-success" {% endif %}
+        {% if part.low %} class="table-danger" {% endif %}>
         <td><img src="{{ part.thumbnail.image.url }}" style="height: 100px;"/></td>
         <td>{{ part.part.partNumber }}</td>
         <td>{{ part.part.description }}</td>
         <td>{{ part.part.location }}</td>
         <td>{{ part.extra }}</td>
         <td>
-            <form method="POST" action="{% url 'edittaskpart-required' part.pk %}">
+            <form class="silent_form" method="POST" action="{% url 'edittaskpart-required' part.pk %}">
 
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityRequired }}" name="quantityRequired"
@@ -47,7 +48,7 @@
             </form>
         </td>
         <td>
-            <form method="POST" action="{% url 'edittaskpart-serial' part.pk %}">
+            <form class="silent_form" method="POST" action="{% url 'edittaskpart-serial' part.pk %}">
 
                 {% csrf_token %}
                 <input type="text" value="{{ part.serial }}" name="serial"
@@ -58,7 +59,7 @@
             </form>
         </td>
         <td>
-            <form method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
+            <form class="silent_form" ethod="POST" action="{% url 'edittaskpart-completed' part.pk %}">
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
                        id="id_quantityCompleted" class="input-group col-md-5">
@@ -106,7 +107,7 @@
         <td>{{ part.part.description }}</td>
 
         <td>
-            <form method="POST" action="{% url 'edittaskpart-required' part.pk %}">
+            <form class="silent_form" method="POST" action="{% url 'edittaskpart-required' part.pk %}">
 
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityRequired }}" name="quantityRequired"
@@ -117,7 +118,7 @@
             </form>
         </td>
         <td>
-            <form method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
+            <form class="silent_form" method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
                        id="id_quantityCompleted" class="input-group col-md-3">
