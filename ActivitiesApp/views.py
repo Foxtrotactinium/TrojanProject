@@ -42,13 +42,11 @@ def activity_information(request, id):
     if request.method == "POST":
 
         actform = activity_form(request.POST, instance=activity)
-        insform = InstructionForm(request.POST, reques1t.FILES, instance=activity)
-        print(request.FILES)
+        insform = InstructionForm(request.POST, request.FILES, instance=activity)
         if actform.is_valid():
             actform.save()
             return redirect('activityinformation', id)
         if insform.is_valid():
-            print("hello")
             # insform.save()
             tempins = instruction(pdf=request.FILES["pdf"], activity=activity)
             tempins.save()
