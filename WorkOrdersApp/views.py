@@ -332,3 +332,24 @@ class TaskActivityCreate(CreateView):
 
     # def get_success_url(self):
     #     return reverse('infotaskactivities', args=[str(self.object.task.pk)])
+
+def complete_task_activity(request, taskid, taskactivityid):
+    taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
+    task = get_object_or_404(TaskModel, id=taskid)
+    taskparts = TaskPartsModel.objects.filter(task=task, activity=taskactivity)
+
+    for part in taskparts:
+        change = part.quantityRequired - part.quantityCompleted
+        part.quantityCompleted = part.quantityRequired
+        if part.increment:
+            part.part.stockOnHand += change
+        else:
+            part.part.stockOnHand -= change
+
+        part.save()
+        part.part.save()
+
+    taskactivity.finishTime = timezone.now()
+    taskactivity.save()
+
+    return info_task_parts(request, taskid, taskactivityid)

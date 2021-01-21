@@ -96,5 +96,9 @@ class TaskPartsModel(models.Model):
             self.part._change_reason = f'{self.activity}:{change}'
             self.part.save()
 
+            if self.activity.isComplete():
+                self.activity.finishTime = timezone.now()
+                self.activity.save()
+
     def __str__(self):
         return str(self.part)
