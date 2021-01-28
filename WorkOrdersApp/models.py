@@ -88,8 +88,10 @@ class TaskPartsModel(models.Model):
         if change != 0:
             if self.increment:
                 self.part.stockOnHand += change
+                print(change)
             else:
                 self.part.stockOnHand -= change
+                print(change)
             self.quantityCompleted = newval
             self.save()
 

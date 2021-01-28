@@ -63,8 +63,11 @@
                         <tr>
                             <th>Part Number</th>
                             <th>Description</th>
+                            <th>Stock on Hand</th>
                             <th>Required</th>
                             <th>Activity</th>
+                            <th>Extra Information</th>
+                            <th>Supplier</th>
                         </tr>
                         </thead>
 
@@ -73,8 +76,11 @@
                         <tr class="{% if part.quantity >= part.part.stockOnHand %} table-danger{% endif %}">
                             <td>{{ part.part.partNumber }}</td>
                             <td>{{ part.part.description }}</td>
+                            <td>{{ part.part.stockOnHand }}</td>
                             <td>{{ part.quantity }}</td>
                             <td>{{ part.activity }}</td>
+                            <td>{{ part.location }}</td>
+                            <td>{{ part.supplier }}</td>
                         </tr>
                         {% endfor %}
                         </tbody>

@@ -59,7 +59,7 @@
             </form>
         </td>
         <td>
-            <form class="silent_form" ethod="POST" action="{% url 'edittaskpart-completed' part.pk %}">
+            <form class="silent_form" method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
                        id="id_quantityCompleted" class="input-group col-md-5">

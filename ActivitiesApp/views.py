@@ -157,6 +157,9 @@ def group_information(request, id):
     group = get_object_or_404(GroupModel, id=id)
     activities = GroupActivityModel.objects.filter(group=id).values_list('activity', flat=True)
     parts = ActivityPartModel.objects.filter(activity__in=activities, increment=False)
+    for part in parts:
+        part.supplier = part.part.getPreferredSupplier()
+
     if request.method == "POST":
         form = group_form(request.POST, instance=group)
         if form.is_valid():
