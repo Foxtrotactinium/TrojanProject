@@ -165,13 +165,6 @@ def info_task_parts(request, taskid, taskactivityid):
         return render(request, 'WorkOrdersApp/infoTaskPickingParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Lazer Cutting':
-        for producedpart in taskPartsProduced:
-            if producedpart.quantityCompleted == producedpart.quantityRequired:
-                for requiredpart in taskPartsRequired:
-                    requiredpart.quantityCompleted = requiredpart.quantityRequired
-                    # requiredpart.quantityCompleted
-                    requiredpart.save()
-                break
         return render(request, 'WorkOrdersApp/infoTaskLaserCuttingParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Powder Coating':
@@ -203,23 +196,9 @@ def info_task_parts(request, taskid, taskactivityid):
                                                                             'taskid': taskid,
                                                                             'taskactivity': taskactivity})
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Assembly':
-        for requiredpart in taskPartsRequired:
-            if requiredpart.quantityCompleted == requiredpart.quantityRequired:
-                for producedpart in taskPartsProduced:
-                    producedpart.quantityCompleted = producedpart.quantityRequired
-                    # producedpart.quantityCompleted
-                    producedpart.save()
-                break
         return render(request, 'WorkOrdersApp/infoTaskAssemblyParts.html', context)
 
     elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Hose Cutting':
-        for requiredpart in taskPartsRequired:
-            if requiredpart.quantityCompleted == requiredpart.quantityRequired:
-                for producedpart in taskPartsProduced:
-                    producedpart.quantityCompleted = producedpart.quantityRequired
-                    # producedpart.quantityCompleted
-                    producedpart.save()
-                break
         return render(request, 'WorkOrdersApp/infoTaskHoseCuttingParts.html', context,)
 
 
