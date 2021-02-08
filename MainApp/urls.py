@@ -5,4 +5,5 @@ urlpatterns = [
     path("register/", register, name="register"),
     path("logout/", logout_request, name="logout"),
     path("login/", login_request, name="login"),
+    path("composertest/", composer_test, name="composertest"),
 ]

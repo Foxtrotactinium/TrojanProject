@@ -1,0 +1,24 @@
+/* CSS Document */
+
+#assembly_tree{
+/*background-color:transparent;*/
+text-align:left;
+margin-left: 3px;
+height: 90%;
+}
+
+.tree_element{
+font-size:10px;
+color:black;
+white-space:nowrap; 
+height:16px;
+margin:0px;
+}
+
+
+.div_block{
+background-image: url("img/dots.gif");
+background-repeat:repeat-y;
+white-space:nowrap; 
+}
+

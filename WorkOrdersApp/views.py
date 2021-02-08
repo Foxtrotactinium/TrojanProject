@@ -1,21 +1,30 @@
+from django import http
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
-from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel
-from .forms import TaskForm
-from .models import TaskModel, TaskPartsModel
+from django.views.generic import UpdateView, DeleteView, CreateView
+
+from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel, instruction
+from PartsApp.models import PartModel
+from .forms import TaskForm, TaskActivityPartsForm
+from .models import TaskModel, TaskPartsModel, TaskActivityModel, PartImageModel
 from django.contrib.auth.decorators import login_required
 
 
 @login_required
 def task_list(request):
-    # print(TaskModel.objects.filter(group__workCenter__contains='LC'))
     # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
-    completedList = TaskModel.objects.all()
-    completedList = [task for task in completedList if not task.isComplete()]
+    tasks = TaskModel.objects.all()
+    # tasks = TaskModel.objects.filter(group__activity__workCenter__in=request.user.groups.all())
+    # activeList = [task for task in tasks if not task.isComplete()]
+    # completedList = [task for task in tasks if task.isComplete()]
+    activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
+    completedList = [task for task in tasks if task.userGroupCompleted(request.user.groups.all())]
 
-    return render(request, 'listTasks.html', {'header': 'Outstanding Tasks',
-                                              'tasks': completedList})
+    return render(request, 'WorkOrdersApp/listTasks.html', {'header': 'Outstanding Tasks',
+                                                            'activetasks': activeList,
+                                                            'completedtasks': completedList})
 
 
 @login_required
@@ -31,15 +40,21 @@ def add_task(request):
             taskMy = form.save()
             groupname = form.cleaned_data['group']
 
-            groupactivitylist = GroupActivityModel.objects.filter(group=groupname)
+            groupactivitylist = GroupActivityModel.objects.filter(group=groupname).order_by('order')
 
-            for activity in groupactivitylist:
-                required_list = ActivityPartModel.objects.filter(activity=activity.activity)
+            for groupactivity in groupactivitylist:
+                tempactivity = TaskActivityModel(task=taskMy,
+                                                 activity=groupactivity.activity)
+                tempactivity.save()
+                required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
                 for required in required_list:
-                    temp = TaskPartsModel(task=taskMy,
+                    temp = TaskPartsModel(activity=tempactivity,
                                           part=required.part,
-                                          increment= required.increment,
+                                          task=taskMy,
+                                          increment=required.increment,
                                           quantityRequired=required.quantity,
+                                          order=required.order,
+                                          extra=required.location,
                                           quantityCompleted=0,
                                           )
                     temp.save()
@@ -47,37 +62,49 @@ def add_task(request):
             return redirect('tasks')
     else:
         form = TaskForm()
-        return render(request, 'addTask.html', {'taskform': form})
+        groups = GroupModel.objects.all()
+        return render(request, 'WorkOrdersApp/addTask.html', {'taskform': form, 'groups': groups})
 
 
 @login_required
 def info_task_activities(request, taskid):
     task = get_object_or_404(TaskModel, id=taskid)
-    activities = GroupActivityModel.objects.filter(group=task.group)
+    activities = TaskActivityModel.objects.filter(task=task, activity__workCenter__in=request.user.groups.all())
 
     if activities.count() == 1:
         activity = activities.first()
-        return info_task_parts(request, taskid, activity.activity.id)
+        return info_task_parts(request, taskid, activity.id)
 
     for activity in activities:
-        partsRequired = ActivityPartModel.objects.filter(activity=activity.activity)
-        taskPartsRequired = TaskPartsModel.objects \
-            .filter(task=taskid) \
-            .filter(part_id__in=partsRequired.values_list("part"))
+        activity.complete = activity.isComplete()
+        partsRequired = TaskPartsModel.objects.filter(activity=activity)
 
-        completedList = [part for part in taskPartsRequired if not part.isComplete()]
+        completedList = [part for part in partsRequired if not part.isComplete()]
 
         if len(completedList) > 0:
             activity.status = activity.activity.getStatus()
         else:
             activity.status = "Done"
 
-    return render(request, 'infoTaskActivities.html', {'header': 'Grouped Activities',
-                                                       'taskid': taskid,
-                                                       'taskactivities': activities})
+    return render(request, 'WorkOrdersApp/infoTaskActivities.html', {'header': 'Grouped Activities',
+                                                                     'task': task,
+                                                                     'taskactivities': activities})
+
+
+class TaskActivityDelete(DeleteView):
+    # http_method_names = ['post']
+    model = TaskActivityModel
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse('infotaskactivities', args=[str(self.object.task.pk)])
+
 
 @login_required
-def info_task_parts(request, taskid, activityid):
+def info_task_parts(request, taskid, taskactivityid):
+    taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
+    instructions = instruction.objects.filter(activity=taskactivity.activity)
+
     if request.method == "POST":
         for completed in request.POST:
             try:
@@ -86,50 +113,222 @@ def info_task_parts(request, taskid, activityid):
             except ValueError:
                 pass
 
-    partsRequired = ActivityPartModel.objects.filter(activity=activityid) \
-        .filter(increment=False)
-    taskPartsRequired = TaskPartsModel.objects \
-        .filter(task=taskid) \
-        .filter(part_id__in=partsRequired.values_list("part"))
-    partsProduced = ActivityPartModel.objects.filter(activity=activityid) \
-        .filter(increment=True)
-    taskPartsProduced = TaskPartsModel.objects \
-        .filter(task=taskid) \
-        .filter(part_id__in=partsProduced.values_list("part"))
+    # activity_part_required = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=False).order_by('order')
+    #
+    # activity_part_produced = ActivityPartModel.objects.filter(activity=taskactivity.activity, increment=True).order_by('order')
 
-    if get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'PK':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'LC':
-        return render(request, 'infoTaskLaserCuttingParts.html', {'header': 'Kits',
-                                                                  'producedparts': taskPartsProduced,
-                                                                  'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'PC':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'ZN':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'HT':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'RS':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'SK':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'FD':
-        return render(request, 'infoTaskParts.html', {'header': 'Kits',
-                                                      'producedparts': taskPartsProduced,
-                                                      'requiredparts': taskPartsRequired})
-    elif get_object_or_404(ActivityModel, id=taskid).workCenter.wcType == 'OR':
+    taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=False).order_by('order')
+    for part in taskPartsRequired:
+        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        part.low = part.part.stockOnHand < part.part.minimumStock
+
+    taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid, increment=True).order_by('order')
+    for part in taskPartsProduced:
+        part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+        part.low = part.part.stockOnHand < part.part.minimumStock
+
+    # for (a_part, t_part) in zip(activity_part_required, taskPartsRequired):
+    #     t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
+    #     t_part.extra = a_part
+    #
+    # for (a_part, t_part) in zip(activity_part_produced, taskPartsProduced):
+    #     t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
+    #     t_part.extra = a_part
+
+
+    # taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
+    #     .filter(increment=False)
+    # for part in taskPartsRequired:
+    #     part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+    #     .order_by('id')
+    #     required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
+    #
+    #
+    #     ActivityPartModel.objects.filter(activity=taskactivity.activity).filter(part=part).order_by('id')
+    #
+    #     part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivity).first()
+    #
+    # taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
+    #     .filter(increment=True)
+    # for part in taskPartsProduced:
+    #     part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
+    #     part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivityid).first()
+
+    context = {'header': 'Kits',
+               'producedparts': taskPartsProduced,
+               'requiredparts': taskPartsRequired,
+               'taskid': taskid,
+               'taskactivity': taskactivity,
+               'instructions': instructions}
+
+    if get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Picking':
+        return render(request, 'WorkOrdersApp/infoTaskPickingParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Lazer Cutting':
+        return render(request, 'WorkOrdersApp/infoTaskLaserCuttingParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Powder Coating':
+        return render(request, 'WorkOrdersApp/infoTaskPowderCoatingParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Zinc Coating':
+        return render(request, 'WorkOrdersApp/infoTaskZincCoatingParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel,
+                           id=taskactivityid).activity.workCenter.name == 'Heat Treatment & Shot Peening':
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel,
+                           id=taskactivityid).activity.workCenter.name == 'Welding':
+        return render(request, 'WorkOrdersApp/infoTaskLaserCuttingParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Brobo Rotary Saw':
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Shakeout':
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Sheet Metal Folding':
+        return render(request, 'WorkOrdersApp/infoTaskParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Ordering':
         taskPartsOrdered = TaskPartsModel.objects.filter(task=taskid)
-        return render(request, 'infoTaskOrderingParts.html', {'header': 'Ordered',
-                                                              'orderedparts': taskPartsOrdered})
+        return render(request, 'WorkOrdersApp/infoTaskOrderingParts.html', {'orderedparts': taskPartsOrdered,
+                                                                            'taskid': taskid,
+                                                                            'taskactivity': taskactivity})
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Assembly':
+        return render(request, 'WorkOrdersApp/infoTaskAssemblyParts.html', context)
+
+    elif get_object_or_404(TaskActivityModel, id=taskactivityid).activity.workCenter.name == 'Hose Cutting':
+        return render(request, 'WorkOrdersApp/infoTaskHoseCuttingParts.html', context,)
+
+
+def info_task_part_include(request, taskid, taskactivityid, increment):
+    taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
+    task = get_object_or_404(TaskModel, id=taskid)
+    taskparts = TaskPartsModel.objects.filter(task=task, activity=taskactivity)
+    parts = PartModel.objects.all()
+
+    if request.method == 'POST':
+        form = TaskActivityPartsForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            return info_task_parts(request, taskid, taskactivityid)
+
+    initial = {'activity': taskactivity,
+               'task': task,
+               'increment': increment,
+               'quantityCompleted': 0,
+               'order': 100_000,
+               'user': request.user
+               }
+    form = TaskActivityPartsForm(initial=initial)
+    context = {"parts": parts,
+               "partform": form,
+               "taskparts": taskparts,
+               "task": task,
+               "taskactivity": taskactivity}
+
+    return render(request, 'WorkOrdersApp/addTaskActivityParts.html', context)
+
+
+class TaskPartRequiredUpdate(UpdateView):
+    http_method_names = ['post']
+    model = TaskPartsModel
+    fields = ['quantityRequired']
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+class TaskPartSerialUpdate(UpdateView):
+    http_method_names = ['post']
+    model = TaskPartsModel
+    fields = ['serial']
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+class TaskPartCompletedUpdate(UpdateView):
+    # http_method_names = ['post']
+    model = TaskPartsModel
+    fields = ['quantityCompleted']
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            taskPart = get_object_or_404(TaskPartsModel, id=int(self.object.pk))
+            taskPart.updateQuantity(self.object.quantityCompleted, request.user)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+class TaskPartDelete(DeleteView):
+    # http_method_names = ['post']
+    model = TaskPartsModel
+    fields = "__all__"
+
+    def get_success_url(self):
+        return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
+
+
+class TaskActivityCreate(CreateView):
+    model = TaskActivityModel
+    fields = ('activity',)
+
+    # def get_initial(self):
+    #     task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
+    #     return {'task': task}
+
+    def form_valid(self, form):
+        task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
+        form.instance.task = task
+
+        tempactivity = form.save()
+
+        activity = tempactivity.activity
+
+        required_list = ActivityPartModel.objects.filter(activity=activity)
+        for required in required_list:
+            temp = TaskPartsModel(activity=tempactivity,
+                                  part=required.part,
+                                  task=task,
+                                  increment=required.increment,
+                                  quantityRequired=required.quantity,
+                                  order=required.order,
+                                  extra=required.location,
+                                  quantityCompleted=0,
+                                  )
+            temp.save()
+
+        # return super(TaskActivityCreate, self).form_valid(form)
+        return http.HttpResponseRedirect(reverse('infotaskactivities', args=[str(task.pk)]))
+        # return reverse('infotaskactivities', args=[str(task.pk)])
+
+    # def get_success_url(self):
+    #     return reverse('infotaskactivities', args=[str(self.object.task.pk)])
+
+def complete_task_activity(request, taskid, taskactivityid):
+    taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)
+    task = get_object_or_404(TaskModel, id=taskid)
+    taskparts = TaskPartsModel.objects.filter(task=task, activity=taskactivity)
+
+    for part in taskparts:
+        change = part.quantityRequired - part.quantityCompleted
+        part.quantityCompleted = part.quantityRequired
+        if part.increment:
+            part.part.stockOnHand += change
+        else:
+            part.part.stockOnHand -= change
+
+        part.save()
+        part.part.save()
+
+    taskactivity.finishTime = timezone.now()
+    taskactivity.save()
+
+    return info_task_parts(request, taskid, taskactivityid)

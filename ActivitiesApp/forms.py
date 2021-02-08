@@ -1,7 +1,9 @@
 from django import forms
-from .models import ActivityModel, ActivityPartModel, GroupModel, GroupActivityModel
+from django.forms import HiddenInput
+
+from .models import ActivityModel, ActivityPartModel, GroupModel, GroupActivityModel, instruction
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field,Hidden
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Hidden
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 
@@ -38,7 +40,7 @@ class required_part_form(forms.ModelForm):
             Field('quantity', css_class='form-control'),
             Field('increment', type='hidden'),
             HTML('<br>'),
-            Submit('save', 'Save')
+            Submit('save', 'Add to Activity')
         )
 
     class Meta:
@@ -72,22 +74,37 @@ class required_activity_form(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Field('group', type="hidden"),
+            Field('order', type="hidden"),
             Field('activity', css_class='form-control'),
             HTML('<br>'),
-            Submit('save', 'Save')
+            Submit('save', 'Add Activity')
         )
 
     class Meta:
         model = GroupActivityModel
         fields = '__all__'
-#
-#
-# class TypesForm(forms.ModelForm):
-#     def __init__(self, *args, **kwargs):
-#         super(TypesForm, self).__init__(*args, **kwargs)
-#         self.helper = FormHelper(self)
-#         self.helper.layout = Layout('workCenter')
-#
-#     class Meta:
-#         model = GroupModel
-#         fields = ['workCenter']
+
+
+class OrderingForm(forms.Form):
+    ordering = forms.CharField()
+
+class PartOrderingForm(forms.Form):
+    ordering = forms.CharField()
+
+class InstructionForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(InstructionForm, self).__init__(*args, **kwargs)
+
+        # If you pass FormHelper constructor a form instance
+        # It builds a default layout with all its fields
+        self.helper = FormHelper(self)
+        self.fields['activity'].widget = HiddenInput()
+        self.helper.layout = Layout(
+            Field('activity', css_class='form-control'),
+            'pdf',
+            Submit('submit', 'Add')
+        )
+
+    class Meta:
+        model = instruction
+        fields = '__all__'

@@ -1,11 +1,7 @@
-html {
-  height: 100%;
-}
-
 body {
   font-family: sans-serif;
   padding: 0 10px;
-  height: 100%;
+  border: 1px solid transparent;
   background: black;
   margin: 0;
 }

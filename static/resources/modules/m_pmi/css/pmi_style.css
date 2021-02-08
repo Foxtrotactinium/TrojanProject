@@ -1,0 +1,27 @@
+/* CSS Document */
+
+
+PMI_Table td{
+border-left: #fff 0px solid;
+}
+
+#PMI_Table_div{
+text-align:left;
+height:80%;
+overflow:auto;  
+width:100%;
+}
+
+#PMI_Table td{
+  font-size: 10px;
+  color: #6d6d6d;
+  height:5px;
+}
+
+.PMI_lines tr{
+  height:20px;
+}
+
+.PMI_lines a{
+  line-height:20px;
+}

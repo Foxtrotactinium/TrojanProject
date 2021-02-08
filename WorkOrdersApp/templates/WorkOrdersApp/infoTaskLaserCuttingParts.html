@@ -1,0 +1,143 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block body %}
+
+<a href="{% url 'tasks' %}" class="badge badge-light">Tasks</a>>
+<a href="{% url 'infotaskactivities' taskid %}" class="badge badge-light">Activities</a>
+<br>
+<p class="font-weight-bold">{{ taskactivity.activity }}</p>
+<form method="POST">
+
+    <table class="table table-hover" id="selection">
+        <thead>
+        <tr>
+            <th colspan="6" style="text-align: center">Sheets Required</th>
+        </tr>
+        <tr>
+            <th>Image</th>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Complete</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for part in requiredparts %}
+
+        <tr {% if part.quantityRequired == part.quantityCompleted %} class="table-success" {% endif %}
+            {% if part.low %} class="table-danger" {% endif %}>
+            <td><img src="{{ part.thumbnail.image.url }}" style="height: 100px;"/></td>
+            <td>{{ part.part.partNumber }}</td>
+            <td>{{ part.part.description }}</td>
+            <td>
+                <form class="silent_form" method="POST" action="{% url 'edittaskpart-required' part.pk %}">
+
+                    {% csrf_token %}
+                    <input type="number" value="{{ part.quantityRequired }}" name="quantityRequired"
+                           id="id_quantityRequired" class="input-group col-md-3">
+                    <br/>
+
+                    <input type="submit" class="btn btn-warning" value="Amend">
+                </form>
+            </td>
+            <td>
+                <form class="silent_form" method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
+                    {% csrf_token %}
+                    <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
+                           id="id_quantityCompleted" class="input-group col-md-3">
+                    <br/>
+
+                    <input type="submit" class="btn btn-primary" value="Complete" onclick="
+                                    $(this).prev().prev().val({{ part.quantityRequired }})">
+                </form>
+            </td>
+            <form action="{% url 'deletetaskpart' part.pk %}" method="post"
+                  style="display: inline;">
+                <td>
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-danger" value="Delete"
+                           onclick="return confirm('Are you sure you want to delete {{ part.part.partNumber }} from {{ taskactivity.activity }}?');">
+                </td>
+            </form>
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+        <thead>
+        <tr>
+            <th colspan="6" style="text-align: center"> Parts Produced</th>
+        </tr>
+        <tr>
+            <th>Image</th>
+            <th>Part Number</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Complete</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for part in producedparts %}
+
+        <tr class="{% if part.quantityRequired == part.quantityCompleted %} table-success{% endif %}">
+            <td><img src="{{ part.thumbnail.image.url }}" style="height: 100px;"/></td>
+            <td>{{ part.part.partNumber }}</td>
+            <td>{{ part.part.description }}</td>
+
+            <td>
+                <form class="silent_form" method="POST" action="{% url 'edittaskpart-required' part.pk %}">
+
+                    {% csrf_token %}
+                    <input type="number" value="{{ part.quantityRequired }}" name="quantityRequired"
+                           id="id_quantityRequired" class="input-group col-md-3">
+                    <br/>
+
+                    <input type="submit" class="btn btn-warning" value="Amend">
+                </form>
+            </td>
+            <td>
+                <form class="silent_form" method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
+                    {% csrf_token %}
+                    <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
+                           id="id_quantityCompleted" class="input-group col-md-3">
+                    <br/>
+
+                    <input type="submit" class="btn btn-primary" value="Complete" onclick="
+                                    $(this).prev().prev().val({{ part.quantityRequired }})">
+                </form>
+            </td>
+            <form action="{% url 'deletetaskpart' part.pk %}" method="post"
+                  style="display: inline;">
+                <td>
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-danger" value="Delete"
+                           onclick="return confirm('Are you sure you want to delete {{ part.part.partNumber }} from {{ taskactivity.activity }}?');">
+                </td>
+            </form>
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+    <div>
+        <a href="{% url 'includerequiredpart' taskid taskactivity.id %}" class="btn btn-secondary btn-sm btn-pad"
+           role="button">Include Part</a>
+    </div>
+    <br>
+
+    <div>
+        <a href="{% url 'completetaskactivity' taskid taskactivity.id %}" class="btn btn-secondary btn-sm btn-pad"
+           role="button"><button class="btn btn-secondary btn-sm" id="completeAll" type="button">Complete ALL + Save</button></a>
+    </div>
+    {% csrf_token %}
+</form>
+
+{% endblock %}

@@ -1,66 +1,79 @@
 [
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 1,
     "fields": {
-        "wcType": "PK",
-        "description": "Picking"
+        "name": "Picking"
     }
 },
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 2,
     "fields": {
-        "wcType": "LC",
-        "description": "Lazer Cutting"
+        "name": "Lazer Cutting"
     }
 },
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 3,
     "fields": {
-        "wcType": "PC",
-        "description": "Powder Coating"
+        "name": "Powder Coating"
     }
 },
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 4,
     "fields": {
-        "wcType": "ZN",
-        "description": "Zinc Coating"
+        "name": "Zinc Coating"
     }
 },
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 5,
     "fields": {
-        "wcType": "HT",
-        "description": "Heat Treatment & Sho"
+        "name": "Heat Treatment & Sho"
     }
 },
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 6,
     "fields": {
-        "wcType": "RS",
-        "description": "Brobo Rotary Saw"
+        "name": "Brobo Rotary Saw"
     }
 },
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 7,
     "fields": {
-        "wcType": "SK",
-        "description": "Shakeout"
+        "name": "Shakeout"
     }
 },
 {
-    "model": "ActivitiesApp.workcentertypes",
+    "model": "auth.group",
     "pk": 8,
     "fields": {
-        "wcType": "FD",
-        "description": "Sheet Metal Folding"
+        "name": "Sheet Metal Folding"
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 9,
+    "fields": {
+        "name": "Assembly"
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 10,
+    "fields": {
+        "name": "Welding"
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 11,
+    "fields": {
+        "name": "Hose Cutting"
     }
 }
 ]

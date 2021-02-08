@@ -1,0 +1,48 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block body %}
+{##}
+{#<h1>Articles</h1>#}
+{#<ul>#}
+{#    {% for partHistory in object_list %}#}
+{#        <li>{{ partHistory.partNumber }} - {{ partHistory.stockOnHand }}</li>#}
+{#    {% empty %}#}
+{#        <li>No articles yet.</li>#}
+{#    {% endfor %}#}
+{#</ul>#}
+
+
+<table class="table table-hover" id="selection">
+    <thead>
+    <tr>
+        <th>Part Number</th>
+        <th>Description</th>
+        <th>User</th>
+        <th>Time</th>
+        <th>Update</th>
+        <th>S.O.H</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for part in object_list %}
+
+        <tr data-href="{% url 'info_part' part.id %}"
+                {% if part.obsolete %} class="table-dark" {% endif %}
+                {% if part.low %} class="table-danger" {% endif %}>
+            <td>{{ part.partNumber }}</td>
+            <td>{{ part.description }}</td>
+            <td>{{ part.history_user }}</td>
+            <td>{{ part.history_date }}</td>
+            <td>{{ part.history_change_reason }}</td>
+            <td>{{ part.stockOnHand }}</td>
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

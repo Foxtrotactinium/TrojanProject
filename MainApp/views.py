@@ -20,17 +20,17 @@ def register(request):
                 messages.error(request, f"{msg}: {login_form.error_messages[msg]}")
 
             return render(request=request,
-                          template_name="register.html",
+                          template_name="MainApp/register.html",
                           context={"login_form": login_form})
 
             login_form = UserCreationForm
         return render(request=request,
-                      template_name="register.html",
+                      template_name="MainApp/register.html",
                       context={"login_form": login_form})
     else:
         login_form = UserCreationForm
         return render(request=request,
-                      template_name="register.html",
+                      template_name="MainApp/register.html",
                       context={"login_form": login_form})
 
 
@@ -38,6 +38,10 @@ def logout_request(request):
     logout(request)
     messages.info(request, "Logged out successfully!")
     return redirect("inventory")
+
+
+def composer_test(request):
+    return render(request, "MainApp/composerplayertest.html")
 
 
 def login_request(request):
@@ -60,5 +64,5 @@ def login_request(request):
 
     login_form = AuthenticationForm()
     return render(request=request,
-                  template_name="login.html",
+                  template_name="MainApp/login.html",
                   context={"login_form": login_form})

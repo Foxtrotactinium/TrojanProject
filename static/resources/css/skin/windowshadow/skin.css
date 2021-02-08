@@ -1,0 +1,339 @@
+/* CSS Document
+
+
+Skin DARK grey
+
+/* 
+-------
+BARS
+-------
+*/
+
+
+
+.bar_bottom{
+     
+}
+
+.top_bar{
+                                       
+}
+
+
+#bar_right{
+  
+}
+
+/* ___ magnet CELL INIT ___ */
+
+top_magnetcell_open{
+  /*background-image: url(img/top.jpg);
+  background-repeat: no-repeat;
+  background-position: top;*/
+  height:100px;
+  background-color: blue;
+} 
+
+
+
+
+/* Bottom Bar */
+
+#B_table {
+  width: 1120px; 
+  text-align: left;
+  
+}
+
+
+#B_center {
+  
+    color: #808080;
+}
+
+#B_container {
+  
+    background-image: url(img/modules_bkg.gif);
+    background-repeat: repeat-x;   
+    height:268px;
+    /*margin-right:-10px;*/
+    padding-top:15px; 
+    
+}
+
+#B_title {
+   padding-top:5px;
+   height:33px;
+   font-weight: bold;
+   color: #606060;
+   
+}
+
+
+
+.module {
+   margin-left: 3%;
+   float: left;
+   width: 30%;
+   height: 100%;
+   color: #808080;
+   display:none;
+   
+}
+#leftbloc{
+   width:20%;
+   float:left;
+   border-right: 1px #bfbfbf solid;      
+   background-color: #e0e0e0;
+   height: 100%;
+   margin-right: 0.5%;
+}
+
+
+#Tree_area {
+   width:97%;
+   float:left;
+   background-color: #e0e0e0;
+   height: 86.5%;
+   overflow:auto;
+   margin-left: 3%;
+   margin-top: 3%;
+}
+
+#Tree_area .jspDrag
+{
+	background:  #b5b5b5;            /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+#Tree_area .jspTrack .jspActive,
+.jspTrack .jspHover,
+.jspDrag:hover
+{
+	background: #898989;
+}
+
+#Tree_area .jspTrack
+{
+	background: #e0e0e0;
+}
+
+#Tree_area .jspArrow
+{
+	background-image: url(../../img/ui-icons_222222_256x240.png) no-repeat;
+	background-color:#e0e0e0;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+.logo {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+#Logo_area{
+    width:100%;
+    height:12%;
+    background-color: #d0d0d0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#root{
+     font-size: 11px;
+     line-height: 15px;
+     vertical-align: middle;
+}
+#p-root{
+    height:18px;
+}
+
+#p-capture{
+    height:18px;
+    font-weight: bold;
+         font-size: 11px;;
+}
+#shadow{
+    width:100%;
+   background-image: url(img/shadow_side.gif);
+   background-repeat: repeat-y; 
+    height:100%;
+    margin:0px;
+    padding:0px;
+}
+
+
+
+.content{
+height:100%;
+float:left;
+width:97%;
+padding: 0.5%;
+background-color:white;      	
+}
+
+#3D{
+height:100%;
+}
+
+
+.top_tableNormal{
+   height:80%;
+   width:96%;
+   padding-left: 2%;
+   padding-right: 2%;
+   padding-top: 1%;
+   /*background-color:blue;*/
+}
+
+.top_table_withBottom{
+   height:60%;
+   width:96%;
+   padding-left: 2%;
+   padding-right: 2%;
+   padding-top: 1%;
+}
+
+.normal_3D_object{
+overflow:hidden;
+/*Do not call this (very large size ocx init)*/
+/*position: relative;*/
+height:100%;
+width:100%;
+float:left;
+}
+
+.objectWithLeftBlock{
+overflow:hidden;
+   height:100%;
+width:79.35%;
+float:left;
+}
+
+#rightbuttons li{
+    list-style-position: outside;
+    list-style-type: none;
+  
+    margin: 0;   
+    padding: 0; 
+}
+#rightbuttons {
+    margin: 0;   
+    padding: 0; 
+    width: 30px;
+}
+
+
+#BOM_Table{
+  width: 100%; 
+}
+
+#meta_list tr td{
+  color: #7d7d7d;
+}
+
+
+/* Common */
+
+p{ color: #808080; }
+
+h1, h2, h3{ color: #6c6c6c;}
+
+h1{ font-size: 16px;}
+
+h2{font-size: 14px;}
+
+h3{font-size: 12px; margin-bottom:18px;}
+
+body{
+background-color:#ebebeb;
+min-height: 720px;
+min-width: 960px;
+}
+
+
+/******     BOM tr      ********/
+
+
+.bom_line_pair{
+background-color:#e4e4e4;
+color:grey;
+font-weight:normal;
+}
+
+.bom_line_unpair{
+background-color:#ebebeb;
+color:grey;
+font-weight:normal;
+}
+
+.bom_line_highlight{
+background-color:#77b800;
+color:white;
+font-weight:bolder;
+}
+
+
+
+
+/* Popup */
+#meta_rows_table{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 0.8em;
+color: #686868;
+margin-top: 15px;
+}
+
+.ui-button-text{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 0.8em;
+color: #686868;
+}
+
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset{
+text-align: center;
+float:none;
+}
+
+.ui-dialog {
+padding: 0px;
+background:white;
+}
+
+.ui-widget-header {
+border-left:0px;
+border-right:0px;
+border-top:0px;
+}
+
+#Help_Icones td{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 0.8em;
+color: #686868;
+padding-top:4px;
+padding-left:10px;
+}
+
+#Help_Icones  {
+padding-top:10px;
+}
+
+#meta_rows_table td{
+padding-right: 10px;
+}
+
+.ui-dialog-title{
+color: white;
+  font-size: 14px;
+  font-variant: small-caps;
+}
+
+.ui-widget-header .ui-state-hover {
+  background:none;
+     border-color: white;
+}

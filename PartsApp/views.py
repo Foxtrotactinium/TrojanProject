@@ -1,13 +1,53 @@
 # Create your views here.
-from django.shortcuts import render, redirect
-
-from WorkOrdersApp.forms import TaskForm, TaskPartsModel
-from .models import *
-from .forms import *
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils import timezone
+from django.views.generic import ListView, UpdateView
+from BrotherQL270NW.imageTest import print_label
+from ActivitiesApp.models import ActivityPartModel
+from WorkOrdersApp.forms import TaskForm, TaskPartsModel
+from .forms import *
 
 
 # Create your views here.
+@login_required
+def qr_scan(request):
+    query = request.GET.get('q', None)
+    context = {
+        'header': 'Scanner',
+        'infoText': 'Please scan first'
+    }
+
+    if query is not None and query != '':
+
+        parts = PartModel.objects.filter(partNumber__contains=query)
+
+        if parts.count() == 0:
+            context['infoText'] = f'Nothing found for partNumber "{query}"'
+        elif parts.count() == 1:
+            part = parts.first()
+
+            return redirect('info_part', part.id)  # info_part(request, part.id)
+
+        else:
+            # print(f'{parts=}')
+
+            for part in parts:
+                part.low = part.stockOnHand < part.minimumStock
+            for part in parts:
+                part.supplier = part.getPreferredSupplier()
+
+            context = {
+                'parts': parts,
+                'header': 'Inventory'
+            }
+
+            return render(request, 'PartsApp/partsQrScan.html', context)
+
+    return render(request, 'PartsApp/partsQrScan.html', context)
+
+
 @login_required
 def list_parts(request):
     parts = PartModel.objects.all()
@@ -21,7 +61,25 @@ def list_parts(request):
         'header': 'Inventory'
     }
 
-    return render(request, 'listParts.html', context)
+    return render(request, 'PartsApp/listParts.html', context)
+
+
+class PartHistoryListView(ListView):
+    model = PartModel.history.model
+
+    paginate_by = 100  # if pagination is desired
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
+    # def get_queryset(self):
+    #     model = PartModel.objects.history.all()
+    #     for part in model:
+    #         part.change = part.stockOnHand - part.prev_record.stockOnHand
+    #         print(part.change)
+    #     return model
 
 
 @login_required
@@ -30,39 +88,70 @@ def list_supplier(request):
         'header': 'Supplier List',
         'suppliers': SupplierModel.objects.all(),
     }
-    return render(request, 'listSuppliers.html', context)
+    return render(request, 'PartsApp/listSuppliers.html', context)
 
+def print_inventory_label(request, part_id):
+    part = PartModel.objects.get(id=part_id)
+    print_label(part.partNumber, part.description)
+    return redirect("info_part", part_id)
 
 @login_required
 def info_part(request, part_id):
     part = PartModel.objects.all().filter(pk=part_id).first()
 
     if request.method == "POST":
+        imageform = ImageForm(request.POST, request.FILES, initial={'part': part})
         form1 = PartForm(request.POST, instance=part)
         form2 = PartCommentForm(request.POST, initial={'author': request.user, 'part': part})
         if form1.is_valid():
-            form1.save()
-            return redirect('inventory')
+            part = form1.save()
+            # update_change_reason(part, 'Manual')
         if form2.is_valid():
             form2.save()
-            return redirect('inventory')
+        if imageform.is_valid():
+            imageform.save()
 
-    else:
-        form1 = PartForm(instance=part)
-        form2 = PartCommentForm(initial={'author': request.user, 'part': part})
-        movements = part.history.all()[:10]
-        previouslevel = 0
-        for movement in movements:
-            movements.change = movement.stockOnHand - previouslevel
-            previouslevel = movement.stockOnHand
-        return render(request, 'infoPart.html', {'partform': form1,
-                                                 'partsuppliers': PartSupplierModel.objects.all().filter(
-                                                     part=part.id),
-                                                 'commentForm': form2,
-                                                 'part_id': part.id,
-                                                 'movements': movements,
-                                                 'partcomments': PartCommentModel.objects.all().filter(part=part.id),
-                                                 })
+    imageform = ImageForm(initial={'part': part})
+    image = PartImageModel.objects.filter(part=part)
+    form1 = PartForm(instance=part)
+    form2 = PartCommentForm(initial={'author': request.user, 'part': part})
+    movements = part.history.all().reverse()
+    previouslevel = 0
+    # activities = GroupActivityModel.objects.filter(activity__activitypartmodel__part=part)
+    #
+    # for activity in activities:
+    #     activity.qty = ActivityPartModel.objects.filter(activity=activity.activity, part=part).aggregate(
+    #         Sum("quantity"))
+
+    activities = ActivityPartModel.objects.filter(part=part)
+
+    for movement in movements:
+        movement.change = movement.stockOnHand - previouslevel
+        previouslevel = movement.stockOnHand
+
+    context = {'partform': form1,
+               'part':part,
+               'images': image,
+               'imageform': imageform,
+               'partsuppliers': PartSupplierModel.objects.filter(
+                   part=part.id),
+               'commentForm': form2,
+               'part_id': part.id,
+               'movements': reversed(movements),
+               'activities': activities,
+               'partcomments': PartCommentModel.objects.all().filter(part=part.id),
+               }
+
+    return render(request, 'PartsApp/infoPart.html', context)
+
+
+class SupplierPartNumberUpdate(UpdateView):
+    http_method_names = ['post']
+    model = PartSupplierModel
+    fields = ['supplierPartNumber']
+
+    def get_success_url(self):
+        return reverse('info_part', args=[str(self.object.part.pk)])
 
 
 @login_required
@@ -96,11 +185,11 @@ def info_supplier(request, id):
         for part in supplierparts:
             part.low = part.part.stockOnHand < part.part.minimumStock
             part.ordered = 0
-        supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first(),prefix='supplierform')
+        supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first(), prefix='supplierform')
         taskform = TaskForm(prefix='taskForm')
-        return render(request, 'infoSupplier.html', {'supplierform': supplierform,
-                                                     'supplierparts': supplierparts,
-                                                     'taskform': taskform})
+        return render(request, 'PartsApp/infoSupplier.html', {'supplierform': supplierform,
+                                                              'supplierparts': supplierparts,
+                                                              'taskform': taskform})
 
 
 @login_required
@@ -114,7 +203,7 @@ def add_supplier(request):
 
     else:
         form = SupplierForm()
-        return render(request, 'addSupplier.html', {'supplierForm': form})
+        return render(request, 'PartsApp/addSupplier.html', {'supplierForm': form})
 
 
 @login_required
@@ -124,11 +213,11 @@ def add_part(request):
 
         if form.is_valid():
             form.save()
-            return redirect('inventory')
+            return qr_scan(request)
 
     else:
         form = PartForm()
-        return render(request, 'addPart.html', {'PartForm': form})
+        return render(request, 'PartsApp/addPart.html', {'PartForm': form})
 
 
 @login_required
@@ -150,4 +239,4 @@ def add_supplier_to_part(request, part_id):
                    'part': part,
                    'suppliers': suppliers,
                    }
-    return render(request, 'addPartSupplier.html', context)
+    return render(request, 'PartsApp/addPartSupplier.html', context)

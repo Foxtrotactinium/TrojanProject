@@ -1,0 +1,36 @@
+{% extends "includes/base.html" %}
+
+{% block body %}
+<br>
+<div class="container-fluid">
+    <a href="{% url 'addactivity' %}" class="btn btn-secondary btn-sm btn-pad" role="button">New Activity</a>
+</div>
+<br>
+<form class="form-inline">
+    <input class="form-control" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+</form>
+<br>
+<table class="table table-hover" id="selection">
+    <thead>
+    <tr>
+        <th>Activity</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    {% for activity in activities %}
+
+    <tr data-href="{% url 'activityinformation' activity.id %}">
+        <td>{{ activity.activityName }}</td>
+        <td>{{ activity.description }}</td>
+        <td>{{ activity.workCenter.name }}</td>
+    </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

@@ -10,20 +10,14 @@ const btnScanQR = document.getElementById("btn-scan-qr");
 
 let scanning = false;
 
-// window.qrcode.debug=true;
+canvasElement.hidden = true;
 
-// console.log(qrcode);
- canvasElement.hidden = true;
-
-btnScanQR.onclick = () =>
-{
+btnScanQR.onclick = () => {
     console.log("CLICKED");
     navigator.mediaDevices
         .getUserMedia({video: {facingMode: "environment"}})
         .then(function (stream) {
             scanning = true;
-            // qrResult.hidden = true;
-            // btnScanQR.hidden = true;
             canvasElement.hidden = false;
             video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
             video.srcObject = stream;
@@ -52,17 +46,16 @@ function scan() {
 
 qrcode.callback = (res) => {
     if (res) {
-        // console.log(res);
-        qrResult.value = res;
-        // outputData.innerText = res;
+        // qrResult.value = res;
+
         scanning = false;
 
         video.srcObject.getTracks().forEach(track => {
             track.stop();
         });
 
-        // qrResult.hidden = false;
-        // btnScanQR.hidden = false;
         canvasElement.hidden = true;
+
+        window.location = window.location.origin + '?q='+res;
     }
 };
