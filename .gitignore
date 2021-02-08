@@ -137,3 +137,4 @@ PartsApp/migrations/0001_initial.py
 ActivitiesApp/migrations/0001_initial.py
 ActivitiesApp/migrations/0003_auto_20201012_1219.py
 ActivitiesApp/migrations/0002_groupactivitymodel_order.py
+media/
