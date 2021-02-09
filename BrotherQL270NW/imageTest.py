@@ -11,7 +11,17 @@ def insert_newlines(string, every=30):
 def print_label(partNo, desc):
     out = Image.new("RGB", (696, 271), (255, 255, 255))
 
-    fnt = ImageFont.truetype("arial.ttf", 100)
+    fontsize = 1  # starting font size
+    fnt = ImageFont.truetype("arial.ttf", fontsize)
+    while fnt.getsize(partNo)[0] < 450:
+        # iterate until the text size is just larger than the criteria
+        fontsize += 1
+        fnt = ImageFont.truetype("arial.ttf", fontsize)
+
+    # optionally de-increment to be sure it is less than criteria
+    fontsize -= 1
+    fnt = ImageFont.truetype("arial.ttf", fontsize)
+
     fnt_small = ImageFont.truetype("arial.ttf", 30)
 
     d = ImageDraw.Draw(out)

@@ -158,7 +158,7 @@ class SupplierPartNumberUpdate(UpdateView):
 def info_supplier(request, id):
     supplierparts = PartSupplierModel.objects.filter(supplier=id)
     if request.method == "POST":
-        if 'supplier' in request.POST:
+        if 'supplierform-supplierName' in request.POST:
             supplierform = SupplierForm(request.POST, instance=SupplierModel.objects.filter(pk=id),
                                         prefix='supplierform')
             if supplierform.is_valid():

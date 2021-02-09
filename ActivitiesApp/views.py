@@ -80,8 +80,6 @@ def activity_information(request, id):
                'activity': activity,
                'history': ActivityPartModel.history.filter(activity=activity)
                }
-    print(activity)
-    print(ActivityPartModel.history.model.objects.all())
     return render(request, 'ActivitiesApp/infoActivity.html', context)
 
 
