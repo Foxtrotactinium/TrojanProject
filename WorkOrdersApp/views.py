@@ -7,7 +7,7 @@ from django.views.generic import UpdateView, DeleteView, CreateView
 
 from ActivitiesApp.models import GroupActivityModel, ActivityPartModel, ActivityModel, GroupModel, instruction
 from PartsApp.models import PartModel
-from .forms import TaskForm, TaskActivityPartsForm
+from .forms import TaskForm, TaskActivityPartsForm, TaskActivitiesForm
 from .models import TaskModel, TaskPartsModel, TaskActivityModel, PartImageModel
 from django.contrib.auth.decorators import login_required
 
@@ -127,33 +127,6 @@ def info_task_parts(request, taskid, taskactivityid):
         part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
         part.low = part.part.stockOnHand < part.part.minimumStock
 
-    # for (a_part, t_part) in zip(activity_part_required, taskPartsRequired):
-    #     t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
-    #     t_part.extra = a_part
-    #
-    # for (a_part, t_part) in zip(activity_part_produced, taskPartsProduced):
-    #     t_part.thumbnail = PartImageModel.objects.filter(part=t_part.part).first()
-    #     t_part.extra = a_part
-
-
-    # taskPartsRequired = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
-    #     .filter(increment=False)
-    # for part in taskPartsRequired:
-    #     part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
-    #     .order_by('id')
-    #     required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
-    #
-    #
-    #     ActivityPartModel.objects.filter(activity=taskactivity.activity).filter(part=part).order_by('id')
-    #
-    #     part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivity).first()
-    #
-    # taskPartsProduced = TaskPartsModel.objects.filter(task=taskid, activity=taskactivityid) \
-    #     .filter(increment=True)
-    # for part in taskPartsProduced:
-    #     part.thumbnail = PartImageModel.objects.filter(part=part.part).first()
-    #     part.extra = ActivityPartModel.objects.filter(part=part.part).filter(activity__activityName=taskactivityid).first()
-
     context = {'header': 'Kits',
                'producedparts': taskPartsProduced,
                'requiredparts': taskPartsRequired,
@@ -210,7 +183,6 @@ def info_task_part_include(request, taskid, taskactivityid, increment):
 
     if request.method == 'POST':
         form = TaskActivityPartsForm(request.POST)
-        print(form.errors)
         if form.is_valid():
             form.save()
             return info_task_parts(request, taskid, taskactivityid)
@@ -276,41 +248,74 @@ class TaskPartDelete(DeleteView):
         return reverse('infotaskparts', args=[str(self.object.task.pk), str(self.object.activity.pk)])
 
 
-class TaskActivityCreate(CreateView):
-    model = TaskActivityModel
-    fields = ('activity',)
+# class TaskActivityCreate(CreateView):
+#     model = TaskActivityModel
+#     fields = ('activity',)
+#
+#     # def get_initial(self):
+#     #     task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
+#     #     return {'task': task}
+#
+#     def form_valid(self, form):
+#         task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
+#         form.instance.task = task
+#
+#         tempactivity = form.save()
+#
+#         activity = tempactivity.activity
+#
+#         required_list = ActivityPartModel.objects.filter(activity=activity)
+#         for required in required_list:
+#             temp = TaskPartsModel(activity=tempactivity,
+#                                   part=required.part,
+#                                   task=task,
+#                                   increment=required.increment,
+#                                   quantityRequired=required.quantity,
+#                                   order=required.order,
+#                                   extra=required.location,
+#                                   quantityCompleted=0,
+#                                   )
+#             temp.save()
+#
+#         # return super(TaskActivityCreate, self).form_valid(form)
+#         return http.HttpResponseRedirect(reverse('infotaskactivities', args=[str(task.pk)]))
+#         # return reverse('infotaskactivities', args=[str(task.pk)])
+#
+#     # def get_success_url(self):
+#     #     return reverse('infotaskactivities', args=[str(self.object.task.pk)])
 
-    # def get_initial(self):
-    #     task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
-    #     return {'task': task}
+def info_task_activity_include(request, taskid):
+    task = get_object_or_404(TaskModel, id=taskid)
+    taskactivities = TaskActivityModel.objects.filter(task=task)
+    activities = ActivityModel.objects.all()
 
-    def form_valid(self, form):
-        task = get_object_or_404(TaskModel, id=self.kwargs.get('taskid'))
-        form.instance.task = task
+    if request.method == 'POST':
+        form = TaskActivitiesForm(request.POST)
+        if form.is_valid():
+            tempactivity = form.save()
+            activity = tempactivity.activity
+            required_list = ActivityPartModel.objects.filter(activity=activity)
+            for required in required_list:
+                temp = TaskPartsModel(activity=tempactivity,
+                                      part=required.part,
+                                      task=task,
+                                      increment=required.increment,
+                                      quantityRequired=required.quantity,
+                                      order=required.order,
+                                      extra=required.location,
+                                      quantityCompleted=0,
+                                      )
+                temp.save()
+            return info_task_activities(request, taskid)
 
-        tempactivity = form.save()
+    initial = {'task': task}
+    form = TaskActivitiesForm(initial=initial)
+    context = {"activities": activities,
+               "activitiesform": form,
+               "taskactivities": taskactivities,
+               "task": task}
 
-        activity = tempactivity.activity
-
-        required_list = ActivityPartModel.objects.filter(activity=activity)
-        for required in required_list:
-            temp = TaskPartsModel(activity=tempactivity,
-                                  part=required.part,
-                                  task=task,
-                                  increment=required.increment,
-                                  quantityRequired=required.quantity,
-                                  order=required.order,
-                                  extra=required.location,
-                                  quantityCompleted=0,
-                                  )
-            temp.save()
-
-        # return super(TaskActivityCreate, self).form_valid(form)
-        return http.HttpResponseRedirect(reverse('infotaskactivities', args=[str(task.pk)]))
-        # return reverse('infotaskactivities', args=[str(task.pk)])
-
-    # def get_success_url(self):
-    #     return reverse('infotaskactivities', args=[str(self.object.task.pk)])
+    return render(request, 'WorkOrdersApp/addTaskActivity.html', context)
 
 def complete_task_activity(request, taskid, taskactivityid):
     taskactivity = get_object_or_404(TaskActivityModel, id=taskactivityid)

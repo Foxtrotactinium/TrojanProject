@@ -60,3 +60,24 @@ class TaskActivityPartsForm(forms.ModelForm):
     class Meta:
         model = TaskPartsModel
         fields = '__all__'
+
+class TaskActivitiesForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TaskActivitiesForm, self).__init__(*args, **kwargs)
+
+        # If you pass FormHelper constructor a form instance
+        # It builds a default layout with all its fields
+        self.helper = FormHelper(self)
+        self.fields['finishTime'].required = False
+        self.helper.layout = Layout(
+            Field('task', type='hidden'),
+            Field('activity', css_class='form-control'),
+            Field('startTime', type='hidden'),
+            Field('finishTime', type='hidden'),
+            HTML('<br>'),
+            Submit('save', 'Save')
+        )
+
+    class Meta:
+        model = TaskActivityModel
+        fields = '__all__'

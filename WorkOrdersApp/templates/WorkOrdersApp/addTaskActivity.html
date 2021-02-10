@@ -1,0 +1,67 @@
+{% extends "includes/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block body%}
+
+
+<div class="row">
+    <div class="col-sm">
+        <a href="{% url 'tasks' %}" class="badge badge-light">Tasks</a>>
+        <a href="{% url 'infotaskactivities' task.id %}" class="badge badge-light">{{ task.taskName }}</a>
+
+        <p class="font-weight-bold">Include Activity</p>
+        <br>
+        <br>
+        <form class="form-inline">
+            <input class="form-control" type="text" id="searchBar" onkeyup="search()" placeholder="Search" aria-label="Search">
+        </form>
+        <br>
+        <br>
+        <table class="table table-hover" id="selection">
+            <thead>
+            <tr>
+                <th>Activity</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for activity in activities %}
+            <tr data-aid="{{ activity.id }}">
+                <td>{{ activity.activityName }}</td>
+                <td>{{ activity.description }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <form method="POST">
+                {% csrf_token %}
+                {% crispy activitiesform %}
+            </form>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Activity</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for activity in taskactivities %}
+            <tr>
+                <td>{{ activity.activity.activityName }}</td>
+                <td>{{ activity.activity.description }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+
+

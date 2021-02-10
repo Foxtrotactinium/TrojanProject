@@ -6,7 +6,7 @@ urlpatterns = [
     path('tasks/', task_list, name='tasks'),
     path('task/addtask/', add_task, name='addtask'),
     path('task/<int:taskid>/', info_task_activities, name='infotaskactivities'),
-    path('task/<int:taskid>/addTaskActivity', TaskActivityCreate.as_view(), name='addtaskactivity'),
+    path('task/<int:taskid>/addTaskActivity', info_task_activity_include, name='addtaskactivity'),
     # path('task/addTaskActivity', TaskActivityCreate.as_view(), name='addtaskactivity'),
     path('task/deleteactivity/<int:pk>', TaskActivityDelete.as_view(), name='deletetaskactivity'),
 
