@@ -213,7 +213,9 @@ def add_part(request):
 
         if form.is_valid():
             form.save()
-            return qr_scan(request)
+            partnumber = form.cleaned_data['partNumber']
+            part_id = PartModel.objects.get(partNumber__exact=partnumber)
+            return info_part(request, part_id.id)
 
     else:
         form = PartForm()
