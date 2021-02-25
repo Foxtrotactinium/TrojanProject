@@ -71,9 +71,9 @@ def info_task_activities(request, taskid):
     task = get_object_or_404(TaskModel, id=taskid)
     activities = TaskActivityModel.objects.filter(task=task, activity__workCenter__in=request.user.groups.all())
 
-    if activities.count() == 1:
-        activity = activities.first()
-        return info_task_parts(request, taskid, activity.id)
+    # if activities.count() == 1:
+    #     activity = activities.first()
+    #     return info_task_parts(request, taskid, activity.id)
 
     for activity in activities:
         activity.complete = activity.isComplete()
