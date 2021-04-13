@@ -52,7 +52,7 @@
 
                 {% csrf_token %}
                 <input type="text" value="{{ part.serial }}" name="serial"
-                       id="id_serial" class="input-group col-md-5">
+                       id="id_serial" class="input-group col-md-6">
                 <br/>
 
                 <input type="submit" class="btn btn-warning" value="Update Serial Number">
@@ -62,7 +62,7 @@
             <form class="silent_form" method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
-                       id="id_quantityCompleted" class="input-group col-md-5">
+                       id="id_quantityCompleted" class="input-group col-md-6">
                 <br/>
 
                 <input type="submit" class="btn btn-primary" value="Complete" onclick="
@@ -111,7 +111,7 @@
 
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityRequired }}" name="quantityRequired"
-                       id="id_quantityRequired" class="input-group col-md-3">
+                       id="id_quantityRequired" class="input-group col-md-4">
                 <br/>
 
                 <input type="submit" class="btn btn-warning" value="Amend">
@@ -121,7 +121,7 @@
             <form class="silent_form" method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
-                       id="id_quantityCompleted" class="input-group col-md-3">
+                       id="id_quantityCompleted" class="input-group col-md-4">
                 <br/>
 
                 <input type="submit" class="btn btn-primary" value="Complete" onclick="

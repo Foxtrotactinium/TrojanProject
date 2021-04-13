@@ -39,6 +39,6 @@ def print_label(partNo, desc):
 
     out.save('tempPrint.png')
 
-    os.system('brother_ql -p tcp://172.16.10.60:9100 -m QL-720NW print -l 62x29 tempPrint.png')
+    os.system('brother_ql -p tcp://172.16.10.58:9100 -m QL-720NW print -l 62x29 tempPrint.png')
 
     os.remove('tempPrint.png')
