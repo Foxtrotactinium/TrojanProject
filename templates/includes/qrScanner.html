@@ -4,6 +4,7 @@
         width: calc(100% - 20px);
         max-width: 800px;
     }
+
 </style>
 
 <br>
@@ -11,9 +12,21 @@
     <input class="form-control mr-sm-2" type="text" id="q" name="q" placeholder="Search"
            aria-label="Search">
     <input type="submit"/>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="partnumbercheck" value="1">
+        <label class="form-check-label" for="inlineCheckbox1">Part Number</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="descriptioncheck" value="1">
+        <label class="form-check-label" for="inlineCheckbox2">Description</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="locationcheck" value="1">
+        <label class="form-check-label" for="inlineCheckbox3">Location</label>
+    </div>
 </form>
 <br>
-<button id="btn-scan-qr" class="btn btn-primary">Start Scanning</button>
+<button id="btn-scan-qr" class="btn btn-primary d-lg-none">Start Scanning</button>
 
 <p id="test"></p>
 

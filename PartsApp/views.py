@@ -2,6 +2,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.db.models import Q
 from django.utils import timezone
 from django.views.generic import ListView, UpdateView
 from BrotherQL270NW.imageTest import print_label
@@ -14,13 +15,17 @@ from .forms import *
 @login_required
 def qr_scan(request):
     query = request.GET.get('q', None)
+    # filter = request.GET.keys()
     context = {
         'header': 'Scanner',
         'infoText': 'Please scan first'
     }
 
+    # print(request.GET.lists())
     if query is not None and query != '':
-
+        # parts = PartModel.objects.filter(
+        #     Q(partNumber__contains=query) | Q(description__contains=query))
+        # print(parts)
         parts = PartModel.objects.filter(partNumber__contains=query)
 
         if parts.count() == 0:
@@ -90,10 +95,12 @@ def list_supplier(request):
     }
     return render(request, 'PartsApp/listSuppliers.html', context)
 
+
 def print_inventory_label(request, part_id):
     part = PartModel.objects.get(id=part_id)
     print_label(part.partNumber, part.description)
     return redirect("info_part", part_id)
+
 
 @login_required
 def info_part(request, part_id):
@@ -130,7 +137,7 @@ def info_part(request, part_id):
         previouslevel = movement.stockOnHand
 
     context = {'partform': form1,
-               'part':part,
+               'part': part,
                'images': image,
                'imageform': imageform,
                'partsuppliers': PartSupplierModel.objects.filter(
