@@ -15,18 +15,25 @@ from .forms import *
 @login_required
 def qr_scan(request):
     query = request.GET.get('q', None)
-    # filter = request.GET.keys()
+    fields = request.GET.keys()
     context = {
         'header': 'Scanner',
         'infoText': 'Please scan first'
     }
-
+    print(fields)
     # print(request.GET.lists())
     if query is not None and query != '':
-        # parts = PartModel.objects.filter(
-        #     Q(partNumber__contains=query) | Q(description__contains=query))
+        if "partnumbercheck" in fields:
+            parts = PartModel.objects.filter(
+                Q(partNumber__contains=query))
+        if "descriptioncheck" in fields:
+            parts = PartModel.objects.filter(
+                Q(description__contains=query))
+        if "locationcheck" in fields:
+            parts = PartModel.objects.filter(
+                Q(location__contains=query))
         # print(parts)
-        parts = PartModel.objects.filter(partNumber__contains=query)
+        # parts = PartModel.objects.filter(partNumber__contains=query)
 
         if parts.count() == 0:
             context['infoText'] = f'Nothing found for partNumber "{query}"'
