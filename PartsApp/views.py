@@ -1,4 +1,6 @@
 # Create your views here.
+from functools import reduce
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -14,30 +16,37 @@ from .forms import *
 # Create your views here.
 @login_required
 def qr_scan(request):
-    query = request.GET.get('q', None)
+    searchQuery = request.GET.get('q', None)
     fields = request.GET.keys()
     context = {
         'header': 'Scanner',
         'infoText': 'Please scan first'
     }
-    print(fields)
-    # print(request.GET.lists())
-    if query is not None and query != '':
-        if "partnumbercheck" in fields:
-            parts = PartModel.objects.filter(
-                Q(partNumber__contains=query))
-        if "descriptioncheck" in fields:
-            parts = PartModel.objects.filter(
-                Q(description__contains=query))
-        if "locationcheck" in fields:
-            parts = PartModel.objects.filter(
-                Q(location__contains=query))
-        # print(parts)
-        # parts = PartModel.objects.filter(partNumber__contains=query)
+    if searchQuery is not None and searchQuery != '':
 
-        if parts.count() == 0:
-            context['infoText'] = f'Nothing found for partNumber "{query}"'
+        parts = None
+        query = Q()
+        if 'partnumbercheck' in fields:
+            query.add( Q(partNumber__contains=searchQuery), Q.OR)
+
+        if 'descriptioncheck' in fields:
+            query.add(Q(description__contains=searchQuery), Q.OR)
+
+        if 'locationcheck' in fields:
+            query.add(Q(location__contains=searchQuery), Q.OR)
+
+
+
+        if len(query) == 0:
+            context['infoText'] = f'Nothing found, please select a checkbox'
+            return render(request, 'PartsApp/partsQrScan.html', context)
+
+        parts = PartModel.objects.filter(query)
+
+        if parts == None or parts.count() == 0:
+            context['infoText'] = f'Nothing found for partNumber "{searchQuery}"'
         elif parts.count() == 1:
+
             part = parts.first()
 
             return redirect('info_part', part.id)  # info_part(request, part.id)
