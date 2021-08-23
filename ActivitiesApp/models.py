@@ -2,9 +2,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 # from django.contrib.postgres.fields import ArrayField
 from PartsApp.models import PartModel
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from simple_history.models import HistoricalRecords
-from django.contrib.auth.models import Group
+
 
 # class WorkCenterTypes(models.Model):
 #     wcType = models.CharField(max_length=2)
