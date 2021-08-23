@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.views.generic import ListView, UpdateView
 from BrotherQL270NW.imageTest import print_label
 from ActivitiesApp.models import ActivityPartModel
+from WorkOrdersApp.models import TaskModel
 from WorkOrdersApp.forms import TaskForm, TaskPartsModel
 from .forms import *
 
@@ -137,6 +138,7 @@ def info_part(request, part_id):
     imageform = ImageForm(initial={'part': part})
     image = PartImageModel.objects.filter(part=part)
     form1 = PartForm(instance=part)
+    taskform = LowStockTaskForm(instance=part)
     form2 = PartCommentForm(initial={'author': request.user, 'part': part})
     movements = part.history.all().reverse()
     previouslevel = 0
@@ -167,6 +169,25 @@ def info_part(request, part_id):
 
     return render(request, 'PartsApp/infoPart.html', context)
 
+
+@login_required
+def low_stock_task(request, part_id):
+    tasks = TaskModel.objects.all()
+    part = PartModel.objects.filter(pk=part_id)
+    if request.method == "POST":
+        form = LowStockTaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+        return redirect('info_part', part_id)
+
+    else:
+        form = LowStockTaskForm(initial={'part': part_id,})
+        context = {'LowStockTaskForm': form,
+                   'part': part,
+                   'tasks': tasks,
+                   }
+    return render(request, 'PartsApp/lowstocktask.html', context)
 
 class SupplierPartNumberUpdate(UpdateView):
     http_method_names = ['post']

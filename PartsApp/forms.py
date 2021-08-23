@@ -29,7 +29,7 @@ class PartForm(forms.ModelForm):
                         Button('add stock', '+ / -', css_class="btn btn-success h-50 align-self-center"),
 
                         css_class="input-group-append"),
-                    css_class='input-group col-md-2'),
+                    css_class='input-group col-md-3'),
                 Column(
                     Field('minimumStock', css_class='form-control', required=True),
                     css_class='col-md-2'
@@ -52,6 +52,7 @@ class PartForm(forms.ModelForm):
                 ),
                 css_class='form-row form_group'
             ),
+            Field('task', css_class='form-control', disabled=True),
             HTML('<br>'),
             Submit('save', 'Save')
         )
@@ -60,6 +61,22 @@ class PartForm(forms.ModelForm):
         model = PartModel
         fields = '__all__'
 
+class LowStockTaskForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(LowStockTaskForm, self).__init__(*args, **kwargs)
+
+        # If you pass FormHelper constructor a form instance
+        # It builds a default layout with all its fields
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            Field('partNumber', type='hidden'),
+            Field('task', css_class='form-control'),
+            Submit('submit', 'Add Task')
+        )
+
+    class Meta:
+        model = PartModel
+        fields = '__all__'
 
 class SupplierForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

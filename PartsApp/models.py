@@ -20,7 +20,7 @@ class PartModel(models.Model):
     leadtime = models.CharField(max_length=50)
     weight = models.IntegerField(blank=True)
     obsolete = models.BooleanField(default=False)
-    # task = models.ForeignKey("WorkOrdersApp.TaskModel", on_delete=models.PROTECT, blank=True)
+    task = models.ForeignKey("WorkOrdersApp.TaskModel", on_delete=models.PROTECT, null=True) 
     history = HistoricalRecords()
 
     def getPreferredSupplier(self):
