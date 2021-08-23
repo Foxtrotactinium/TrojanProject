@@ -7,6 +7,8 @@ from django.utils.html import mark_safe
 
 
 # Inventory Model with fields
+
+
 class PartModel(models.Model):
     partNumber = models.CharField(max_length=50, blank=False, unique=True)
     description = models.CharField(max_length=200)
@@ -18,6 +20,7 @@ class PartModel(models.Model):
     leadtime = models.CharField(max_length=50)
     weight = models.IntegerField(blank=True)
     obsolete = models.BooleanField(default=False)
+    # task = models.ForeignKey("WorkOrdersApp.TaskModel", on_delete=models.PROTECT, blank=True)
     history = HistoricalRecords()
 
     def getPreferredSupplier(self):
