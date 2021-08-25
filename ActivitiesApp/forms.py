@@ -3,7 +3,7 @@ from django.forms import HiddenInput
 
 from .models import ActivityModel, ActivityPartModel, GroupModel, GroupActivityModel, instruction
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Hidden
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Hidden, Column
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 
@@ -15,11 +15,14 @@ class activity_form(forms.ModelForm):
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            Field('activityName', css_class='form-control'),
+            Row(
+                Column(
+            Field('activityName', css_class='form-control'), css_class='col-md-6'
+                ),
+                Column('workCenter'),
+                Column(Submit('save', 'Save'), css_class="btn col-md-2")
+            ),
             Field('description', css_class='form-control'),
-            'workCenter',
-            HTML('<br>'),
-            Submit('save', 'Save')
         )
 
     class Meta:

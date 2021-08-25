@@ -52,7 +52,7 @@ class PartForm(forms.ModelForm):
                 ),
                 css_class='form-row form_group'
             ),
-            Field('task', css_class='form-control', disabled=True),
+            Field('group', css_class='form-control', disabled=True),
             HTML('<br>'),
             Submit('save', 'Save')
         )
@@ -61,17 +61,17 @@ class PartForm(forms.ModelForm):
         model = PartModel
         fields = '__all__'
 
-class LowStockTaskForm(forms.ModelForm):
+class LowStockGroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(LowStockTaskForm, self).__init__(*args, **kwargs)
+        super(LowStockGroupForm, self).__init__(*args, **kwargs)
 
         # If you pass FormHelper constructor a form instance
         # It builds a default layout with all its fields
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
             Field('partNumber', type='hidden'),
-            Field('task', css_class='form-control'),
-            Submit('submit', 'Add Task')
+            Field('group', css_class='form-control'),
+            Submit('submit', 'Add Group')
         )
 
     class Meta:

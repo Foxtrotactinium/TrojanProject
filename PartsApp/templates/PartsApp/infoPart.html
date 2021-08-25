@@ -15,7 +15,7 @@
                 {% csrf_token %}
                 {% crispy partform %}
             </form>
-            <a href="{% url 'lowstocktask' part_id %}" ><button>Task Selection</button></a>
+            <a href="{% url 'lowstockgroup' part_id %}" ><button>Group Selection</button></a>
             <br>
             <table class="table table-hover">
                 <tbody>

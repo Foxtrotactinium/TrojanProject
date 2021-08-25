@@ -7,6 +7,7 @@ from django.utils.html import mark_safe
 
 
 # Inventory Model with fields
+from ActivitiesApp.models import GroupModel
 
 
 class PartModel(models.Model):
@@ -20,7 +21,7 @@ class PartModel(models.Model):
     leadtime = models.CharField(max_length=50)
     weight = models.IntegerField(blank=True)
     obsolete = models.BooleanField(default=False)
-    task = models.ForeignKey("WorkOrdersApp.TaskModel", on_delete=models.PROTECT, null=True) 
+    group = models.ForeignKey("ActivitiesApp.GroupModel", on_delete=models.PROTECT, blank=True, null=True)
     history = HistoricalRecords()
 
     def getPreferredSupplier(self):

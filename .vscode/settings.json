@@ -1,0 +1,4 @@
+{
+    "workspace"
+    "python.envFile": "${workspaceFolder}/.venv"
+}

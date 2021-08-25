@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 # from django.contrib.postgres.fields import ArrayField
-from PartsApp.models import PartModel
+# from PartsApp.models import PartModel
 from django.contrib.auth.models import User, Group
 from simple_history.models import HistoricalRecords
 
@@ -45,7 +45,7 @@ class ActivityModel(models.Model):
 
 class ActivityPartModel(models.Model):
     activity = models.ForeignKey(ActivityModel, on_delete=models.CASCADE)
-    part = models.ForeignKey(PartModel, on_delete=models.CASCADE)
+    part = models.ForeignKey("PartsApp.PartModel", on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     increment = models.BooleanField(default=False)  # TRUE/FALSE used to represent parts ActivityPartModel/produced
     order = models.IntegerField(blank=False, default=100_000)

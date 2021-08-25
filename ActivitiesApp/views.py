@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import UpdateView, DeleteView
 from simple_history.utils import update_change_reason
 
-from PartsApp.models import PartImageModel
+from PartsApp.models import PartImageModel, PartModel
 from .models import *
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
@@ -102,7 +102,7 @@ def add_required_part_to_activity(request, id, increment):
 
     if request.method == "POST":
         form = required_part_form(request.POST)
-
+        print(form)
         if form.is_valid():
             form.save()
         return render(request, 'ActivitiesApp/addActivityPart.html', context)
