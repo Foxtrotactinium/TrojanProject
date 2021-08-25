@@ -138,7 +138,7 @@ def info_part(request, part_id):
     imageform = ImageForm(initial={'part': part})
     image = PartImageModel.objects.filter(part=part)
     form1 = PartForm(instance=part)
-    taskform = LowStockTaskForm(instance=part)
+    # taskform = LowStockTaskForm(instance=part)
     form2 = PartCommentForm(initial={'author': request.user, 'part': part})
     movements = part.history.all().reverse()
     previouslevel = 0
@@ -171,23 +171,25 @@ def info_part(request, part_id):
 
 
 @login_required
-def low_stock_task(request, part_id):
-    tasks = TaskModel.objects.all()
+def low_stock_group(request, part_id):
+    groups = GroupModel.objects.all()
     part = PartModel.objects.filter(pk=part_id)
     if request.method == "POST":
-        form = LowStockTaskForm(request.POST)
+        form = LowStockGroupForm(request.POST)
+        print('======'*2)
+        print(form)
         if form.is_valid():
             form.save()
-
         return redirect('info_part', part_id)
 
     else:
-        form = LowStockTaskForm(initial={'part': part_id,})
-        context = {'LowStockTaskForm': form,
+        form = LowStockGroupForm(initial={'PartModel': part,})
+        # print(form)
+        context = {'LowStockGroupForm': form,
                    'part': part,
-                   'tasks': tasks,
+                   'groups': groups,
                    }
-    return render(request, 'PartsApp/lowstocktask.html', context)
+    return render(request, 'PartsApp/lowstockgroup.html', context)
 
 class SupplierPartNumberUpdate(UpdateView):
     http_method_names = ['post']
