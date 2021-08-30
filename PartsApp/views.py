@@ -175,16 +175,14 @@ def low_stock_group(request, part_id):
     groups = GroupModel.objects.all()
     part = PartModel.objects.filter(pk=part_id)
     if request.method == "POST":
-        form = LowStockGroupForm(request.POST)
-        print('======'*2)
-        print(form)
+        form = LowStockGroupForm(request.POST,initial={'partNumber': part_id},instance=part.first())
         if form.is_valid():
             form.save()
+
         return redirect('info_part', part_id)
 
     else:
-        form = LowStockGroupForm(initial={'PartModel': part,})
-        # print(form)
+        form = LowStockGroupForm(instance=part.first())
         context = {'LowStockGroupForm': form,
                    'part': part,
                    'groups': groups,

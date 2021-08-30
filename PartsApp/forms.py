@@ -76,7 +76,8 @@ class LowStockGroupForm(forms.ModelForm):
 
     class Meta:
         model = PartModel
-        fields = '__all__'
+        fields = ['partNumber', 'group'] 
+        # fields = '__all__'
 
 class SupplierForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

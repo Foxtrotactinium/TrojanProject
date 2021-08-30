@@ -3,11 +3,13 @@ from django.db import models, transaction
 from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
 from django.utils.html import mark_safe
-
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 # Inventory Model with fields
-from ActivitiesApp.models import GroupModel
+# from ActivitiesApp.models import GroupModel, GroupActivityModel, ActivityPartModel
+# from WorkOrdersApp.models import TaskModel, TaskActivityModel, TaskPartsModel
 
 
 class PartModel(models.Model):
@@ -32,6 +34,34 @@ class PartModel(models.Model):
 
     def __str__(self):
         return self.partNumber
+
+# @receiver(post_save, sender=PartModel)
+# def lowstocktaskcreate(sender,instance,created,**kwargs):
+#     group = instance.group
+#     task = TaskModel(taskName='Trojan',
+#                     fleetNumber='Restock',
+#                     group=group)
+#     print(task)
+#     # task.save()
+#     groupactivitylist = ActivitiesApp.GroupActivityModel.objects.filter(group=group).order_by('order')
+
+#     for groupactivity in groupactivitylist:
+#         tempactivity = TaskActivityModel(task=task,
+#                                             activity=groupactivity.activity)
+#         tempactivity.save()
+#         required_list = ActivitiesApp.ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
+#         for required in required_list:
+#             temp = WorkOrdersApp.TaskPartsModel(activity=tempactivity,
+#                                     part=required.part,
+#                                     task=task,
+#                                     increment=required.increment,
+#                                     quantityRequired=required.quantity,
+#                                     order=required.order,
+#                                     extra=required.location,
+#                                     quantityCompleted=0,
+#                                  )
+#             print(temp) 
+#             # temp.save()
 
 
 class SupplierModel(models.Model):

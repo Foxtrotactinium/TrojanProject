@@ -1,4 +1,4 @@
 {
-    "workspace"
-    "python.envFile": "${workspaceFolder}/.venv"
+    "python.envFile": "./venv",
+    "python.formatting.provider": "autopep8",
 }

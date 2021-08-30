@@ -20,6 +20,7 @@ def task_list(request):
     # activeList = [task for task in tasks if not task.isComplete()]
     # completedList = [task for task in tasks if task.isComplete()]
     activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
+    activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
     completedList = [task for task in tasks if task.userGroupCompleted(request.user.groups.all())]
 
     return render(request, 'WorkOrdersApp/listTasks.html', {'header': 'Outstanding Tasks',
