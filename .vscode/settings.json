@@ -1,4 +1,6 @@
 {
     "python.envFile": "./venv",
     "python.formatting.provider": "autopep8",
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
 }

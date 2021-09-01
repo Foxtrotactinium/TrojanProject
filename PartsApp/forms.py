@@ -52,13 +52,14 @@ class PartForm(forms.ModelForm):
                 ),
                 css_class='form-row form_group'
             ),
-            Field('group', css_class='form-control', disabled=True),
-            HTML('<br>'),
+            Field('group', css_class='form-control'),
+            HTML('<br>'), 
             Submit('save', 'Save')
         )
 
     class Meta:
-        model = PartModel
+        model = PartModel        
+        # fields = ['partNumber','description','location','stockOnHand','minimumStock','reorderQtys','boxSize','leadtime','weight','obsolete','group']
         fields = '__all__'
 
 class LowStockGroupForm(forms.ModelForm):

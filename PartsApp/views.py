@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.views.generic import ListView, UpdateView
 from BrotherQL270NW.imageTest import print_label
-from ActivitiesApp.models import ActivityPartModel
+from ActivitiesApp.models import ActivityPartModel, GroupModel
 from WorkOrdersApp.models import TaskModel
 from WorkOrdersApp.forms import TaskForm, TaskPartsModel
 from .forms import *
@@ -121,9 +121,14 @@ def print_inventory_label(request, part_id):
 
 @login_required
 def info_part(request, part_id):
+    # print("working")
     part = PartModel.objects.all().filter(pk=part_id).first()
 
     if request.method == "POST":
+        # from pprint import pprint
+        # pprint(request.POST)
+        # print("---")
+
         imageform = ImageForm(request.POST, request.FILES, initial={'part': part})
         form1 = PartForm(request.POST, instance=part)
         form2 = PartCommentForm(request.POST, initial={'author': request.user, 'part': part})
