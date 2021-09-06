@@ -36,40 +36,40 @@ class PartModel(models.Model):
         return self.partNumber
 
 @receiver(post_save, sender=PartModel)
-# def lowstocktaskcreate(sender,instance,created,**kwargs):
-#     from ActivitiesApp.models import GroupModel, GroupActivityModel, ActivityPartModel
-#     from WorkOrdersApp.models import TaskModel, TaskActivityModel, TaskPartsModel
-#
-#     if instance.group is not None:
-#         tasks = TaskModel.objects.all()
-#         activeList = [task for task in tasks if not task.userGroupCompleted(User.objects.all())]
-#         print(activeList)
-#         if not activeList.objects.filter(group=instance.group):
-#             group = instance.group
-#             task = TaskModel(taskName='Trojan',
-#                             fleetNumber='Restock',
-#                             group=group)
-#             # task.save()
-#             groupactivitylist = GroupActivityModel.objects.filter(group=group).order_by('order')
-#
-#             for groupactivity in groupactivitylist:
-#                 tempactivity = TaskActivityModel(task=task,
-#                                                     activity=groupactivity.activity)
-#                 # tempactivity.save()
-#                 required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
-#                 for required in required_list:
-#                     temp = TaskPartsModel(activity=tempactivity,
-#                                             part=required.part,
-#                                             task=task,
-#                                             increment=required.increment,
-#                                             quantityRequired=required.quantity,
-#                                             order=required.order,
-#                                             extra=required.location,
-#                                             quantityCompleted=0,
-#                                          )
-#                     # temp.save()
-#     else:
-#         pass
+def lowstocktaskcreate(sender,instance,created,**kwargs):
+    from ActivitiesApp.models import GroupModel, GroupActivityModel, ActivityPartModel
+    from WorkOrdersApp.models import TaskModel, TaskActivityModel, TaskPartsModel
+
+    if instance.group is not None:
+        tasks = TaskModel.objects.all()
+        activeList = [task for task in tasks if not task.userGroupCompleted(User.objects.all())]
+        print(activeList)
+        if not activeList.objects.filter(group=instance.group):
+            group = instance.group
+            task = TaskModel(taskName='Trojan',
+                            fleetNumber='Restock',
+                            group=group)
+            # task.save()
+            groupactivitylist = GroupActivityModel.objects.filter(group=group).order_by('order')
+
+            for groupactivity in groupactivitylist:
+                tempactivity = TaskActivityModel(task=task,
+                                                    activity=groupactivity.activity)
+                # tempactivity.save()
+                required_list = ActivityPartModel.objects.filter(activity=groupactivity.activity).order_by('id')
+                for required in required_list:
+                    temp = TaskPartsModel(activity=tempactivity,
+                                            part=required.part,
+                                            task=task,
+                                            increment=required.increment,
+                                            quantityRequired=required.quantity,
+                                            order=required.order,
+                                            extra=required.location,
+                                            quantityCompleted=0,
+                                         )
+                    # temp.save()
+    else:
+        pass
 
 
 class SupplierModel(models.Model):

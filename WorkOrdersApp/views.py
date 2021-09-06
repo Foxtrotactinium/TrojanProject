@@ -15,13 +15,24 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def task_list(request):
     # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
+    # activities = GroupActivityModel.objects.filter(activity__workCenter__contains=request.user.groups.all())
+    
     tasks = TaskModel.objects.all()
-    # tasks = TaskModel.objects.filter(group__activity__workCenter__in=request.user.groups.all())
+    print(request.user.groups.all())
+    print(tasks)
     # activeList = [task for task in tasks if not task.isComplete()]
     # completedList = [task for task in tasks if task.isComplete()]
     # activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
-    activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
-    completedList = [task for task in tasks if task.userGroupCompleted(request.user.groups.all())]
+    # activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
+    # completedList = [task for task in tasks if task.userGroupCompleted(request.user.groups.all())]
+    activeList = []
+    completedList = []
+    for task in tasks:
+        if task.completed == False: #and task.group == request.user.groups.all() :
+            activeList += [task]
+        else:
+            completedList += [task]
+
 
     return render(request, 'WorkOrdersApp/listTasks.html', {'header': 'Outstanding Tasks',
                                                             'activetasks': activeList,
@@ -186,6 +197,7 @@ def info_task_part_include(request, taskid, taskactivityid, increment):
         form = TaskActivityPartsForm(request.POST)
         if form.is_valid():
             form.save()
+            task.userGroupCompleted(task)
             return info_task_parts(request, taskid, taskactivityid)
 
     initial = {'activity': taskactivity,

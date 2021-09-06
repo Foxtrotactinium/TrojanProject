@@ -4,7 +4,8 @@ from django.db import models
 from django.utils import timezone
 from simple_history.models import HistoricalRecords
 from PartsApp.models import *
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 from ActivitiesApp.models import GroupModel, ActivityModel, GroupActivityModel, ActivityPartModel
@@ -15,40 +16,20 @@ class TaskModel(models.Model):
     taskName = models.CharField(max_length=50)
     fleetNumber = models.CharField(max_length=50)
     group = models.ForeignKey(GroupModel, on_delete=models.PROTECT)
-    #
-    # def isComplete(self):
-    #     completedList = TaskActivityModel.objects.filter(task=self)
-    #     completedList = [activity for activity in completedList if not activity.isComplete()]
-    #     return len(completedList) == 0
+    completed = models.BooleanField(default=False)
 
-    def userGroupCompleted(self, userGroup):
+    
+    def userGroupCompleted(self):
         completedList = TaskActivityModel.objects.filter(task=self)
-        completedList = [activity for activity in completedList if not activity.isComplete()]
-        completedList = [activity for activity in completedList if activity.activity.workCenter in userGroup]
-        return len(completedList) == 0
+        for activity in completedList:
+            if not activity.isComplete():
+                return False
+        self.completed = True
+        self.save()
+        return True
 
     def __str__(self):
-        return str(self.taskName) + " - " + str(self.group)
-
-    # def triggerNextGroup(self):
-    #     triggers = GroupTriggerModel.objects.filter(completedGroup=self.group)
-    #
-    #     for groupTrigger in triggers:
-    #         groupactivitylist = GroupActivityModel.objects.filter(group=groupTrigger.triggerGroup)
-    #
-    #         newTaskName = self.taskName + " - " + groupTrigger.triggerGroup.workCenter.wcType
-    #         newTask = TaskModel(newTaskName, self.fleetNumber, groupTrigger.triggerGroup)
-    #         newTask.save()
-    #
-    #         for activity in groupactivitylist:
-    #             required_list = ActivityPartModel.objects.filter(activity=activity.activity)
-    #             for required in required_list:
-    #                 temp = TaskPartsModel(task=newTask,
-    #                                       part=required.part,
-    #                                       quantityRequired=required.quantity,
-    #                                       quantityCompleted=0,
-    #                                       )
-    #                 temp.save()
+        return str(self.taskName) + " - " + str(self.group) + " - " + str(self.completed)
 
 class TaskActivityModel(models.Model):
     task = models.ForeignKey(TaskModel, on_delete=models.CASCADE)
@@ -58,8 +39,12 @@ class TaskActivityModel(models.Model):
 
     def isComplete(self):
         completedList = TaskPartsModel.objects.filter(activity=self)
-        completedList = [part for part in completedList if not part.isComplete()]
-        return len(completedList) == 0
+        # completedList = [part for part in completedList if not part.isComplete()]
+        for part in completedList:
+            if not part.isComplete():
+                return False
+
+        return True
 
     def __str__(self):
         return str(self.activity)
