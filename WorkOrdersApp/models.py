@@ -29,7 +29,8 @@ class TaskModel(models.Model):
         return True
 
     def __str__(self):
-        return str(self.taskName) + " - " + str(self.group) + " - " + str(self.completed)
+        # return str(self.taskName) + " - " + str(self.group) + " - " + str(self.completed)
+        return str(self.taskName) + " => " + str(self.group)
 
 class TaskActivityModel(models.Model):
     task = models.ForeignKey(TaskModel, on_delete=models.CASCADE)

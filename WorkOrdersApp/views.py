@@ -14,17 +14,13 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def task_list(request):
-    # print(TaskModel.objects.filter(taskpartsmodel__user__exact=request.user))
-    # activities = GroupActivityModel.objects.filter(activity__workCenter__contains=request.user.groups.all())
+    activities = ActivityModel.objects.filter(workCenter__in=request.user.groups.all())
+    activitytasks = TaskActivityModel.objects.filter(activity__in=activities)
+    tasklist = activitytasks.values_list('task',flat=True)
+    tasks = TaskModel.objects.filter(group__in=set(tasklist)).order_by('pk')
+    # tasks = TaskModel.objects.all()
+
     
-    tasks = TaskModel.objects.all()
-    print(request.user.groups.all())
-    print(tasks)
-    # activeList = [task for task in tasks if not task.isComplete()]
-    # completedList = [task for task in tasks if task.isComplete()]
-    # activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
-    # activeList = [task for task in tasks if not task.userGroupCompleted(request.user.groups.all())]
-    # completedList = [task for task in tasks if task.userGroupCompleted(request.user.groups.all())]
     activeList = []
     completedList = []
     for task in tasks:
@@ -33,10 +29,9 @@ def task_list(request):
         else:
             completedList += [task]
 
-
     return render(request, 'WorkOrdersApp/listTasks.html', {'header': 'Outstanding Tasks',
                                                             'activetasks': activeList,
-                                                            'completedtasks': completedList})
+                                                            'completedtasks': reversed(completedList)})
 
 
 @login_required

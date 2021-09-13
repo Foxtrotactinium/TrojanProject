@@ -7,15 +7,14 @@
 <a href="{% url 'printlabel' part_id %}" ><button>Print Label</button></a>
 <div class="container-fluid">
     <div class="row">
-
         <div class="col">
-
             <form method="POST">
                 <br>
                 {% csrf_token %}
                 {% crispy partform %}
             </form>
-            <a href="{% url 'lowstockgroup' part_id %}" ><button>Group Selection</button></a>
+            <br>
+            <a href="{% url 'lowstockgroup' part_id %}" ><button class="btn btn-warning">Group Selection</button></a>
             <br>
             <table class="table table-hover">
                 <tbody>
@@ -31,16 +30,30 @@
                 {% csrf_token %}
                 {% crispy commentForm %}
             </form>
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% for image in images %}
+                    <div class="carousel-item  {% if forloop.first %} {{ 'active' }} {% endif %}">
+                    <img class="d-block w-100" src="{{ image.image.url }}"  width="700px" height="500px" style="object-fit: contain;"/>
+                  </div>
+                  {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+
             <div>
-                {% for image in images %}
-                <img class="center img-responsive" src="{{ image.image.url }}"
-                     style="height: 100%"/>
-                {% endfor %}
                 <br>
                 <form enctype="multipart/form-data" method="post">
                     {% csrf_token %}
                     {{ imageform.as_p }}
-                    <button type="submit">Upload</button>
+                    <button type="submit" class="btn btn-success">Upload</button>
                 </form>
             </div>
         </div>
