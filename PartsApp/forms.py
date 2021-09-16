@@ -25,9 +25,7 @@ class PartForm(forms.ModelForm):
                 Column(
                     Div(
                         Field('stockOnHand', css_class='form-control', required=True,),
-
                         Button('add stock', '+ / -', css_class="btn btn-success h-50 align-self-center"),
-
                         css_class="input-group-append"),
                     css_class='input-group col-md-3'),
                 Column(

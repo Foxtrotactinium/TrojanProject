@@ -19,13 +19,13 @@ class TaskModel(models.Model):
     completed = models.BooleanField(default=False)
 
     
-    def userGroupCompleted(self):
-        completedList = TaskActivityModel.objects.filter(task=self)
+    def userGroupCompleted(self,task):
+        completedList = TaskActivityModel.objects.filter(task=task)
         for activity in completedList:
             if not activity.isComplete():
                 return False
-        self.completed = True
-        self.save()
+        task.completed = True
+        task.save()
         return True
 
     def __str__(self):

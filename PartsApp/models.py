@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from simple_history.models import HistoricalRecords
 from django.utils.html import mark_safe
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
+from django.core.files.storage import default_storage
 
 
 # Inventory Model with fields
@@ -42,8 +43,8 @@ def lowstocktaskcreate(sender,instance,created,**kwargs):
 
     if instance.group is not None:
         tasks = TaskModel.objects.all()
+        print(User.objects.all())
         activeList = [task for task in tasks if not task.userGroupCompleted(User.objects.all())]
-        print(activeList)
         if not activeList.objects.filter(group=instance.group):
             group = instance.group
             task = TaskModel(taskName='Trojan',
@@ -114,7 +115,16 @@ class PartImageModel(models.Model):
     part = models.ForeignKey(PartModel, on_delete=models.PROTECT)
     image = models.ImageField(upload_to='images/')
 
+    @classmethod
+    def delete_associated_files(sender, instance, **kwargs):
+        """Remove all files of an image after deletion."""
+        path = instance.image.name
+        if path:
+            default_storage.delete(path)
+
     def image_tag(self):
         return mark_safe('<img src="/media/images/%s" width="150" height="150" />' % (self.image))
 
     image_tag.short_description = 'Image'
+
+post_delete.connect(PartImageModel.delete_associated_files, sender=PartImageModel)

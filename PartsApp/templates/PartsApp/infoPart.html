@@ -30,31 +30,78 @@
                 {% csrf_token %}
                 {% crispy commentForm %}
             </form>
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    {% for image in images %}
-                    <div class="carousel-item  {% if forloop.first %} {{ 'active' }} {% endif %}">
-                    <img class="d-block w-100" src="{{ image.image.url }}"  width="700px" height="500px" style="object-fit: contain;"/>
-                  </div>
-                  {% endfor %}
+            <br>
+            <ul class="nav nav-pills nav-fill" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="view-tab" data-toggle="tab" href="#view" role="tab" aria-controls="view" aria-selected="true">View image</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="upload-tab" data-toggle="tab" href="#upload" role="tab" aria-controls="upload" aria-selected="false">Profile</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="contact-tab" data-toggle="tab" href="#delete" role="tab" aria-controls="delete" aria-selected="false">Delete</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent" style="width:100%; height: 500px;" >
+                <div class="tab-pane fade show active" id="view" role="tabpanel" aria-labelledby="view-tab">
+                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            {% for image in images %}
+                            <div class="carousel-item  {% if forloop.first %} {{ 'active' }} {% endif %}">
+                            <img class="d-block w-100" src="{{ image.image.url }}"  width="700px" height="500px" style="object-fit: contain;"/>
+                          </div>
+                          {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
-
-            <div>
-                <br>
-                <form enctype="multipart/form-data" method="post">
+                <div class="tab-pane fade" id="upload" role="tabpanel" aria-labelledby="upload-tab">
+                    <div>
+                        <br>
+                        <form enctype="multipart/form-data" method="post">
+                            {% csrf_token %}
+                            {{ imageform.as_p }}
+                            <button type="submit" class="btn btn-success">Upload</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="delete" role="tabpanel" aria-labelledby="delete-tab">
+                    <form class="form-group" action="{% url 'delete_inventory_images' part_id %}" method="POST">
                     {% csrf_token %}
-                    {{ imageform.as_p }}
-                    <button type="submit" class="btn btn-success">Upload</button>
-                </form>
+                    <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>  
+                            <th scope="col">Image name</th>
+                            <th scope="col">thumbnail</th>
+                            <th scope="col">Delete?</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for image in images %}
+                          <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ image.image.name }}</td>
+                            <td> <img class="d-block w-100" src="{{ image.image.url }}"  width="50px" height="50px" style="object-fit: contain;"/> </td>
+                            <td>
+                                <div class="form-check">
+                                    <input type="checkbox" value="{{ image.image.name }}" name="to_delete[]" class="form-check-input" >
+                                </div>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                      <button type="submit" name="delete-inventory-images" class="btn btn-danger" >Delete Images</button>
+                    </form>
+                </div>
             </div>
         </div>
 

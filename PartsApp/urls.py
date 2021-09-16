@@ -6,6 +6,7 @@ urlpatterns = [
     path('history', PartHistoryListView.as_view(), name='parts_history'),  # URL path for inventory_list view
     path('addpart/', add_part, name='addpart'),
     path('parts/<int:part_id>/', info_part, name='info_part'),
+    path('parts/<int:part_id>/delete-inventory-images/', delete_inventory_images, name='delete_inventory_images'),
     path('parts/<int:part_id>/lowstockgroup', low_stock_group, name='lowstockgroup'),
     path('parts/<int:part_id>/print', print_inventory_label, name='printlabel'),
     path('parts/editsupplierpartnumber/<int:pk>', SupplierPartNumberUpdate.as_view(), name='editsupplierpartnumber'),

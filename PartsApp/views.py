@@ -202,6 +202,13 @@ class SupplierPartNumberUpdate(UpdateView):
     def get_success_url(self):
         return reverse('info_part', args=[str(self.object.part.pk)])
 
+@login_required
+def delete_inventory_images(request, part_id):
+    images_to_delete = request.POST.getlist('to_delete[]')
+    instance = PartImageModel.objects.filter(part=part_id, image__in=images_to_delete).delete()
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
 
 @login_required
 def info_supplier(request, id):

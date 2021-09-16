@@ -51,7 +51,6 @@ class TaskActivityPartsForm(forms.ModelForm):
             Field('serial', type='form-control'),
             Field('extra', type='form-control'),
             Field('order', type='hidden'),
-            Field('completed', type='hidden'),
             HTML('<br>'),
             Submit('save', 'Save')
         )

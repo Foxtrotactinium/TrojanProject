@@ -192,7 +192,6 @@ def info_task_part_include(request, taskid, taskactivityid, increment):
         form = TaskActivityPartsForm(request.POST)
         if form.is_valid():
             form.save()
-            task.userGroupCompleted(task)
             return info_task_parts(request, taskid, taskactivityid)
 
     initial = {'activity': taskactivity,
@@ -242,6 +241,8 @@ class TaskPartCompletedUpdate(UpdateView):
         if form.is_valid():
             taskPart = get_object_or_404(TaskPartsModel, id=int(self.object.pk))
             taskPart.updateQuantity(self.object.quantityCompleted, request.user)
+            task = get_object_or_404(TaskModel, id=taskPart.task.pk)
+            task.userGroupCompleted(task)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
