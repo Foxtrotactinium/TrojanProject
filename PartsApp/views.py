@@ -28,15 +28,13 @@ def qr_scan(request):
         parts = None
         query = Q()
         if 'partnumbercheck' in fields:
-            query.add( Q(partNumber__contains=searchQuery), Q.OR)
+            query.add(Q(partNumber__contains=searchQuery), Q.OR)
 
         if 'descriptioncheck' in fields:
             query.add(Q(description__contains=searchQuery), Q.OR)
 
         if 'locationcheck' in fields:
             query.add(Q(location__contains=searchQuery), Q.OR)
-
-
 
         if len(query) == 0:
             context['infoText'] = f'Nothing found, please select a checkbox'
@@ -50,7 +48,8 @@ def qr_scan(request):
 
             part = parts.first()
 
-            return redirect('info_part', part.id)  # info_part(request, part.id)
+            # info_part(request, part.id)
+            return redirect('info_part', part.id)
 
         else:
             # print(f'{parts=}')
@@ -129,9 +128,11 @@ def info_part(request, part_id):
         # pprint(request.POST)
         # print("---")
 
-        imageform = ImageForm(request.POST, request.FILES, initial={'part': part})
+        imageform = ImageForm(request.POST, request.FILES,
+                              initial={'part': part})
         form1 = PartForm(request.POST, instance=part)
-        form2 = PartCommentForm(request.POST, initial={'author': request.user, 'part': part})
+        form2 = PartCommentForm(request.POST, initial={
+                                'author': request.user, 'part': part})
         if form1.is_valid():
             part = form1.save()
             # update_change_reason(part, 'Manual')
@@ -180,7 +181,8 @@ def low_stock_group(request, part_id):
     groups = GroupModel.objects.all()
     part = PartModel.objects.filter(pk=part_id)
     if request.method == "POST":
-        form = LowStockGroupForm(request.POST,initial={'partNumber': part_id},instance=part.first())
+        form = LowStockGroupForm(request.POST, initial={
+                                 'partNumber': part_id}, instance=part.first())
         if form.is_valid():
             form.save()
 
@@ -194,6 +196,7 @@ def low_stock_group(request, part_id):
                    }
     return render(request, 'PartsApp/lowstockgroup.html', context)
 
+
 class SupplierPartNumberUpdate(UpdateView):
     http_method_names = ['post']
     model = PartSupplierModel
@@ -202,12 +205,15 @@ class SupplierPartNumberUpdate(UpdateView):
     def get_success_url(self):
         return reverse('info_part', args=[str(self.object.part.pk)])
 
+
 @login_required
 def delete_inventory_images(request, part_id):
     images_to_delete = request.POST.getlist('to_delete[]')
-    instance = PartImageModel.objects.filter(part=part_id, image__in=images_to_delete).delete()
+    print(part_id)
+    print(images_to_delete)
+    instance = PartImageModel.objects.filter(
+        part=part_id, image__in=images_to_delete).delete()
     return redirect(request.META.get('HTTP_REFERER', '/'))
-
 
 
 @login_required
@@ -241,7 +247,8 @@ def info_supplier(request, id):
         for part in supplierparts:
             part.low = part.part.stockOnHand < part.part.minimumStock
             part.ordered = 0
-        supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(pk=id).first(), prefix='supplierform')
+        supplierform = SupplierForm(instance=SupplierModel.objects.all().filter(
+            pk=id).first(), prefix='supplierform')
         taskform = TaskForm(prefix='taskForm')
         return render(request, 'PartsApp/infoSupplier.html', {'supplierform': supplierform,
                                                               'supplierparts': supplierparts,

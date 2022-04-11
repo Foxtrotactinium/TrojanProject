@@ -17,8 +17,8 @@ def task_list(request):
     activities = ActivityModel.objects.filter(workCenter__in=request.user.groups.all())
     activitytasks = TaskActivityModel.objects.filter(activity__in=activities)
     tasklist = activitytasks.values_list('task',flat=True)
-    tasks = TaskModel.objects.filter(group__in=set(tasklist)).order_by('pk')
-    # tasks = TaskModel.objects.all()
+    # tasks = TaskModel.objects.filter(group__in=set(tasklist)).order_by('pk')
+    tasks = TaskModel.objects.all()
 
     
     activeList = []

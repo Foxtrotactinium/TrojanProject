@@ -102,7 +102,6 @@ def add_required_part_to_activity(request, id, increment):
 
     if request.method == "POST":
         form = required_part_form(request.POST)
-        print(form)
         if form.is_valid():
             form.save()
         return render(request, 'ActivitiesApp/addActivityPart.html', context)
