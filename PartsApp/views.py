@@ -19,6 +19,7 @@ from .forms import *
 def qr_scan(request):
     searchQuery = request.GET.get('q', None)
     fields = request.GET.keys()
+    # print(list(fields))
     context = {
         'header': 'Scanner',
         'infoText': 'Please scan first'
@@ -27,14 +28,14 @@ def qr_scan(request):
 
         parts = None
         query = Q()
-        if 'partnumbercheck' in fields:
-            query.add(Q(partNumber__contains=searchQuery), Q.OR)
+        # if 'partnumbercheck' in fields:
+        query.add(Q(partNumber__contains=searchQuery), Q.OR)
 
-        if 'descriptioncheck' in fields:
-            query.add(Q(description__contains=searchQuery), Q.OR)
-
-        if 'locationcheck' in fields:
-            query.add(Q(location__contains=searchQuery), Q.OR)
+        # if 'descriptioncheck' in fields:
+        #     query.add(Q(description__contains=searchQuery), Q.OR)
+        #
+        # if 'locationcheck' in fields:
+        #     query.add(Q(location__contains=searchQuery), Q.OR)
 
         if len(query) == 0:
             context['infoText'] = f'Nothing found, please select a checkbox'
@@ -211,8 +212,9 @@ def delete_inventory_images(request, part_id):
     images_to_delete = request.POST.getlist('to_delete[]')
     print(part_id)
     print(images_to_delete)
-    instance = PartImageModel.objects.filter(
-        part=part_id, image__in=images_to_delete).delete()
+    print(PartImageModel.objects.get(part=part_id, image__in=images_to_delete))
+    instance = PartImageModel.objects.get(
+        image__in=images_to_delete).delete()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 

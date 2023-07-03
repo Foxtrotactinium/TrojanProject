@@ -1,44 +1,37 @@
+import csv
 import os
 import django
+from django.http import HttpResponse
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TrojanProject.settings')
 django.setup()
 
 from PartsApp.models import PartModel
 from datetime import datetime
-from ActivitiesApp.models import ActivityPartModel
-from PartsApp.models import PartSupplierModel
 
-
-inventory =
-def export_users_csv(request):
+def export_stocktake_csv(request):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+    response['Content-Disposition'] = 'attachment; filename="stocktake.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(['employee','IG', 'follower', 'email', 'website', 'DA', 'youtube_url', 'youtube_name', 'subscriber', 'type','country'])
+    writer.writerow(['partNumber','description', 'location', 'stockOnHand'])
 
-    users = Library.objects.all().values_list('employee','IG', 'follower', 'email', 'website', 'DA', 'youtube_url', 'youtube_name', 'subscriber', 'type','country')
-    for user in users:
-        writer.writerow(user)
+    target_date = datetime(2023, 6, 18)  # Specify the target date you want to query
+
+    parts_dict = {}
+
+    # Retrieve all historical records for PartModel
+    historical_parts = PartModel.history.filter(history_date__lte=target_date)
+
+    # Iterate over the historical records and track the latest entry for each partNumber
+    for part in historical_parts:
+        part_number = part.partNumber
+        if part_number not in parts_dict or part.history_date > parts_dict[part_number].history_date:
+            parts_dict[part_number] = part
+
+    # Write the latest entries to the CSV file
+    for part in parts_dict.values():
+        part_data = [part.partNumber, part.description, part.location, part.stockOnHand]
+        writer.writerow(part_data)
 
     return response
-
-# s = PartSupplierModel.objects.filter(supplier__supplierName__contains='TROJAN').values_list('part_id')
-# p = ActivityPartModel.objects.filter(increment=True, part_id__in=s)
-# p2 = ActivityPartModel.objects.filter(increment=False, part_id__in=s)
-# output = set()
-# for part in p:
-#     if part not in p2:
-#         output.add(part.part)
-#
-# for part in p2:
-#     if part not in p:
-#         output.add(part.part)
-#
-# for part in output:
-#     print(f'{part.id},{part.partNumber}')
-#
-#
-#
-#

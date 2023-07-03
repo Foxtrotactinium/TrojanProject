@@ -41,7 +41,7 @@
 
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityRequired }}" name="quantityRequired"
-                       id="id_quantityRequired" class="input-group col-md-5">
+                       id="id_quantityRequired" class="input-group col-md-10">
                 <br/>
 
                 <input type="submit" class="btn btn-warning" value="Amend">
@@ -62,7 +62,7 @@
             <form class="silent_form" method="POST" action="{% url 'edittaskpart-completed' part.pk %}">
                 {% csrf_token %}
                 <input type="number" value="{{ part.quantityCompleted }}" name="quantityCompleted"
-                       id="id_quantityCompleted" class="input-group col-md-6">
+                       id="id_quantityCompleted" class="input-group col-md-8">
                 <br/>
 
                 <input type="submit" class="btn btn-primary" value="Complete" onclick="
